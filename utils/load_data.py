@@ -111,7 +111,7 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
             
             # make sure there is one to one mapping between image IDs in the folder and in the text file so that label allocation is done correctly
             if path_to_labels:
-                if img_id != img_ids_labels[index]:
+                if img_id != img_ids_labels[index][0]:
                     raise ValueError(f"Image IDs in the folder as well as in the text file are sorted. However, the image ID at {index} do not match with each other. \n Image ID in the folder:{img_id} \n Image ID in the text file {img_ids_labels[index]}.")
             
             #store image        
