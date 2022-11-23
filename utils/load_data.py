@@ -2,7 +2,7 @@ import numpy as np
 import cv2 
 import os
 
-def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_labels_path=None, color=1, verbose=False):
+def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_labels_path=None, color=0, verbose=False):
     """
         Loads raw data 
 
@@ -24,6 +24,9 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
             - if 'path_to_data' points to a folder, only .png files will be considered.
             - When loading data from the folder, if 'save_images_path' or 'save_labels_path' is not provided, the npy file will be saved to 'path_to_data/images.npy' or 'path_to_data/labels.npy'
             - When loading data from npy file, if 'save_labels_path' is not given, an empty array is returned for the labels
+
+            - (Tested by Ahmad on his computer and kaggle) This code is not suitable for reading colored images as it writes to allocate large amount of memory and the kernel crashes.
+            - for now, better to use it for gray scale. In later stage, maybe make a generator out of it so that images are loadad on demand instead of loading all of images in the memory
     """     
 
     # load npy files
@@ -32,9 +35,8 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
         # load images 
         data = np.load(path_to_data)
 
-        if verbose:
-            print(f"Loaded Images from {path_to_data} successfully.") 
-            print(f"The shape of images: {data.shape}.")
+        print(f"Loaded Images from {path_to_data} successfully.") 
+        print(f"The shape of images: {data.shape}.")
         
         # load labels
         if path_to_labels:
@@ -50,8 +52,7 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
         
         else:
 
-            if verbose:
-                print("Returning empty array for the labels ")
+            print("Returning empty array for the labels ")
 
             img_ids_labels = np.array([])
 
@@ -63,8 +64,7 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
         if not image_ids:
             raise ValueError(f"No Images(.png) found in {path_to_data}")
         
-        if verbose:
-            print(f"{len(image_ids)} number of images found.")
+        print(f"{len(image_ids)} number of images found.")
         
         # get image labels
         if path_to_labels:
@@ -74,16 +74,14 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
             # make sure number of images are equal to number of labels provided
             if img_ids_labels.shape[0] != len(image_ids):
                 raise ValueError(f"Number of images ({len(image_ids)}) are not equal to number of provided labels ({img_ids_labels.shape[0]})")
-
-            if verbose:
-                print(f"Unique labels found in the txt file: {np.unique(img_ids_labels[:,1])}")
+            
+            print(f"Unique labels found in the txt file: {np.unique(img_ids_labels[:,1])}")
 
         else:
             img_ids_labels = np.array(image_ids)
             img_ids_labels = np.expand_dims(img_ids_labels, axis=-1)
 
-            if verbose:
-                print(f"No labels found.")
+            print(f"No labels found.")
 
 
         for index, img_id in enumerate(image_ids):
@@ -92,12 +90,12 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
             path_to_image = os.path.join(path_to_data, img_id)
             img = cv2.imread(path_to_image, color)
 
+            if verbose:
+                print(f"Loaded image: {img_id} Shape: {img.shape}")
+
             # add dim to image for grayscale 
             if not color:
                 img = np.expand_dims(img, axis=-1)
-
-            if verbose:
-                print(f"Load image: {img_id} Shape: {img.shape}")
 
 
             # initialize data for storing images
@@ -122,9 +120,9 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
             save_images_path = os.path.join(path_to_data, "images.npy")
         np.save(save_images_path, data)
         
-        if verbose:
-            print(f"Final shape of images: {data.shape}")
-            print(f"Saved images to {save_images_path}")
+
+        print(f"Final shape of images: {data.shape}")
+        print(f"Saved images to {save_images_path}")
 
 
         # save labels
@@ -132,9 +130,9 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
             save_labels_path = os.path.join(path_to_data, "labels.npy")
         np.save(save_labels_path, img_ids_labels)
         
-        if verbose:
-            print(f"Final shape of labels: {img_ids_labels.shape}")
-            print(f"Saved labels to {save_labels_path}")
+
+        print(f"Final shape of labels: {img_ids_labels.shape}")
+        print(f"Saved labels to {save_labels_path}")
 
     return data, img_ids_labels
 
