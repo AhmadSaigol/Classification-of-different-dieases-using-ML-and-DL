@@ -45,10 +45,13 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
             else:
                 raise ValueError("When loading data from .npy file, path to labels must be also point to labels.npy file")
            
-            if verbose:
-                print(f"Loaded Labels from {path_to_labels}.")
-                print(f"The shape of labels: {img_ids_labels.shape}")
+            print(f"Loaded Labels from {path_to_labels}.")
+            print(f"The shape of labels: {img_ids_labels.shape}")
             
+            unique_labels, counts =np.unique(img_ids_labels[:,1], return_counts=True)
+            print(f"Unique labels and their frequencies found in the txt file: ")
+            for ul, c in zip(unique_labels, counts):
+                print(f"Label: {ul} Count: {c}")
         
         else:
 
@@ -62,9 +65,9 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
         # get image ids
         image_ids = [id for id in sorted(os.listdir(path_to_data)) if ".png" in id]
         if not image_ids:
-            raise ValueError(f"No Images(.png) found in {path_to_data}")
+            raise ValueError(f"No Image(.png) found in {path_to_data}")
         
-        print(f"{len(image_ids)} number of images found.")
+        print(f"{len(image_ids)} images found.")
         
         # get image labels
         if path_to_labels:
@@ -75,7 +78,10 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
             if img_ids_labels.shape[0] != len(image_ids):
                 raise ValueError(f"Number of images ({len(image_ids)}) are not equal to number of provided labels ({img_ids_labels.shape[0]})")
             
-            print(f"Unique labels found in the txt file: {np.unique(img_ids_labels[:,1])}")
+            unique_labels, counts =np.unique(img_ids_labels[:,1], return_counts=True)
+            print(f"Unique labels and their frequencies found in the txt file: ")
+            for ul, c in zip(unique_labels, counts):
+                print(f"Label: {ul} Count: {c}")
 
         else:
             img_ids_labels = np.array(image_ids)
@@ -138,7 +144,12 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
 
 if __name__ == "__main__":
     # path to data folders
-    path_to_data = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data"
+    # actual data
+    #path_to_data = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data"
+    
+    # data for testing
+    path_to_data = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing"
+    
     path_to_train_data = path_to_data + "/train"
     path_to_train_labels = path_to_data + "/train.txt"
 
@@ -148,15 +159,20 @@ if __name__ == "__main__":
     
 
     # save paths
-    save_path = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/processed_data"
-    train_npy = save_path + "/train_colored.npy"
-    train_labels_npy = save_path + "/train_colored_labels.npy"
+    # actual data
+    #save_path = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/processed_data"
     
-    tests_npy = save_path + "/tests_colored.npy"
-    tests_labels_npy = save_path + "/tests_colored_labels.npy"
+    # data for testing
+    save_path = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/processed_data/code_testing"
     
-    noisy_tests_npy = save_path + "/noisy_tests_colored.npy"
-    noisy_tests_labels_npy = save_path + "/noisy_tests_colored_labels.npy" 
+    train_npy = save_path + "/train_bw.npy"
+    train_labels_npy = save_path + "/train_bw_labels.npy"
+    
+    tests_npy = save_path + "/tests_bw.npy"
+    tests_labels_npy = save_path + "/tests_bw_labels.npy"
+    
+    noisy_tests_npy = save_path + "/noisy_tests_bw.npy"
+    noisy_tests_labels_npy = save_path + "/noisy_tests_bw_labels.npy" 
 
     # load train data
     print("Working on training data")
@@ -164,7 +180,7 @@ if __name__ == "__main__":
                                         path_to_labels=path_to_train_labels,
                                         save_images_path=train_npy,
                                         save_labels_path=train_labels_npy,
-                                        color=1,
+                                        color=0,
                                         verbose=True)
     
     print(f"Processing Completed for training: Image: {train_img.shape} Labels: {train_labels.shape}")
@@ -174,7 +190,7 @@ if __name__ == "__main__":
     test_img, test_labels = load_data(path_to_data=path_to_test_data,
                                             save_images_path=tests_npy,
                                             save_labels_path=tests_labels_npy,
-                                            color=1,
+                                            color=0,
                                             verbose=True)
         
     print(f"Processing Completed for test: Image: {test_img.shape} Labels: {test_labels.shape}")
@@ -184,7 +200,7 @@ if __name__ == "__main__":
     noisy_test_img, noisy_test_labels = load_data(path_to_data=path_to_noisy_test_data,
                                         save_images_path=noisy_tests_npy,
                                         save_labels_path=noisy_tests_labels_npy,
-                                        color=1,
+                                        color=0,
                                         verbose=True)
     
     print(f"Processing Completed for noisy_test: Image: {noisy_test_img.shape} Labels: {noisy_test_labels.shape}")
