@@ -1,0 +1,42 @@
+if you are writing a feature extractor, (rough idea) your function should look like something like this 
+
+def fnt(image, in_config):
+
+	"""
+	image: ndarray of shape(num_of_images, height, width, num_of_channels)
+	in_config: dict containing parameter as keys with values
+	
+	"""
+	# error checking for compularoy pararmeters
+	
+	# setup default values for parameters e.g.
+	if "parameter_1" in_config.keys()
+		out_config["parameter_1"] = in_config["parameter_1"]
+	else:
+		out_config["parameter_1"] = 56 # default value for this parameter
+		 
+	
+	## then use out_config in the code
+	
+	## do feature extraction
+	
+	## generate 'features'-- > 1D numpy array whose elements will be used as features (e.g. if there are two elements in array, then they will be considered two separate features) 
+		
+	return  features, out_config
+	
+	
+NOTE:
+
+often there are methods/feature extractors where certain values have calculated during the training phase and these values are then used in testing phase for doing calculation.
+
+To handle this, put these values in the dict 'out_config' as 
+(e.g. out_config["cal_parameter'] = some_value)
+
+and then have a check for this parameter which will tell you in which phase are you and perfrom the calculation correspondingly 
+(e.g. if "cal_parameter" in in_config.keys():
+	train= false
+	else
+	train = true)
+	
+take care of te fact dictionary is passed by reference
+

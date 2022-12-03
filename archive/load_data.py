@@ -16,7 +16,7 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
             verbose: True/False
         
         Returns:
-            data: numpy array containing all images of shape (num_of_images, height, width, num_of_channels)
+            data: numpy array containing all images of shape (num_of_images, height, width, num_of_channels) with range [0,255]
             labels: numpy array with image ids (axis=0) and/or image labels(axis=1) of shape (num_of_images, 1) or (num_of_images, 2)
     
         Additional Notes:
@@ -48,6 +48,7 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
             print(f"Loaded Labels from {path_to_labels}.")
             print(f"The shape of labels: {img_ids_labels.shape}")
             
+            # get unique labels and their counts
             unique_labels, counts =np.unique(img_ids_labels[:,1], return_counts=True)
             print(f"Unique labels and their frequencies found in the txt file: ")
             for ul, c in zip(unique_labels, counts):
@@ -78,10 +79,11 @@ def load_data(path_to_data, path_to_labels=None, save_images_path=None, save_lab
             if img_ids_labels.shape[0] != len(image_ids):
                 raise ValueError(f"Number of images ({len(image_ids)}) are not equal to number of provided labels ({img_ids_labels.shape[0]})")
             
+            # get unique labels and their counts
             unique_labels, counts =np.unique(img_ids_labels[:,1], return_counts=True)
             print(f"Unique labels and their frequencies found in the txt file: ")
             for ul, c in zip(unique_labels, counts):
-                print(f"Label: {ul} Count: {c}")
+                print(f"Label: {ul}, Count: {c}")
 
         else:
             img_ids_labels = np.array(image_ids)
