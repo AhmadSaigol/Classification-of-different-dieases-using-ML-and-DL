@@ -35,7 +35,7 @@ def load_and_preprocess_data(data_config):
         
         
         Returns:
-            data: numpy array containing all images of shape (fold, num_of_images, height, width, num_of_channels)
+            data: numpy array containing all images of shape (folds, num_of_images, height, width, num_of_channels)
             labels: numpy array with image ids (axis=0) and/or image labels(axis=1) of shape (fold, num_of_images, 1) or (fold, num_of_images, 2)
     
         Additional Notes:
@@ -244,8 +244,8 @@ def load_images(path_to_images, image_ids, data_preprocessing):
         for preprocessing in data_preprocessing.keys():
 
             fnt_pointer = data_preprocessing[preprocessing]["function"]
-
-            print("Applying ", fnt_pointer.__name__)
+            
+            print("Applying ", preprocessing)
 
             if verbose:
                 print("Before: ", img.shape)

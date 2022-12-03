@@ -31,7 +31,7 @@ def normalize(images, parameters):
         method = parameters["method"]
         config["method"] = method
     else:
-        raise ValueError("'method' must be provided in the parameters when normalization.") 
+        raise ValueError("'method' must be provided in the parameters when normalizating the image.") 
 
     
     if method == "simple":

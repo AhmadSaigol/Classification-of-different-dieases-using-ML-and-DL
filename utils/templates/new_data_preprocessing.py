@@ -2,7 +2,7 @@
 Template for adding new data preprocessing utility
 """
 
-def preprocess_util(images, parameters):
+def preprocess_data_util(images, parameters):
 
     """
     Describe what the preprocessing does
