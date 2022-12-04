@@ -43,7 +43,7 @@ def load_and_preprocess_data(data_config):
                 
         """ 
 
-    verbose= True
+    verbose=False
 
     # setup output config and make sure data_config has correct structure
     output_config ={}
@@ -283,17 +283,17 @@ if __name__ == "__main__":
     #------------------ setup data------------------------
     pipeline["data"] = {}
 
-    # can be to folder 
+    # path to folder containing images 
     pipeline["data"]["path_to_images"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train"
     # can be to .txt
     pipeline["data"]["path_to_labels"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train.txt"
 
     # split data
-    pipeline["data"]["split_type"] =  "kfoldStratified" #"simple" #"simpleStrafied", "kfold", "kfoldStratified"
+    pipeline["data"]["split_type"] =  "simpleStratified" #"simple" #"simpleStrafied", "kfold", "kfoldStratified"
 
 
     # ---------------------------------set up data preprocessing methods and parameters------------------------------------
-    #default values for parameters not guven -8way of determining whether its training or predictin
+
     pipeline["data_preprocessing"] ={}
 
     # normalize image
@@ -309,7 +309,7 @@ if __name__ == "__main__":
     # resize_image
     pipeline["data_preprocessing"]["resize_image"] = {}
     pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-    pipeline["data_preprocessing"]["resize_image"]["output_size"] = (20,20) #(width, height)
+    pipeline["data_preprocessing"]["resize_image"]["output_size"] = (100,100) #(width, height)
     pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
 
 
