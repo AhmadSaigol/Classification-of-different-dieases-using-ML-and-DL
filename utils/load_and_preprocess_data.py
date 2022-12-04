@@ -302,9 +302,9 @@ if __name__ == "__main__":
     pipeline["data_preprocessing"]["normalize_image"]["method"] = "minmax" 
 
     # map to RGB
-    pipeline["data_preprocessing"]["map_to_RGB"] = {}
-    pipeline["data_preprocessing"]["map_to_RGB"]["function"] = change_colorspace 
-    pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY" 
+    pipeline["data_preprocessing"]["map_to_grayscale"] = {}
+    pipeline["data_preprocessing"]["map_to_grayscale"]["function"] = change_colorspace 
+    pipeline["data_preprocessing"]["map_to_grayscale"]["conversion"] ="BGR2GRAY" 
 
     # resize_image
     pipeline["data_preprocessing"]["resize_image"] = {}
