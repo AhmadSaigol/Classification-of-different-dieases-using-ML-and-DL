@@ -222,15 +222,11 @@ print("Evaluated Metrics on the validation data successfully")
 # print results
 #for index in range(len())
  
+plot_CM(y_true=y_train, y_pred=y_pred_train, path_to_results=path_to_results)
 
-"""
-param to determine whether it is training or not
-if yes reutn config with parameters required in prediction,
+plot_ROC()
 
-save config, use it in prediction
+# concencate all the returuned configs and save it json
+save_to_json(config, path_to_results)
 
-check configs
-
-take care of train and pred in each fucntion 
-
-"""
+# save metrics train and metrics_valid
