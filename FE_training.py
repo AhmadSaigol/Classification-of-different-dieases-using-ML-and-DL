@@ -20,16 +20,18 @@ from utils.feature_extractors.skewness import calculate_skew
 
 from utils.normalize_features import normalize_features
 
+from utils.apply_classifiers import apply_classifiers
+from utils.classifiers.SVM import svm
+from utils.classifiers.RFTree import rftree
 
 verbose = True
 
-# where to store the results
-path_to_results = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/new_code_testing"
-
-
 pipeline = {}
+pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/new_code_testing"
+
 
 #------------------ setup data------------------------
+
 pipeline["data"] = {}
 
 # can be to folder 
@@ -40,6 +42,7 @@ pipeline["data"]["path_to_labels"] = "/home/ahmad/Documents/TUHH/Semester 3/Inte
 # split data
 pipeline["data"]["split_data"] = "simple" , #"simpleStrafied", "kfold", "kfoldStratified"
 
+pipeline["data"]["classes"] = np.array(["Normal", "COVID", "pneumonia", "Lung_Opacity"])
 
 # ---------------------------------set up data preprocessing methods and parameters------------------------------------
 #default values for parameters not guven -8way of determining whether its training or predictin
@@ -94,25 +97,33 @@ pipeline["classifiers"] ={}
 
 # SVM
 pipeline["classifiers"]["svm"] = {}
-pipeline["classifiers"]["svm"]["function"] =0 #some function pointer
-pipeline["classifiers"]["svm"]["some_parameter"] =0 #value of parameter
+pipeline["classifiers"]["svm"]["function"] = svm 
+pipeline["classifiers"]["svm"]["trainAuto"] = True 
+pipeline["classifiers"]["svm"]['svm_type'] =  'C_SVC' 
+pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
+pipeline["classifiers"]["svm"]['Gamma'] =  0.2 
 
 
 # kNN
-pipeline["classifiers"]["kNN"] = {}
-pipeline["classifiers"]["kNN"]["function"] =0 #some function pointer
-pipeline["classifiers"]["kNN"]["some_parameter"] =0 #value of parameter
-
+#pipeline["classifiers"]["kNN"] = {}
+#pipeline["classifiers"]["kNN"]["function"] =0 #some function pointer
+#pipeline["classifiers"]["kNN"]["some_parameter"] =0 #value of parameter
 
 # decision tree
-pipeline["classifiers"]["decision_tree"] = {}
-pipeline["classifiers"]["decision_tree"]["function"] =0 #some function pointer
-pipeline["classifiers"]["decision_tree"]["some_parameter"] =0 #value of parameter
+#pipeline["classifiers"]["decision_tree"] = {}
+#pipeline["classifiers"]["decision_tree"]["function"] =0 #some function pointer
+#pipeline["classifiers"]["decision_tree"]["some_parameter"] =0 #value of parameter
+
+# random forest tree
+pipeline["classifiers"]["RFTree"] = {}
+pipeline["classifiers"]["RFTree"]["function"] =rftree
+pipeline["classifiers"]["RFTree"]["ActiveVarCount"] =0 
+
 
 # ensemble learning
-pipeline["classifiers"]["ensemble"] = {}
-pipeline["classifiers"]["ensemble"]["function"] =["svm", "decision_tree"] #name of functions to be used for ensemblers
-pipeline["classifiers"]["decision_tree"]["some_parameter"] =0 #value of parameter
+#pipeline["classifiers"]["ensemble"] = {}
+#pipeline["classifiers"]["ensemble"]["function"] =["svm", "decision_tree"] #name of functions to be used for ensemblers
+#pipeline["classifiers"]["decision_tree"]["some_parameter"] =0 #value of parameter
 
 
 #---------------------------------------------set up evaluation metrics and parameters------------------------
@@ -164,7 +175,9 @@ print("the shape of X_train: ", X_train.shape)
 print("the shape of y_train: ", y_train.shape)
 print("the shape of X_valid: ", X_valid.shape)
 print("the shape of y_valid: ", y_valid.shape)
-               
+
+print("data processing config ", data_config)
+
 # print unique labels and their counts
 """
 num_images_train =y_train.shape[1]
@@ -179,34 +192,68 @@ for ul, c in zip(unique_labels, counts):
 # feature generation
 
 print("\nGenerating Features for training data . . . ")
-features_train, features_config = generate_feature_vector(X=X_train, extractors=pipeline["feature_extractors"])
-print(f"Generated Features for training data successfully. Shape of feature vector: {features_train.shape}")
+features_train, features_train_config = generate_feature_vector(X=X_train, extractors=pipeline["feature_extractors"])
+print(f"Generated Features for training data successfully.")
+
+print("the shape of features_train: ", features_train.shape)
+
+print("features config ", features_train_config)
+
 
 print("\nGenerating Features for validation data . . . ")
-features_valid, _ =generate_feature_vector(X=X_valid, extractors=features_config)
-print(f"Generated Features for validation data successfully. Shape of feature vector: {features_valid.shape}")
+features_valid, features_valid_config =generate_feature_vector(X=X_valid, extractors=features_train_config)
+print(f"Generated Features for validation data successfully.")
+
+print("the shape of features_valid: ", features_valid.shape)
+
+print("features config ", features_valid_config)
 
 
 # normalize vectors
 print("\nNormalizing Features for training data . . . ")
-features_norm_train, features_norm_config = normalize_features(features=features_train, parameters=pipeline["normalize_features"])
+features_norm_train, features_norm_train_config = normalize_features(features=features_train, parameters=pipeline["normalize_features"])
 print(f"Normalized Features for training data successfully. Shape of normalized feature vector: {features_norm_train.shape}")
+print("the shape of features_norm_train: ", features_norm_train.shape)
+
+print("features norm config ", features_norm_train_config)
+
 
 print("\nNormalizing Features for validation data . . . ")
-features_norm_valid, _ = normalize_features(features=features_valid, parameters=features_norm_config)
+features_norm_valid, features_norm_valid_config = normalize_features(features=features_valid, parameters=features_norm_config)
 print(f"Normalized Features for validation data successfully. Shape of normalized feature vector: {features_norm_valid.shape}")
+print("the shape of features_norm_valid: ", features_norm_valid.shape)
+
+print("features norm config ", features_norm_valid_config)
+
 
 
 # get prediction
 
 print("\nGenerating labels for training data . . . ")
-y_pred_train, classifiers_config = apply_classifiers(X=features_norm_train, classifiers=pipeline["classifiers"])
+y_pred_train, classifiers_train_config, classifers_train_list = apply_classifiers(X=features_norm_train, y=y_train, classes=pipeline["data"]["classes"], classifiers=pipeline["classifiers"], path_to_results= pipeline["path_to_results"])
+data_config["data"]["classes"] = pipeline["data"]["classes"]
+data_config["path_to_results"] = pipeline["path_to_results"]
 print("\nGenerated labels for training data successfully. ")
 
+print("the shape of y_pred_train: ", y_pred_train.shape)
+
+print("classifiers_train config ", classifiers_train_config)
+
+print("classifiers_list ", classifers_train_list)
 
 print("\nGenerating labels for validation data . . . ")
-y_pred_valid, _ = apply_classifiers(X=features_norm_valid, classifiers=classifiers_config)
+y_pred_valid, classifiers_valid_config, classifers_valid_list = apply_classifiers(X=features_norm_valid, classifiers=classifiers_train_config)
 print("\nGenerated labels for validation data successfully. ")
+
+print("the shape of y_pred_valid: ", y_pred_valid.shape)
+
+print("classifiers_valid config ", classifiers_valid_config)
+
+print("classifiers_list ", classifers_valid_list)
+
+
+
+
 
 print("Evaluating Metrics on training data . . . ")
 metrics_train, metrics_config = evaluate_metrics(y_true=y_train, y_pred=y_pred_train, metrics=pipeline["metrics"])
