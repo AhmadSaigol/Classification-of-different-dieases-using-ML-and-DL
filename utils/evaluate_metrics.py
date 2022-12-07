@@ -16,7 +16,7 @@ def evaluate_metrics(y_true, y_pred, metrics):
 
     Parameters:
         y_true: numpy array of shape (folds, num_images, 2)
-        y_pred: numoy array of shape (classifiers, folds, num_images, 2)
+        y_pred: numpy array of shape (classifiers, folds, num_images, 2)
         metrics: dictionary with following structure:
             metrics["metrics_1"]["function"] = pointer to the function
             metrics["metrics_1"]["parameter_1"] = value

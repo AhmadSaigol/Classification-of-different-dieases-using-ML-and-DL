@@ -3,7 +3,7 @@ Creates plots
 """
 import os
 import numpy as np
-from plots import plot_CM
+from plots.plot_CM import plot_CM
 
 def create_plots(y_true, y_pred, path_to_results, plots, classifiers):
     """
@@ -41,7 +41,7 @@ def create_plots(y_true, y_pred, path_to_results, plots, classifiers):
         raise ValueError("Shape of y_pred is not correct.")
 
 
-    for cl in range(classifiers):
+    for cl in range(num_classifiers):
 
         for fold_no in range(num_folds):
 
@@ -104,6 +104,7 @@ if __name__ == "__main__":
     config = create_plots(
         y_true=y_true,
         y_pred=y_pred,
+        plots= pipeline["plots"],
         path_to_results="/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/new_code_testing",
         classifiers=["a", "b"]
     )                 
