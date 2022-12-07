@@ -3,6 +3,7 @@ import numpy as np
 import os
 import pandas as pd
 
+"""
 from data_preprocessing.change_colorspace import change_colorspace
 from data_preprocessing.normalize import normalize
 
@@ -15,7 +16,7 @@ from metrics.accuracy import accuracy
 from metrics.f1_score import F1_score
 from metrics.mcc import mcc
 from metrics.precision import precision
-
+"""
 
 
 def add_function_names(dic):
@@ -74,8 +75,7 @@ def generate_txt_file(y, path_to_results, classifiers, name_of_file):
             
             path_to_file = path_to_fold + "/" + name_of_file + "_" + classifiers[cl] +".txt"
 
-            if not os.path.exists(path_to_file):
-                open(path_to_file, "w").close()
+            open(path_to_file, "w").close()
             
             with open(path_to_file, "a") as file:
 

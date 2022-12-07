@@ -4,13 +4,13 @@ Applies each evaluation metrics to generate evaluation score
 """
 
 import numpy as np
-from metrics.accuracy import accuracy
-from metrics.f1_score import F1_score
-from metrics.mcc import mcc
-from metrics.precision import precision
-from metrics.sensitivity import sensitivity
+from utils.metrics.accuracy import accuracy
+from utils.metrics.f1_score import F1_score
+from utils.metrics.mcc import mcc
+from utils.metrics.precision import precision
+from utils.metrics.sensitivity import sensitivity
 
-def evaluate_metrics(y_true, y_pred, metrics):
+def evaluate_metrics(y_true, y_pred, metrics, classifiers):
     """
     Applies each metric and generates evaluation score
 
@@ -26,7 +26,7 @@ def evaluate_metrics(y_true, y_pred, metrics):
             metrics["metrics_2"]["parameter_1"] = value
             metrics["metrics_2"]["parameter_2"] = value
 
-        classes: numpy array consisting names of classes
+        classifiers: numpy array consisting names of classifiers
 
     Returns:
         scores:numpy array of shape (classifiers, folds, metrics)
@@ -63,7 +63,7 @@ def evaluate_metrics(y_true, y_pred, metrics):
 
             for metric_no in range(num_metrics):
 
-                print(f"Procesing Classifer No: {cl_no} Fold No: {fold_no} Metric: {met_keys[metric_no]}")
+                print(f"Classifer: {classifiers[cl_no]} Fold No: {fold_no} Metric: {met_keys[metric_no]}")
 
                 fnt_pointer = metrics[ met_keys[metric_no] ]["function"]
 

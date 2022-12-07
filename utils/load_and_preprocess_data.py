@@ -3,11 +3,11 @@ import cv2
 import os
 from copy import deepcopy
 
-from compare_dicts import compare_dict
-from data_preprocessing.change_colorspace import change_colorspace
-from data_preprocessing.resize import resize
-from data_preprocessing.normalize import normalize
-from data_preprocessing.split_data import split_data
+from utils.compare_dicts import compare_dict
+from utils.data_preprocessing.change_colorspace import change_colorspace
+from utils.data_preprocessing.resize import resize
+from utils.data_preprocessing.normalize import normalize
+from utils.data_preprocessing.split_data import split_data
 
 def load_and_preprocess_data(data_config):
     """
@@ -38,7 +38,7 @@ def load_and_preprocess_data(data_config):
             data: numpy array containing all images of shape (folds, num_of_images, height, width, num_of_channels)
             labels: numpy array with image ids (axis=0) and/or image labels(axis=1) of shape (fold, num_of_images, 1) or (fold, num_of_images, 2)
             output_config:
-            
+
         Additional Notes:
            Images are initially read in BGR format  with shape (1, Height, width, color_channels) in uint8 format 
                 
@@ -53,7 +53,7 @@ def load_and_preprocess_data(data_config):
         if k in data_config.keys():
             output_config[k] = {}
         else:
-            raise (f"{k} must be provided in 'data_config'")
+            raise ValueError(f"'{k}' must be provided in 'data_config'")
 
     # Set up default values for data options
     data = data_config["data"]
@@ -118,32 +118,29 @@ def load_and_preprocess_data(data_config):
 
 
         if split_type:
-            print("image Id Labels: ")
-            print(img_ids_labels.shape)
-            print(img_ids_labels)
-
+            print( f"Spliting the data: type: {split_type}")
+            
             y_train, y_valid = split_data(y=img_ids_labels, split_type=split_type)
 
-            print("y_train ", y_train.shape)
-            print("y_valid ", y_valid.shape)
+            print(f"Shape of y_train: {y_train.shape} y_valid:  {y_valid.shape}")
             
             
             num_folds = y_train.shape[0]
 
             for fold_no in range(num_folds):
-                print("Processing Fold No: ", fold_no)
+                print("Loading Images of Fold No: ", fold_no)
                 
                 train_images, train_config = load_images(path_to_images=path_to_images, 
                                                         image_ids=y_train[fold_no,:,0],
                                                         data_preprocessing=data_config["data_preprocessing"])
 
-                print("train images: ", train_images.shape)
+                print(f"\nFold No: {fold_no}s Shape of Training Images: {train_images.shape}")
 
                 valid_images, valid_config = load_images(path_to_images=path_to_images, 
                                             image_ids=y_valid[fold_no,:,0],
                                             data_preprocessing=train_config)
-
-                print("valid images: ", valid_images.shape)
+                
+                print(f"\nFold No: {fold_no} Shape of Validation Images: {train_images.shape}")
 
                 if not compare_dict(train_config, valid_config):
                     raise ValueError("While loading images for validation data, a function changed the values of the configuration")
@@ -160,25 +157,22 @@ def load_and_preprocess_data(data_config):
             
             
             output_config ["data_preprocessing"] = train_config
-
-            print(f"Shape of X_train: {X_train.shape} y_train: {y_train.shape} X_valid: {X_valid.shape} y_valid: {y_valid.shape}")
-            
+     
             for fold_no in range(y_train.shape[0]):
                 
                 # ratio in y_train
                 unique_labels, counts =np.unique(y_train[fold_no, :,1], return_counts=True)
-                print(f"Fold No: {fold_no} Training data: Unique labels: ")
+                print(f"\nFold No: {fold_no} Training data: Unique labels: ")
                 for ul, c in zip(unique_labels, counts):
-                    print(f"Label: {ul}, %age: {c*100/y_train.shape[1]}")
+                    print(f"Label: {ul}, %age: {format(c*100/y_train.shape[1], '.2f')}")
 
                 # ratio in y_valid
                 unique_labels, counts =np.unique(y_valid[fold_no, :,1], return_counts=True)
-                print(f"Fold No: {fold_no} Validation data: Unique labels: ")
+                print(f"\nFold No: {fold_no} Validation data: Unique labels: ")
                 for ul, c in zip(unique_labels, counts):
-                    print(f"Label: {ul}, %age: {c*100/y_valid.shape[1]}")
+                    print(f"Label: {ul}, %age: {format(c*100/y_valid.shape[1], '.2f')}")
     
                 
-            print(output_config)
 
             return X_train, y_train, X_valid, y_valid, output_config
         
@@ -193,10 +187,7 @@ def load_and_preprocess_data(data_config):
             if not compare_dict(data_config["data_preprocessing"], config):
                 raise ValueError("While loading images for the data, a function changed the values of the configuration")
               
-            print(f"Shape of X: {X.shape} y: {y.shape}")
-            
             output_config["data_preprocessing"] = config
-            print(output_config)
 
             return X, y, output_config
 
@@ -209,15 +200,13 @@ def load_and_preprocess_data(data_config):
 
 def load_images(path_to_images, image_ids, data_preprocessing):
     """
-    Loads images (in grayscale) and applies preprocesssing
+    Loads images and applies preprocesssing
 
     Returns images (num_images, H, W, channels)
     
     and data preprocessing config
 
     """
-
-    verbose = True
 
     # for storing preprocessing default values
     config = {}
@@ -228,10 +217,8 @@ def load_images(path_to_images, image_ids, data_preprocessing):
         path_to_image = os.path.join(path_to_images, img_id)
         img = cv2.imread(path_to_image)
 
-        if verbose:
-            print(f"Loaded image: {img_id} Shape: {img.shape}")
-
-
+        print(f"\nLoaded image {img_id} Shape: {img.shape} ")
+        
         # make sure that every image has same shape
         if index == 0:
             temp_shape = img.shape
@@ -246,15 +233,9 @@ def load_images(path_to_images, image_ids, data_preprocessing):
 
             fnt_pointer = data_preprocessing[preprocessing]["function"]
             
-            print("Applying ", preprocessing)
+            print(f"Applying Data Preprocessing: {preprocessing}")
 
-            if verbose:
-                print("Before: ", img.shape)
-            
             img, fnt_config = fnt_pointer(img, data_preprocessing[preprocessing])            
-
-            if verbose:
-                print("After: ", img.shape)
             
             fnt_config["function"] = fnt_pointer
 

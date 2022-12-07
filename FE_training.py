@@ -55,7 +55,7 @@ pipeline["data"]["path_to_images"] = "/home/ahmad/Documents/TUHH/Semester 3/Inte
 pipeline["data"]["path_to_labels"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train.txt"
 
 # split data
-pipeline["data"]["split_data"] = "simple"  #"simpleStrafied", "kfold", "kfoldStratified"
+pipeline["data"]["split_type"] = "simple" #"simple", "simpleStratified", "kfold", "kfoldStratified"
 
 pipeline["data"]["classes"] = np.array(["Normal", "COVID", "pneumonia", "Lung_Opacity"]) # np.array(["No-COVID", "COVID"]) keep order same
 
@@ -113,7 +113,7 @@ pipeline["classifiers"] ={}
 # SVM
 pipeline["classifiers"]["svm"] = {}
 pipeline["classifiers"]["svm"]["function"] = svm 
-pipeline["classifiers"]["svm"]["trainAuto"] = True 
+pipeline["classifiers"]["svm"]["trainAuto"] = False 
 pipeline["classifiers"]["svm"]['svm_type'] =  'C_SVC' 
 pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
 pipeline["classifiers"]["svm"]['Gamma'] =  0.2 
@@ -181,8 +181,6 @@ pipeline["metrics"]["mcc"]["function"] = mcc
 pipeline["plots"] = {}
 pipeline["plots"]["CM"] = {}
 pipeline["plots"]["CM"]["function"] = plot_CM
-pipeline["plots"]["CM"]
-
 
 
 #--------------------------------------------Build classifier and get results----------------------------
@@ -191,19 +189,17 @@ pipeline["plots"]["CM"]
 
 # load data
 
-print("\nLoading Training data . . . ")
-
+print("\nLoading Images . . . ")
+temp_config ={}
+temp_config["data"] = pipeline["data"]
+temp_config["data_preprocessing"] = pipeline["data_preprocessing"]
 X_train, y_train, X_valid, y_valid, data_config = load_and_preprocess_data(
-    data_config={**pipeline["data"], **pipeline["data_preprocessing"]}
+    data_config=temp_config
     )
 
-print("Loaded Training data Sucessfully")
-print("the shape of X_train: ", X_train.shape)
-print("the shape of y_train: ", y_train.shape)
-print("the shape of X_valid: ", X_valid.shape)
-print("the shape of y_valid: ", y_valid.shape)
-
-print("data processing config ", data_config)
+print(f"Loaded Images Sucessfully.Shape of X_train: {X_train.shape} y_train: {y_train.shape} X_valid: {X_valid.shape} y_valid: {y_valid.shape}")
+         
+#print("data processing config ", data_config)
 
 
 # feature generation
@@ -213,11 +209,9 @@ features_train, features_train_config = generate_feature_vector(
     X=X_train, 
     extractors=pipeline["feature_extractors"]
     )
-print(f"Generated Features for training data successfully.")
+print(f"Generated Features for training data successfully. Shape: {features_train.shape}")
 
-print("the shape of features_train: ", features_train.shape)
-
-print("features config ", features_train_config)
+#print("features config ", features_train_config)
 
 
 print("\nGenerating Features for validation data . . . ")
@@ -225,11 +219,9 @@ features_valid, features_valid_config =generate_feature_vector(
     X=X_valid, 
     extractors=features_train_config
     )
-print(f"Generated Features for validation data successfully.")
+print(f"Generated Features for validation data successfully. Shape: {features_valid.shape}")
 
-print("the shape of features_valid: ", features_valid.shape)
-
-print("features config ", features_valid_config)
+#print("features config ", features_valid_config)
 
 
 # normalize vectors
@@ -238,10 +230,9 @@ features_norm_train, features_norm_train_config = normalize_features(
     features=features_train, 
     parameters=pipeline["normalize_features"]
     )
-print(f"Normalized Features for training data successfully. Shape of normalized feature vector: {features_norm_train.shape}")
-print("the shape of features_norm_train: ", features_norm_train.shape)
+print(f"Normalized Features for training data successfully. Shape: {features_norm_train.shape}")
 
-print("features norm config ", features_norm_train_config)
+#print("features norm config ", features_norm_train_config)
 
 
 print("\nNormalizing Features for validation data . . . ")
@@ -249,10 +240,9 @@ features_norm_valid, features_norm_valid_config = normalize_features(
     features=features_valid, 
     parameters=features_norm_train_config
     )
-print(f"Normalized Features for validation data successfully. Shape of normalized feature vector: {features_norm_valid.shape}")
-print("the shape of features_norm_valid: ", features_norm_valid.shape)
+print(f"Normalized Features for validation data successfully. Shape: {features_norm_valid.shape}")
 
-print("features norm config ", features_norm_valid_config)
+#print("features norm config ", features_norm_valid_config)
 
 
 
@@ -266,45 +256,40 @@ y_pred_train, classifiers_train_config, classifers_train_list = apply_classifier
     classifiers=pipeline["classifiers"], 
     path_to_results= pipeline["path_to_results"]
     )
-data_config["data"]["classes"] = pipeline["data"]["classes"]
+data_config["data"]["classes"] = pipeline["data"]["classes"].tolist()
 data_config["path_to_results"] = pipeline["path_to_results"]
-print("\nGenerated labels for training data successfully. ")
+print(f"Generated labels for training data successfully. Shape: {y_pred_train.shape}")
 
-print("the shape of y_pred_train: ", y_pred_train.shape)
+#print("classifiers_train config ", classifiers_train_config)
 
-print("classifiers_train config ", classifiers_train_config)
+#print("classifiers_list ", classifers_train_list)
 
-print("classifiers_list ", classifers_train_list)
 
 print("\nGenerating labels for validation data . . . ")
 y_pred_valid, classifiers_valid_config, classifers_valid_list = apply_classifiers(
     X=features_norm_valid, 
-    y=y_valid, 
+    y=y_valid,
+    classes=pipeline["data"]["classes"],  
     classifiers=classifiers_train_config
     )
-print("\nGenerated labels for validation data successfully. ")
+print(f"Generated labels for validation data successfully. Shape:{y_pred_valid.shape}")
 
-print("the shape of y_pred_valid: ", y_pred_valid.shape)
+#print("classifiers_valid config ", classifiers_valid_config)
 
-print("classifiers_valid config ", classifiers_valid_config)
-
-print("classifiers_list ", classifers_valid_list)
+#print("classifiers_list ", classifers_valid_list)
 
 
 
-
-
-print("Evaluating Metrics on training data . . . ")
+print("\nEvaluating Metrics on training data . . . ")
 metrics_train, metrics_train_config, metrics_train_list = evaluate_metrics(
     y_true=y_train, 
     y_pred=y_pred_train, 
-    metrics=pipeline["metrics"]
+    metrics=pipeline["metrics"],
+    classifiers = classifers_train_list,
     )
-print("Evaluated Metrics on the training data successfully")
-
-print("shape of train metrics score ", metrics_train.shape)
-print("metrics train config ", metrics_train_config)
-print("metrics train list ", metrics_train_list)
+print("\nResults")
+#print("metrics train config ", metrics_train_config)
+#print("metrics train list ", metrics_train_list)
 
 for cl_no, cl in enumerate(classifers_train_list):
 
@@ -314,20 +299,21 @@ for cl_no, cl in enumerate(classifers_train_list):
 
             print(f"Classifer: {cl} Fold No: {fold_no} Metric: {met}  Score: {metrics_train[cl_no, fold_no, met_no]} ")
 
+print(f"Evaluated Metrics on the training data successfully. Shape:{metrics_train.shape}")
 
 
 
-print("Evaluating Metrics on validation data . . . ")
+print("\nEvaluating Metrics on validation data . . . ")
 metrics_valid, metrics_valid_config, metrics_valid_list = evaluate_metrics(
     y_true=y_valid, 
     y_pred=y_pred_valid, 
-    metrics=metrics_train_config
+    metrics=metrics_train_config,
+    classifiers=classifers_valid_list
     )
-print("Evaluated Metrics on the validation data successfully")
+print("\nResults")
 
-print("shape of valid metrics score ", metrics_valid.shape)
-print("metrics train config ", metrics_valid_config)
-print("metrics train list ", metrics_valid_list)
+#print("metrics train config ", metrics_valid_config)
+#print("metrics train list ", metrics_valid_list)
 
 for cl_no, cl in enumerate(classifers_valid_list):
 
@@ -337,24 +323,29 @@ for cl_no, cl in enumerate(classifers_valid_list):
 
             print(f"Classifer: {cl} Fold No: {fold_no} Metric: {met}  Score: {metrics_valid[cl_no, fold_no, met_no]} ")
 
+print(f"Evaluated Metrics on the validation data successfully. Shape: {metrics_valid.shape}")
 
-
-print("Ploting Confusion Matrix for training data")
+print("\nCreating Plots for training data . . .")
 plots_train_config = create_plots(
     y_true=y_train, 
     y_pred=y_pred_train, 
-    parameters= pipeline["plots"], 
-    path_to_results=pipeline["path_to_results"]
+    plots= pipeline["plots"], 
+    path_to_results=pipeline["path_to_results"],
+    classifiers=classifers_train_list,
+    name_of_file = "train"
     )
-print("Plotted Confusion Matrix for training data")
+print("Created Plots for training data")
 
-print("Ploting Confusion Matrix for validation data")
+print("\nCreating Plots for validation data")
 plots_valid_config = create_plots(
     y_true=y_valid, 
     y_pred=y_pred_valid, 
-    path_to_results=pipeline["path_to_results"]
+    plots= pipeline["plots"], 
+    path_to_results=pipeline["path_to_results"],
+    classifiers=classifers_valid_list, 
+    name_of_file = "valid"
     )
-print("Plotted Confusion Matrix for training data")
+print("Created Plots for validation data")
 
 
 #plot_ROC()
@@ -362,27 +353,25 @@ print("Plotted Confusion Matrix for training data")
 # concencate all the returuned configs and save it json
 
 results_dict = data_config
-results_dict ["feature_extractors"] = {}
 results_dict ["feature_extractors"] = features_train_config
-results_dict["normalize_features"] = {}
 results_dict["normalize_features"] = features_norm_train_config
-results_dict["classifiers"] = {}
 results_dict["classifiers"] = classifiers_train_config
-results_dict ["metrics"] = {}
 results_dict ["metrics"] = metrics_train_config
-results_dict["plots"] = {}
 results_dict["plots"] = plots_train_config
 
 # add function names 
+print("\nReplacing Function names in the dict")
 add_function_names (results_dict)
 
 # save pipeline
+print("\nsaving pipeline dictionary to json")
 save_to_json(
     results_dict, 
     pipeline["path_to_results"]+"/training_pipeline"
     )
 
 # save labels
+print("\nGenerating text file for training data")
 generate_txt_file(
     y=y_pred_train, 
     path_to_results=pipeline["path_to_results"], 
@@ -390,6 +379,7 @@ generate_txt_file(
     name_of_file="train"
     )
 
+print("\nGenerating text file for validation data")
 generate_txt_file(
     y=y_pred_valid, 
     path_to_results=pipeline["path_to_results"], 
@@ -398,6 +388,7 @@ generate_txt_file(
     )
 
 # save metrics train and metrics_valid
+print("\nSaving training results ")
 save_results(
     results=metrics_train,
     classifiers=classifers_train_list,
@@ -406,6 +397,7 @@ save_results(
     name_of_file="train"
 )
 
+print("\nSaving validation results ")
 save_results(
     results=metrics_valid,
     classifiers=classifers_valid_list,
@@ -413,3 +405,6 @@ save_results(
     path_to_results=pipeline["path_to_results"],
     name_of_file="valid"
 )
+
+
+print("\nProcessing Completed")

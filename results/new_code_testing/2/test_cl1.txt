@@ -1,3 +1,0 @@
-ag a
-ah b
-ai c

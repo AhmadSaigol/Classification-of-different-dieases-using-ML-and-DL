@@ -40,6 +40,7 @@ def normalize(images, parameters):
 
    
     elif method == "minmax":
+
         flag = True
 
         for img in range(images.shape[0]):

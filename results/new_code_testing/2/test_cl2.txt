@@ -1,3 +1,0 @@
-ap a
-aq c
-ar b

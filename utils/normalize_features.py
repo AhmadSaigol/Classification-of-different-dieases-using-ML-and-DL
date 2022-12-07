@@ -77,6 +77,16 @@ def normalize_features(features, parameters):
             var_features = parameters["var"]
             scale_features = parameters["scale"]
 
+            #convert to numpy
+            if type(mean_features).__name__ == 'list':
+                mean_features = np.array(mean_features)
+
+            if type(var_features).__name__ == 'list':
+                var_features = np.array(var_features)
+            
+            if type(scale_features).__name__ == 'list':
+                scale_features = np.array(scale_features)
+            
             # Testing features
             if mean_features.shape[0] != features.shape[0]:
                 print("using mean values of keys 'mean', 'var' and 'scale' for calculation")
@@ -124,9 +134,9 @@ def normalize_features(features, parameters):
                 # normalize data
                 results[fold_no] = scaler.transform(features[fold_no])
             
-        config["mean"] = mean_features
-        config["var"] = var_features
-        config["scale"] = scale_features
+        config["mean"] = mean_features.tolist()
+        config["var"] = var_features.tolist()
+        config["scale"] = scale_features.tolist()
     
     elif norm_type == "MinMaxScaler":
         scaler = MinMaxScaler()
@@ -137,6 +147,14 @@ def normalize_features(features, parameters):
             print("Normalizing Features in Testing Phase")
             min_features = parameters["min"]        
             scale_features = parameters["scale"]
+
+            # convert to numpy array
+            if type(min_features).__name__ == 'list':
+                min_features = np.array(min_features)
+            
+            if type(scale_features).__name__ == 'list':
+                scale_features = np.array(scale_features)
+            
 
             # Testing features
             if min_features.shape[0] != features.shape[0]:
@@ -181,8 +199,8 @@ def normalize_features(features, parameters):
                 # normalize data
                 results[fold_no] = scaler.transform(features[fold_no])
             
-        config["min"] = min_features
-        config["scale"] = scale_features
+        config["min"] = min_features.tolist()
+        config["scale"] = scale_features.tolist()
     
     elif norm_type == "MaxAbsScaler":
         scaler = MaxAbsScaler()
@@ -193,6 +211,14 @@ def normalize_features(features, parameters):
             print("Normalizing Features in Testing Phase")
             max_abs_features = parameters["max_abs"]        
             scale_features = parameters["scale"]
+
+            # convert to numpy array
+            if type(max_abs_features).__name__ == 'list':
+                max_abs_features = np.array(max_abs_features)
+            
+            if type(scale_features).__name__ == 'list':
+                scale_features = np.array(scale_features)
+            
 
             # Testing features
             if max_abs_features.shape[0] != features.shape[0]:
@@ -237,8 +263,8 @@ def normalize_features(features, parameters):
                 # normalize data
                 results[fold_no] = scaler.transform(features[fold_no])
             
-        config["max_abs"] = max_abs_features
-        config["scale"] = scale_features
+        config["max_abs"] = max_abs_features.tolist()
+        config["scale"] = scale_features.tolist()
 
     else:
         raise ValueError("Unknown Value encountered for the parameter'norm_type' while normalizing the features.")

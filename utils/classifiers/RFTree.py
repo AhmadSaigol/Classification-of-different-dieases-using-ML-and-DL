@@ -27,7 +27,7 @@ def rftree(X, parameters, classes, y, save_model_path=None, path_to_model=None):
             config: dictionary with parameters of the function (including default parameters)
 
         Additional Notes:
-            if y.shape[-1] ==2 and save_model_path is provided, then program will train the model and generate predicitons (training phase)
+            if save_model_path is provided, then program will train the model and generate predicitons (training phase)
             if path_to_model is provided, then program will load the model and generate the prediction (testing phase)
 
             if "ActiveVarCount" is zero in the output config, that means the parameter was set to default value
@@ -40,9 +40,9 @@ def rftree(X, parameters, classes, y, save_model_path=None, path_to_model=None):
     X=X.astype(np.float32)
 
     # determine phase
-    if (y.shape[-1] == 2 and save_model_path) and not path_to_model:
+    if  save_model_path and not path_to_model:
         train = True
-    elif (y.shape[-1] == 1 and not save_model_path) and path_to_model:
+    elif  not save_model_path and path_to_model:
         train = False
     else:
         raise ValueError("Unable to determine the phase. Check parameters 'y', 'save_model_path' and 'path_to_model'. ")

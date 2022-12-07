@@ -1,3 +1,0 @@
-am c
-an a
-ao a

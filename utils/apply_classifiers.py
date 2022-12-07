@@ -4,8 +4,8 @@ Applies each classifier and generate predictions
 """
 import os
 import numpy as np
-from classifiers.SVM import svm
-from classifiers.RFTree import rftree
+#from classifiers.SVM import svm
+#from classifiers.RFTree import rftree
 
 def apply_classifiers(X, classifiers, classes, y, path_to_results=None):
     """
@@ -24,8 +24,7 @@ def apply_classifiers(X, classifiers, classes, y, path_to_results=None):
             classifiers["classifiers_2"]["parameter_2"] = value
 
         y: labels of the data. numpy array of shape (folds, num_of_images, 2) or (folds,num_images, 1)
-        if last axis = 2, then it would be inferred that the function is being called during training phase 
-        path_to_results: (required in testing phase) where the results will be saved (required for training since trained_models will be saved)
+        path_to_results: where the models will be saved ( if not provided, the code will work in testing phase)
 
 
     Returns:
@@ -47,13 +46,11 @@ def apply_classifiers(X, classifiers, classes, y, path_to_results=None):
     flag = True
     
     # determine whether we are in training phase or testing phase
-    if y.shape[-1] == 2 and path_to_results:
+    if path_to_results:
         train = True
-    elif y.shape[-1] == 1 and not path_to_results :
+    else :
         train = False
-    else:
-        raise ValueError("Unable to determine the phase. please check the parameters 'y' and 'path_to_results'. ")
-
+  
     
     
     if train:
@@ -115,7 +112,6 @@ def apply_classifiers(X, classifiers, classes, y, path_to_results=None):
                 prediction, fnt_config = fnt_pointer(X=X[fold_no], parameters=classifiers[classifier], 
                                                     classes=classes, y=y[fold_no], path_to_model=path_to_model)
             
-            print ("prediction ", prediction)
             
             # concatenate y_pred for folds  
             prediction = np.expand_dims(prediction, axis=0)
@@ -127,17 +123,16 @@ def apply_classifiers(X, classifiers, classes, y, path_to_results=None):
             else:
                 y_pred = np.concatenate((y_pred, prediction))
                 
-            print("After fold shape ", y_pred.shape)
 
         # concatenate y_pred for classifiers             
         y_pred = np.expand_dims(y_pred, axis=0)
 
         if flag:
             y_preds = y_pred
+            flag=False
         else:
             y_preds = np.concatenate((y_preds, y_pred)) 
                 
-        print("After classifier shape ", y_pred.shape)
         
 
         # save classifier

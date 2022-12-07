@@ -3,9 +3,9 @@ Generates a feature vector
 
 """
 import numpy as np
-from feature_extractors.contrast import calculate_contrast
-from feature_extractors.kurtosis import calculate_kurtosis
-from feature_extractors.skewness import calculate_skew
+#from feature_extractors.contrast import calculate_contrast
+#from feature_extractors.kurtosis import calculate_kurtosis
+#from feature_extractors.skewness import calculate_skew
 
 def generate_feature_vector(X, extractors):
     """

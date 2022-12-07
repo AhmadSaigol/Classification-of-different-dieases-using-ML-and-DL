@@ -3,9 +3,9 @@ Creates plots
 """
 import os
 import numpy as np
-from plots.plot_CM import plot_CM
+#from plots.plot_CM import plot_CM
 
-def create_plots(y_true, y_pred, path_to_results, plots, classifiers):
+def create_plots(y_true, y_pred, path_to_results, plots, classifiers, name_of_file):
     """
     Generates differenet plots
     Parameters:
@@ -20,6 +20,8 @@ def create_plots(y_true, y_pred, path_to_results, plots, classifiers):
                 plots["plots_2"]["function"] = pointer to the function
                 plots["plots_2"]["parameter_1"] = value
                 plots["plots_2"]["parameter_2"] = value
+        classifiers: numpay array with numes of classifiers
+        name_of_file:  
 
     Returns:
         output_config:
@@ -61,7 +63,7 @@ def create_plots(y_true, y_pred, path_to_results, plots, classifiers):
 
                 fnt_pointer = plots[pl]["function"]
 
-                fnt_pointer(y_true=y_true[fold_no,:,1], y_pred=y_pred[cl, fold_no, :, 1], path_to_results=path_to_plots+f"/{classifiers[cl]}")
+                fnt_pointer(y_true=y_true[fold_no,:,1], y_pred=y_pred[cl, fold_no, :, 1], path_to_results=path_to_plots+f"/{classifiers[cl]}_{name_of_file}")
 
 
     return plots
