@@ -268,19 +268,42 @@ print("classifiers_list ", classifers_valid_list)
 
 
 print("Evaluating Metrics on training data . . . ")
-metrics_train, metrics_config = evaluate_metrics(y_true=y_train, y_pred=y_pred_train, metrics=pipeline["metrics"])
+metrics_train, metrics_train_config, metrics_train_list = evaluate_metrics(y_true=y_train, y_pred=y_pred_train, metrics=pipeline["metrics"])
 print("Evaluated Metrics on the training data successfully")
 
-# print results
-#for index in range(len())
+print("shape of train metrics score ", metrics_train.shape)
+print("metrics train config ", metrics_train_config)
+print("metrics train list ", metrics_train_list)
+
+for cl_no, cl in enumerate(classifers_train_list):
+
+    for fold_no in range(metrics_train.shape[1]):
+        
+        for met_no, met in enumerate(metrics_train_list):
+
+            print(f"Classifer: {cl} Fold No: {fold_no} Metric: {met}  Score: {metrics_train[cl_no, fold_no, met_no]} ")
+
+
+
 
 print("Evaluating Metrics on validation data . . . ")
-metrics_valid, _ = evaluate_metrics(y_true=y_valid, y_pred=y_pred_valid, metrics=metrics_config)
+metrics_valid, metrics_valid_config, metrics_valid_list = evaluate_metrics(y_true=y_valid, y_pred=y_pred_valid, metrics=metrics_train_config)
 print("Evaluated Metrics on the validation data successfully")
 
-# print results
-#for index in range(len())
- 
+print("shape of valid metrics score ", metrics_valid.shape)
+print("metrics train config ", metrics_valid_config)
+print("metrics train list ", metrics_valid_list)
+
+for cl_no, cl in enumerate(classifers_valid_list):
+
+    for fold_no in range(metrics_valid.shape[1]):
+        
+        for met_no, met in enumerate(metrics_valid_list):
+
+            print(f"Classifer: {cl} Fold No: {fold_no} Metric: {met}  Score: {metrics_valid[cl_no, fold_no, met_no]} ")
+
+
+
 plot_CM(y_true=y_train, y_pred=y_pred_train, path_to_results=path_to_results)
 
 plot_ROC()
