@@ -37,7 +37,8 @@ def load_and_preprocess_data(data_config):
         Returns:
             data: numpy array containing all images of shape (folds, num_of_images, height, width, num_of_channels)
             labels: numpy array with image ids (axis=0) and/or image labels(axis=1) of shape (fold, num_of_images, 1) or (fold, num_of_images, 2)
-    
+            output_config:
+            
         Additional Notes:
            Images are initially read in BGR format  with shape (1, Height, width, color_channels) in uint8 format 
                 

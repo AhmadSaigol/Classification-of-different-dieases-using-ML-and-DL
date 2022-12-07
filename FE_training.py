@@ -34,6 +34,8 @@ from utils.metrics.sensitivity import sensitivity
 from utils.create_plots import create_plots
 from utils.plots.plot_CM import plot_CM
 
+from utils.json_processing import save_to_json
+
 verbose = True
 
 pipeline = {}
@@ -198,17 +200,7 @@ print("the shape of y_valid: ", y_valid.shape)
 
 print("data processing config ", data_config)
 
-# print unique labels and their counts
-"""
-num_images_train =y_train.shape[1]
-num_images_valid =y_valid.shape[1]
-total_num_samples = num_images_train + num_images_valid
 
-unique_labels, counts = np.unique(y_train[:,1], return_counts=True)
-print(f"Unique labels and their frequencies found in the training data: ")
-for ul, c in zip(unique_labels, counts):
-    print(f"Label: {ul} Count: {c}")
-"""
 # feature generation
 
 print("\nGenerating Features for training data . . . ")
@@ -324,7 +316,21 @@ print("Plotted Confusion Matrix for training data")
 #plot_ROC()
 
 # concencate all the returuned configs and save it json
-save_to_json(config, path_to_results)
+
+results_dict = data_config
+results_dict ["feature_extractors"] = {}
+results_dict ["feature_extractors"] = features_train_config
+results_dict["normalize_features"] = {}
+results_dict["normalize_features"] = features_norm_train_config
+results_dict["classifiers"] = {}
+results_dict["classifiers"] = classifiers_train_config
+results_dict ["metrics"] = {}
+results_dict ["metrics"] = metrics_train_config
+results_dict["plots"] = {}
+results_dict["plots"] = plots_train_config
+
+
+save_to_json(results_dict, pipeline["path_to_results"])
 
 # save metrics train and metrics_valid
 
