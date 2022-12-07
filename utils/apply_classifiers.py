@@ -31,7 +31,7 @@ def apply_classifiers(X, classifiers, classes, y, path_to_results=None):
     Returns:
         predictions: (classifer, folds, num_images, 2)
         output_config:
-        list_of_classifiers: since data is incoming in dictionary format, so for easy mapping of which index represents which classifiers
+        list_of_classifiers: since data is incoming in dictionary format, so for easy mapping of which index represents to which classifier
 
     Additional Notes:
 

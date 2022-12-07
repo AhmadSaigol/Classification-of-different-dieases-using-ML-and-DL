@@ -24,6 +24,13 @@ from utils.apply_classifiers import apply_classifiers
 from utils.classifiers.SVM import svm
 from utils.classifiers.RFTree import rftree
 
+from utils.evaluate_metrics import evaluate_metrics
+from utils.metrics.accuracy import accuracy
+from utils.metrics.f1_score import F1_score
+from utils.metrics.mcc import mcc
+from utils.metrics.precision import precision
+from utils.metrics.sensitivity import sensitivity
+
 verbose = True
 
 pipeline = {}
@@ -42,7 +49,7 @@ pipeline["data"]["path_to_labels"] = "/home/ahmad/Documents/TUHH/Semester 3/Inte
 # split data
 pipeline["data"]["split_data"] = "simple" , #"simpleStrafied", "kfold", "kfoldStratified"
 
-pipeline["data"]["classes"] = np.array(["Normal", "COVID", "pneumonia", "Lung_Opacity"])
+pipeline["data"]["classes"] = np.array(["Normal", "COVID", "pneumonia", "Lung_Opacity"]) # np.array(["No-COVID", "COVID"]) keep order same
 
 # ---------------------------------set up data preprocessing methods and parameters------------------------------------
 #default values for parameters not guven -8way of determining whether its training or predictin
@@ -128,34 +135,39 @@ pipeline["classifiers"]["RFTree"]["ActiveVarCount"] =0
 
 #---------------------------------------------set up evaluation metrics and parameters------------------------
 
-# accuracy
+
 pipeline["metrics"] = {}
 
-pipeline["metrics"]["accuracy"] = {}
-pipeline["metrics"]["accuracy"]["function"] =0 #name of functions to be used for ensemblers
-pipeline["metrics"]["accuracy"]["some_parameter"] =0 #value of parameter
+# accuracy
+pipeline["metrics"]["simple_accuracy"] = {}
+pipeline["metrics"]["simple_accuracy"]["function"] = accuracy
+pipeline["metrics"]["simple_accuracy"]["type"] = "simple"  #value of parameter
+
+pipeline["metrics"]["balanced_accuracy"] = {}
+pipeline["metrics"]["balanced_accuracy"]["function"] = accuracy
+pipeline["metrics"]["balanced_accuracy"]["type"] = "balanced"
 
 # precision
 pipeline["metrics"]["precision"] = {}
-pipeline["metrics"]["precision"]["function"] =0 #name of functions to be used for ensemblers
-pipeline["metrics"]["precision"]["some_parameter"] =0 #value of parameter
-
+pipeline["metrics"]["precision"]["function"] = precision #name of functions to be used for ensemblers
+pipeline["metrics"]["precision"]["class_result"] = "COVID"
+pipeline["metrics"]["precision"]["average"] = "weighted"
 
 # recall
 pipeline["metrics"]["sensitivity"] = {}
-pipeline["metrics"]["sensitivity"]["function"] =0 #name of functions to be used for ensemblers
-pipeline["metrics"]["sensitivity"]["some_parameter"] =0 #value of parameter
+pipeline["metrics"]["sensitivity"]["function"] = sensitivity
+pipeline["metrics"]["sensitivity"]["class_result"]  = "COVID"
+pipeline["metrics"]["sensitivity"]["average"]  = "weighted"
 
-# Specificity
-pipeline["metrics"]["specificity"] = {}
-pipeline["metrics"]["specificity"]["function"] =0 #name of functions to be used for ensemblers
-pipeline["metrics"]["specificity"]["some_parameter"] =0 #value of parameter
-
-
-# f1_score
+# F1 score
 pipeline["metrics"]["f1_score"] = {}
-pipeline["metrics"]["f1_score"]["function"] =0 #name of functions to be used for ensemblers
-pipeline["metrics"]["f1_score"]["some_parameter"] =0 #value of parameter
+pipeline["metrics"]["f1_score"]["function"] = F1_score 
+pipeline["metrics"]["f1_score"]["class_result"] = "COVID"
+pipeline["metrics"]["f1_score"]["average"] = "weighted"
+
+# mcc
+pipeline["metrics"]["mcc"] = {}
+pipeline["metrics"]["mcc"]["function"] = mcc 
 
 
 
@@ -219,7 +231,7 @@ print("features norm config ", features_norm_train_config)
 
 
 print("\nNormalizing Features for validation data . . . ")
-features_norm_valid, features_norm_valid_config = normalize_features(features=features_valid, parameters=features_norm_config)
+features_norm_valid, features_norm_valid_config = normalize_features(features=features_valid, parameters=features_norm_train_config)
 print(f"Normalized Features for validation data successfully. Shape of normalized feature vector: {features_norm_valid.shape}")
 print("the shape of features_norm_valid: ", features_norm_valid.shape)
 
