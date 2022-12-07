@@ -31,6 +31,9 @@ from utils.metrics.mcc import mcc
 from utils.metrics.precision import precision
 from utils.metrics.sensitivity import sensitivity
 
+from utils.create_plots import create_plots
+from utils.plots.plot_CM import plot_CM
+
 verbose = True
 
 pipeline = {}
@@ -169,6 +172,11 @@ pipeline["metrics"]["f1_score"]["average"] = "weighted"
 pipeline["metrics"]["mcc"] = {}
 pipeline["metrics"]["mcc"]["function"] = mcc 
 
+#------------------------------------------------Create Plots --------------------------
+pipeline["plots"] = {}
+pipeline["plots"]["CM"] = {}
+pipeline["plots"]["CM"]["function"] = plot_CM
+pipeline["plots"]["CM"]
 
 
 
@@ -304,11 +312,20 @@ for cl_no, cl in enumerate(classifers_valid_list):
 
 
 
-plot_CM(y_true=y_train, y_pred=y_pred_train, path_to_results=path_to_results)
+print("Ploting Confusion Matrix for training data")
+plots_train_config = create_plots(y_true=y_train, y_pred=y_pred_train, parameters= pipeline["plots"], path_to_results=pipeline["path_to_results"])
+print("Plotted Confusion Matrix for training data")
 
-plot_ROC()
+print("Ploting Confusion Matrix for validation data")
+plots_valid_config = create_plots(y_true=y_valid, y_pred=y_pred_valid, path_to_results=pipeline["path_to_results"])
+print("Plotted Confusion Matrix for training data")
+
+
+#plot_ROC()
 
 # concencate all the returuned configs and save it json
 save_to_json(config, path_to_results)
 
 # save metrics train and metrics_valid
+
+#save y_train and y_label

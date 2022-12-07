@@ -102,7 +102,6 @@ def apply_classifiers(X, classifiers, classes, y, path_to_results=None):
                 if not os.path.exists(save_model_path):
                     os.mkdir(save_model_path)
 
-                print("confing ", output_config) 
                 output_config[classifier]["path_to_models"][fn] = save_model_path
             
                 prediction, fnt_config = fnt_pointer(X=X[fold_no], parameters=classifiers[classifier], 

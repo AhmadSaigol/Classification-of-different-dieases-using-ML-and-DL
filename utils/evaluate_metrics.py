@@ -17,7 +17,7 @@ def evaluate_metrics(y_true, y_pred, metrics):
     Parameters:
         y_true: numpy array of shape (folds, num_images, 2)
         y_pred: numoy array of shape (classifiers, folds, num_images, 2)
-        classifiers: dictionary with following structure:
+        metrics: dictionary with following structure:
             metrics["metrics_1"]["function"] = pointer to the function
             metrics["metrics_1"]["parameter_1"] = value
             metrics["metrics_1"]["parameter_2"] = value
@@ -32,6 +32,7 @@ def evaluate_metrics(y_true, y_pred, metrics):
         scores:numpy array of shape (classifiers, folds, metrics)
         output_config:
         list_of_metrics: since data is incoming in dictionary format, so for easy mapping of which index represents to which metric
+    
     Additional Notes:
 
     """
