@@ -1,6 +1,6 @@
 {
     "data": {
-        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/test",
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/noisy_test",
         "path_to_labels": null,
         "split_type": null,
         "classes": [
@@ -28,7 +28,7 @@
             "function": "resize"
         }
     },
-    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/test",
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/final_test/multiclass/noisy",
     "feature_extractors": {
         "contrast": {
             "method": "michelson",
@@ -52,26 +52,26 @@
         "norm_type": "StandardScaler",
         "mean": [
             [
-                0.998456461088998,
-                -0.42243732938513034,
-                2.3910359547276094,
-                0.2500695671354021
+                0.9978495240211487,
+                -0.4511482558967326,
+                2.4552414117466173,
+                0.24672173815114157
             ]
         ],
         "var": [
             [
-                6.414083780638827e-06,
-                0.007100612508918664,
-                0.15957314147848808,
-                0.00035138387680698973
+                1.4845025131445969e-05,
+                0.018808217731782473,
+                0.16977274298103112,
+                0.0004459934563666514
             ]
         ],
         "scale": [
             [
-                0.0025326041500082137,
-                0.08426513222513013,
-                0.39946607049721766,
-                0.01874523610966236
+                0.0038529242312101038,
+                0.1371430557184084,
+                0.4120348807819929,
+                0.021118557156364907
             ]
         ]
     },

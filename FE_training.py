@@ -1,5 +1,5 @@
 """
-Performs Binary classification (COVID vs No-COVID).
+Performs classification (COVID vs No-COVID).
 
 Classicial methods are used for generating feature vectors and different classifiers are used to perform classifcation
 

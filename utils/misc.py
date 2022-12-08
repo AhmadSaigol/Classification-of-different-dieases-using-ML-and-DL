@@ -125,6 +125,7 @@ def change_txt_for_binary(path_to_txt, save_path):
      
     binarylabels = np.concatenate( (ids[:, None], labels[:, None]), axis=-1)
     np.savetxt(save_path, binarylabels, fmt="%s")
+    
 
 def save_results(results, classifiers, metrics, path_to_results, name_of_file):
     """

@@ -1,13 +1,11 @@
 {
     "data": {
-        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/noisy_test",
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/test",
         "path_to_labels": null,
         "split_type": null,
         "classes": [
-            "Normal",
-            "COVID",
-            "pneumonia",
-            "Lung_Opacity"
+            "NO_COVID",
+            "COVID"
         ]
     },
     "data_preprocessing": {
@@ -28,7 +26,7 @@
             "function": "resize"
         }
     },
-    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/noisy",
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/final_test/binary/test",
     "feature_extractors": {
         "contrast": {
             "method": "michelson",
@@ -52,26 +50,26 @@
         "norm_type": "StandardScaler",
         "mean": [
             [
-                0.998456461088998,
-                -0.42243732938513034,
-                2.3910359547276094,
-                0.2500695671354021
+                0.9974878600665501,
+                -0.5528508043494784,
+                2.5594762382026652,
+                0.244731998869351
             ]
         ],
         "var": [
             [
-                6.414083780638827e-06,
-                0.007100612508918664,
-                0.15957314147848808,
-                0.00035138387680698973
+                1.7066421728237187e-05,
+                0.034395179479804486,
+                0.2597691266906154,
+                0.00041871148980801066
             ]
         ],
         "scale": [
             [
-                0.0025326041500082137,
-                0.08426513222513013,
-                0.39946607049721766,
-                0.01874523610966236
+                0.004131152590771393,
+                0.18545937420309733,
+                0.5096755111741346,
+                0.020462440954295034
             ]
         ]
     },
