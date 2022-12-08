@@ -1,8 +1,8 @@
 {
     "data": {
-        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train",
-        "path_to_labels": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train_multi.txt",
-        "split_type": "simple",
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train",
+        "path_to_labels": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_multi.txt",
+        "split_type": "simpleStratified",
         "classes": [
             "Normal",
             "COVID",
@@ -21,14 +21,38 @@
         },
         "resize_image": {
             "output_size": [
-                150,
-                150
+                200,
+                200
             ],
             "interpolation": "area",
             "function": "resize"
         }
     },
-    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/final_test/multiclass/train",
+    "original_labels": {
+        "COVID": "17.08",
+        "Lung_Opacity": "28.41",
+        "Normal": "48.16",
+        "pneumonia": "6.36"
+    },
+    "processed_labels": {
+        "train": {
+            "0": {
+                "COVID": "17.09",
+                "Lung_Opacity": "28.40",
+                "Normal": "48.16",
+                "pneumonia": "6.35"
+            }
+        },
+        "valid": {
+            "0": {
+                "COVID": "17.07",
+                "Lung_Opacity": "28.41",
+                "Normal": "48.16",
+                "pneumonia": "6.36"
+            }
+        }
+    },
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/multiclass/train",
     "feature_extractors": {
         "contrast": {
             "method": "michelson",
@@ -52,47 +76,47 @@
         "norm_type": "StandardScaler",
         "mean": [
             [
-                0.9978495240211487,
-                -0.4511482558967326,
-                2.4552414117466173,
-                0.24672173815114157
+                0.9949282855285833,
+                -0.47098621509785754,
+                2.6125017309826086,
+                0.24116968263310629
             ]
         ],
         "var": [
             [
-                1.4845025131445969e-05,
-                0.018808217731782473,
-                0.16977274298103112,
-                0.0004459934563666514
+                0.00020943926212220744,
+                0.19396217217291545,
+                0.8032982657559181,
+                0.0015385843682508822
             ]
         ],
         "scale": [
             [
-                0.0038529242312101038,
-                0.1371430557184084,
-                0.4120348807819929,
-                0.021118557156364907
+                0.014472016518861753,
+                0.4404113669887682,
+                0.8962690811112018,
+                0.039224792775117145
             ]
         ]
     },
     "classifiers": {
         "svm": {
             "path_to_models": {
-                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/final_test/multiclass/train/0/models"
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/multiclass/train/0/models"
             },
             "svm_type": "C_SVC",
             "kernel": "RBF",
-            "Gamma": 0.2,
+            "Gamma": 0.5062500000000001,
             "Degree": 0.0,
             "P": 0.0,
             "Nu": 0.0,
             "Coef0": 0.0,
-            "C": 1.0,
+            "C": 2.5,
             "function": "svm"
         },
         "RFTree": {
             "path_to_models": {
-                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/final_test/multiclass/train/0/models"
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/multiclass/train/0/models"
             },
             "ActiveVarCount": 0,
             "function": "rftree"

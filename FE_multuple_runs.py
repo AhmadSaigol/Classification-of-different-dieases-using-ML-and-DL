@@ -428,7 +428,7 @@ print("Processing completed for binary classification")
 print("\n--------------------------------Multiclass Classification--------------------------------------\n")
 
 pipeline = {}
-pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/final_test/multiclass/train"
+pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/multiclass/train"
 
 
 #------------------ setup data------------------------

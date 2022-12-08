@@ -1,0 +1,93 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/noisy_test",
+        "path_to_labels": null,
+        "split_type": null,
+        "classes": [
+            "NO_COVID",
+            "COVID"
+        ]
+    },
+    "data_preprocessing": {
+        "normalize_image": {
+            "method": "minmax",
+            "function": "normalize"
+        },
+        "map_to_RGB": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        },
+        "resize_image": {
+            "output_size": [
+                200,
+                200
+            ],
+            "interpolation": "area",
+            "function": "resize"
+        }
+    },
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/binary/noisy_test",
+    "feature_extractors": {
+        "contrast": {
+            "method": "michelson",
+            "function": "calculate_contrast"
+        },
+        "skewness": {
+            "bias": true,
+            "function": "calculate_skew"
+        },
+        "kurtosis": {
+            "method": "pearson",
+            "bias": true,
+            "function": "calculate_kurtosis"
+        },
+        "RMS": {
+            "method": "rms",
+            "function": "calculate_contrast"
+        }
+    },
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                0.9949426451933232,
+                -0.46839970439844325,
+                2.606573698715444,
+                0.24162359598154268
+            ]
+        ],
+        "var": [
+            [
+                0.00020928275171178782,
+                0.1948860048202461,
+                0.8753848412089347,
+                0.0015501721235685383
+            ]
+        ],
+        "scale": [
+            [
+                0.01446660816196346,
+                0.44145895032295596,
+                0.9356200303589779,
+                0.03937222528088218
+            ]
+        ]
+    },
+    "classifiers": {
+        "svm": {
+            "svm_type": "C_SVC",
+            "kernel": "RBF",
+            "Gamma": 0.5062500000000001,
+            "Degree": 0.0,
+            "P": 0.0,
+            "Nu": 0.0,
+            "Coef0": 0.0,
+            "C": 2.5,
+            "function": "svm"
+        },
+        "RFTree": {
+            "ActiveVarCount": 0,
+            "function": "rftree"
+        }
+    }
+}

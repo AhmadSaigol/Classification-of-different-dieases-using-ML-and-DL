@@ -105,11 +105,14 @@ def load_and_preprocess_data(data_config):
                 raise ValueError("Files in directory do not match with .txt file.")
 
             # get unique labels and their counts
+            data_labels = {}
             unique_labels, counts =np.unique(img_ids_labels[:,1], return_counts=True)
             print(f"Unique labels found and their frequencies: ")
             for ul, c in zip(unique_labels, counts):
-                print(f"Label: {ul}, %age: {c/img_ids_labels.shape[0]}")
+                data_labels[ul] = format(c*100/img_ids_labels.shape[0], '.2f')
+                print(f"Label: {ul}, %age: {format(c*100/img_ids_labels.shape[0], '.2f')}")
 
+            output_config["original_labels"] = data_labels
         else:
             img_ids_labels = np.array(image_ids)
             img_ids_labels = np.expand_dims(img_ids_labels, axis=-1)
@@ -157,21 +160,30 @@ def load_and_preprocess_data(data_config):
             
             
             output_config ["data_preprocessing"] = train_config
-     
+
+            train_labels = {}
+            valid_labels = {}
             for fold_no in range(y_train.shape[0]):
                 
                 # ratio in y_train
+                train_labels[str(fold_no)] = {}
                 unique_labels, counts =np.unique(y_train[fold_no, :,1], return_counts=True)
                 print(f"\nFold No: {fold_no} Training data: Unique labels: ")
                 for ul, c in zip(unique_labels, counts):
+                    train_labels[str(fold_no)][ul] = format(c*100/y_train.shape[1], '.2f')
                     print(f"Label: {ul}, %age: {format(c*100/y_train.shape[1], '.2f')}")
 
                 # ratio in y_valid
                 unique_labels, counts =np.unique(y_valid[fold_no, :,1], return_counts=True)
+                valid_labels[str(fold_no)] = {}
                 print(f"\nFold No: {fold_no} Validation data: Unique labels: ")
                 for ul, c in zip(unique_labels, counts):
+                    valid_labels[str(fold_no)][ul] = format(c*100/y_valid.shape[1], '.2f')
                     print(f"Label: {ul}, %age: {format(c*100/y_valid.shape[1], '.2f')}")
     
+            output_config["processed_labels"] = {}
+            output_config["processed_labels"]["train"] = train_labels
+            output_config["processed_labels"]["valid"] = valid_labels
                 
 
             return X_train, y_train, X_valid, y_valid, output_config
