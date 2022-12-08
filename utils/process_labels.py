@@ -21,7 +21,11 @@ def label_encoder(y, classes, to_numbers):
     """
 
     le = preprocessing.LabelEncoder()
+    
+    if type(classes).__name__ == 'list':
+        classes = np.array(classes)
     le.classes_ = classes
+    
     if to_numbers:
         return le.transform(y.ravel())
     else:

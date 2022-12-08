@@ -178,7 +178,6 @@ def load_and_preprocess_data(data_config):
         
         else:
             y = img_ids_labels
-            print(y[:,0])
             X, config = load_images(path_to_images=path_to_images,
                                         image_ids=y[:,0],
                                         data_preprocessing=data_config["data_preprocessing"])
@@ -189,6 +188,8 @@ def load_and_preprocess_data(data_config):
               
             output_config["data_preprocessing"] = config
 
+            y= np.expand_dims(y, axis=0)
+            
             return X, y, output_config
 
     

@@ -63,7 +63,7 @@ def evaluate_metrics(y_true, y_pred, metrics, classifiers):
 
             for metric_no in range(num_metrics):
 
-                print(f"Classifer: {classifiers[cl_no]} Fold No: {fold_no} Metric: {met_keys[metric_no]}")
+                print(f"Processing: Classifer: {classifiers[cl_no]} Fold No: {fold_no} Metric: {met_keys[metric_no]}")
 
                 fnt_pointer = metrics[ met_keys[metric_no] ]["function"]
 

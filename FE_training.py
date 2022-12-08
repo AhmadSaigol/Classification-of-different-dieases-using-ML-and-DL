@@ -7,6 +7,7 @@ Classicial methods are used for generating feature vectors and different classif
 
 # import libraries
 import numpy as np
+import os
 
 from utils.load_and_preprocess_data import load_and_preprocess_data
 from utils.data_preprocessing.change_colorspace import change_colorspace
@@ -38,11 +39,10 @@ from utils.json_processing import save_to_json
 
 from utils.misc import add_function_names, generate_txt_file, save_results
 
-
-verbose = True
+from FE_prediction import generate_predictions
 
 pipeline = {}
-pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/new_code_testing"
+pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/train"
 
 
 #------------------ setup data------------------------
@@ -186,6 +186,8 @@ pipeline["plots"]["CM"]["function"] = plot_CM
 #--------------------------------------------Build classifier and get results----------------------------
 
 # Image is read in BGR format initially. 
+
+print("\n------------------------Starting Training-------------------\n")
 
 # load data
 
@@ -407,4 +409,38 @@ save_results(
 )
 
 
-print("\nProcessing Completed")
+print("\nTraining Completed\n")
+
+#-----------------------------------------------Predictions-----------------------------
+path_to_json = os.path.join(pipeline["path_to_results"], "training_pipeline.json")
+
+print("\n --------------------Generating predictions for test data-------------.----- \n")
+
+
+path_to_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/test"
+save_path_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/test"
+
+generate_predictions(
+    path_to_json=path_to_json,
+    path_to_images=path_to_test_images,
+    save_path=save_path_test
+)
+
+
+print("\n Completed predictions for test data\n")
+
+print("\n --------------------Generating predictions for noisy test data-------------.----- \n")
+
+path_to_noisy_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/noisy_test"
+save_path_noisy_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/noisy"
+
+generate_predictions(
+    path_to_json=path_to_json,
+    path_to_images=path_to_noisy_test_images,
+    save_path=save_path_noisy_test
+)
+
+
+print("\n Completed predictions for noisy test data\n")
+
+print("Processing completed")

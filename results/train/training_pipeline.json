@@ -28,7 +28,7 @@
             "function": "resize"
         }
     },
-    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/new_code_testing",
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/train",
     "feature_extractors": {
         "contrast": {
             "method": "michelson",
@@ -52,33 +52,33 @@
         "norm_type": "StandardScaler",
         "mean": [
             [
-                0.9978495240211487,
-                -0.5255504935523756,
-                2.6671056481273063,
-                0.2397884087903159
+                0.998456461088998,
+                -0.42243732938513034,
+                2.3910359547276094,
+                0.2500695671354021
             ]
         ],
         "var": [
             [
-                1.4845025131445969e-05,
-                0.03969220692074792,
-                0.1620317364411057,
-                0.0001792654123653617
+                6.414083780638827e-06,
+                0.007100612508918664,
+                0.15957314147848808,
+                0.00035138387680698973
             ]
         ],
         "scale": [
             [
-                0.0038529242312101038,
-                0.19922903132010636,
-                0.4025316589302085,
-                0.013389003411955713
+                0.0025326041500082137,
+                0.08426513222513013,
+                0.39946607049721766,
+                0.01874523610966236
             ]
         ]
     },
     "classifiers": {
         "svm": {
             "path_to_models": {
-                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/new_code_testing/0/models"
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/train/0/models"
             },
             "svm_type": "C_SVC",
             "kernel": "RBF",
@@ -92,7 +92,7 @@
         },
         "RFTree": {
             "path_to_models": {
-                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/new_code_testing/0/models"
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/train/0/models"
             },
             "ActiveVarCount": 0,
             "function": "rftree"

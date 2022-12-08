@@ -42,6 +42,29 @@ def add_function_names(dic):
             if key== "function":
                 dic[key] = values.__name__
 
+    
+def replace_function_names(dic, functions):
+    """
+    Find function in the dictionary and replace its value with its function pointers
+
+    dic: dictionary
+
+    """
+    
+    d_keys = dic.keys()
+
+    for key in d_keys:
+        values = dic[key]
+
+        if type(values) == dict:
+            replace_function_names(values, functions)
+        
+        else:
+            if key == "function":
+                for fnt_pointer in functions:
+                    if fnt_pointer.__name__ == values:
+                        dic[key] = fnt_pointer
+
 
 
 def generate_txt_file(y, path_to_results, classifiers, name_of_file):
