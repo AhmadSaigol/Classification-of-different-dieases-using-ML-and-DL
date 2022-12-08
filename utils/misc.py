@@ -106,6 +106,26 @@ def generate_txt_file(y, path_to_results, classifiers, name_of_file):
                     file.write(f"{y[cl, fold_no, img_no, 0]} {y[cl, fold_no, img_no, 1]}\n")
 
 
+
+def change_txt_for_binary(path_to_txt, save_path):
+    """
+    Generates a new text file with labels with COVID and No_COVID
+
+    path_to_txt: path to txt containing multilabels
+    save_path: path to the file where results will be saved
+    
+    """
+
+    multilabels = np.loadtxt(path_to_txt, dtype=str, delimiter=" ")
+    ids = multilabels[:,0]
+
+    labels = multilabels[:,1]
+
+    labels [labels!="COVID"] = "NO_COVID"
+     
+    binarylabels = np.concatenate( (ids[:, None], labels[:, None]), axis=-1)
+    np.savetxt(save_path, binarylabels, fmt="%s")
+
 def save_results(results, classifiers, metrics, path_to_results, name_of_file):
     """
     Save results to csv file
@@ -133,6 +153,7 @@ def save_results(results, classifiers, metrics, path_to_results, name_of_file):
     df.to_csv(path_to_results + "/" + name_of_file +".csv")
         
 if __name__ == "__main__":
+    """
     pipeline = {}
 
     pipeline["data"] = {}
@@ -231,3 +252,9 @@ if __name__ == "__main__":
     name = "test"
 
     generate_txt_file(y_pred, path, classifiers, name)
+    """
+
+    path_to_txt = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train.txt"
+    save_path = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train_binary.txt"
+
+    change_txt_for_binary(path_to_txt, save_path)

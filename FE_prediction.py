@@ -103,9 +103,6 @@ def generate_predictions(path_to_images, path_to_json, save_path):
     data_config["path_to_results"] = save_path
     print(f"Generated labels for the data successfully. Shape: {y_pred.shape}")
 
-    print("classifiers_train config ", classifiers_config)
-
-    print("classifiers_list ", classifers_list)
 
     results_dict = data_config
     results_dict ["feature_extractors"] = features_config
