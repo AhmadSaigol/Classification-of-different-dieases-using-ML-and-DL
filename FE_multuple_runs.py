@@ -39,8 +39,8 @@ from FE_prediction import generate_predictions
 #----------------------------------------Binary Classification--------------------------------
 
 # transform label txt file
-path_to_multi_labels = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train_multi.txt"
-path_to_binary_labels = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train_binary.txt"
+path_to_multi_labels = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_multi.txt"
+path_to_binary_labels = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_binary.txt"
 change_txt_for_binary(path_to_multi_labels, path_to_binary_labels)
 
 
@@ -49,7 +49,7 @@ change_txt_for_binary(path_to_multi_labels, path_to_binary_labels)
 print("----------------------------_Binary Classification------------------------")
 
 pipeline = {}
-pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/final_test/binary/train"
+pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/binary/train"
 
 
 #------------------ setup data------------------------
@@ -57,12 +57,12 @@ pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent
 pipeline["data"] = {}
 
 # can be to folder 
-pipeline["data"]["path_to_images"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train"
+pipeline["data"]["path_to_images"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train"
 # can be to .txt
 pipeline["data"]["path_to_labels"] = path_to_binary_labels
 
 # split data
-pipeline["data"]["split_type"] = "simple" #"simple", "simpleStratified", "kfold", "kfoldStratified"
+pipeline["data"]["split_type"] = "simpleStratified" #"simple", "simpleStratified", "kfold", "kfoldStratified"
 
 pipeline["data"]["classes"] =  np.array(["NO_COVID", "COVID"])
 
@@ -82,7 +82,7 @@ pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY"
 # resize_image
 pipeline["data_preprocessing"]["resize_image"] = {}
 pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-pipeline["data_preprocessing"]["resize_image"]["output_size"] = (150,150) #(width, height)
+pipeline["data_preprocessing"]["resize_image"]["output_size"] = (200,200) #(width, height)
 pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
 
 # ---------------------------------set up feature extractor methods and parameters------------------------------------
@@ -119,10 +119,9 @@ pipeline["classifiers"] ={}
 # SVM
 pipeline["classifiers"]["svm"] = {}
 pipeline["classifiers"]["svm"]["function"] = svm 
-pipeline["classifiers"]["svm"]["trainAuto"] = False 
+pipeline["classifiers"]["svm"]["trainAuto"] = True
 pipeline["classifiers"]["svm"]['svm_type'] =  'C_SVC' 
 pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
-pipeline["classifiers"]["svm"]['Gamma'] =  0.2 
 
 
 # kNN
@@ -155,7 +154,7 @@ pipeline["metrics"] = {}
 # accuracy
 pipeline["metrics"]["simple_accuracy"] = {}
 pipeline["metrics"]["simple_accuracy"]["function"] = accuracy
-pipeline["metrics"]["simple_accuracy"]["type"] = "simple"  #value of parameter
+pipeline["metrics"]["simple_accuracy"]["type"] = "simple"  
 
 pipeline["metrics"]["balanced_accuracy"] = {}
 pipeline["metrics"]["balanced_accuracy"]["function"] = accuracy
@@ -163,21 +162,18 @@ pipeline["metrics"]["balanced_accuracy"]["type"] = "balanced"
 
 # precision
 pipeline["metrics"]["precision"] = {}
-pipeline["metrics"]["precision"]["function"] = precision #name of functions to be used for ensemblers
+pipeline["metrics"]["precision"]["function"] = precision
 pipeline["metrics"]["precision"]["class_result"] = "COVID"
-pipeline["metrics"]["precision"]["average"] = "weighted"
 
 # recall
 pipeline["metrics"]["sensitivity"] = {}
 pipeline["metrics"]["sensitivity"]["function"] = sensitivity
 pipeline["metrics"]["sensitivity"]["class_result"]  = "COVID"
-pipeline["metrics"]["sensitivity"]["average"]  = "weighted"
 
 # F1 score
 pipeline["metrics"]["f1_score"] = {}
 pipeline["metrics"]["f1_score"]["function"] = F1_score 
 pipeline["metrics"]["f1_score"]["class_result"] = "COVID"
-pipeline["metrics"]["f1_score"]["average"] = "weighted"
 
 # mcc
 pipeline["metrics"]["mcc"] = {}
@@ -399,8 +395,8 @@ path_to_json = os.path.join(pipeline["path_to_results"], "training_pipeline.json
 print("\n --------------------Generating predictions for test data-------------.----- \n")
 
 
-path_to_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/test"
-save_path_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/final_test/binary/test"
+path_to_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/test"
+save_path_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/binary/test"
 
 generate_predictions(
     path_to_json=path_to_json,
@@ -413,8 +409,8 @@ print("\n Completed predictions for test data\n")
 
 print("\n --------------------Generating predictions for noisy test data-------------.----- \n")
 
-path_to_noisy_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/noisy_test"
-save_path_noisy_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/final_test/binary/noisy"
+path_to_noisy_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/noisy_test"
+save_path_noisy_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/binary/noisy_test"
 
 generate_predictions(
     path_to_json=path_to_json,
@@ -440,12 +436,12 @@ pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent
 pipeline["data"] = {}
 
 # can be to folder 
-pipeline["data"]["path_to_images"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train"
+pipeline["data"]["path_to_images"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train"
 # can be to .txt
 pipeline["data"]["path_to_labels"] = path_to_multi_labels
 
 # split data
-pipeline["data"]["split_type"] = "simple" #"simple", "simpleStratified", "kfold", "kfoldStratified"
+pipeline["data"]["split_type"] = "simpleStratified"  #"simple", "simpleStratified", "kfold", "kfoldStratified"
 
 pipeline["data"]["classes"] = np.array(["Normal", "COVID", "pneumonia", "Lung_Opacity"]) 
 
@@ -466,7 +462,7 @@ pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY"
 # resize_image
 pipeline["data_preprocessing"]["resize_image"] = {}
 pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-pipeline["data_preprocessing"]["resize_image"]["output_size"] = (150,150) #(width, height)
+pipeline["data_preprocessing"]["resize_image"]["output_size"] = (200, 200) #(width, height)
 pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
 
 # ---------------------------------set up feature extractor methods and parameters------------------------------------
@@ -503,10 +499,9 @@ pipeline["classifiers"] ={}
 # SVM
 pipeline["classifiers"]["svm"] = {}
 pipeline["classifiers"]["svm"]["function"] = svm 
-pipeline["classifiers"]["svm"]["trainAuto"] = False 
+pipeline["classifiers"]["svm"]["trainAuto"] = True
 pipeline["classifiers"]["svm"]['svm_type'] =  'C_SVC' 
 pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
-pipeline["classifiers"]["svm"]['Gamma'] =  0.2 
 
 
 # kNN
@@ -539,7 +534,7 @@ pipeline["metrics"] = {}
 # accuracy
 pipeline["metrics"]["simple_accuracy"] = {}
 pipeline["metrics"]["simple_accuracy"]["function"] = accuracy
-pipeline["metrics"]["simple_accuracy"]["type"] = "simple"  #value of parameter
+pipeline["metrics"]["simple_accuracy"]["type"] = "simple"  
 
 pipeline["metrics"]["balanced_accuracy"] = {}
 pipeline["metrics"]["balanced_accuracy"]["function"] = accuracy
@@ -547,20 +542,17 @@ pipeline["metrics"]["balanced_accuracy"]["type"] = "balanced"
 
 # precision
 pipeline["metrics"]["precision"] = {}
-pipeline["metrics"]["precision"]["function"] = precision #name of functions to be used for ensemblers
-pipeline["metrics"]["precision"]["class_result"] = "COVID"
+pipeline["metrics"]["precision"]["function"] = precision 
 pipeline["metrics"]["precision"]["average"] = "weighted"
 
 # recall
 pipeline["metrics"]["sensitivity"] = {}
 pipeline["metrics"]["sensitivity"]["function"] = sensitivity
-pipeline["metrics"]["sensitivity"]["class_result"]  = "COVID"
 pipeline["metrics"]["sensitivity"]["average"]  = "weighted"
 
 # F1 score
 pipeline["metrics"]["f1_score"] = {}
 pipeline["metrics"]["f1_score"]["function"] = F1_score 
-pipeline["metrics"]["f1_score"]["class_result"] = "COVID"
 pipeline["metrics"]["f1_score"]["average"] = "weighted"
 
 # mcc
@@ -786,8 +778,8 @@ path_to_json = os.path.join(pipeline["path_to_results"], "training_pipeline.json
 print("\n --------------------Generating predictions for test data-------------.----- \n")
 
 
-path_to_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/test"
-save_path_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/final_test/multiclass/test"
+path_to_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/test"
+save_path_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/multiclass/test"
 
 generate_predictions(
     path_to_json=path_to_json,
@@ -800,8 +792,8 @@ print("\n Completed predictions for test data\n")
 
 print("\n --------------------Generating predictions for noisy test data-------------.----- \n")
 
-path_to_noisy_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/noisy_test"
-save_path_noisy_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/final_test/multiclass/noisy"
+path_to_noisy_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/noisy_test"
+save_path_noisy_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/multiclass/noisy_test"
 
 generate_predictions(
     path_to_json=path_to_json,
