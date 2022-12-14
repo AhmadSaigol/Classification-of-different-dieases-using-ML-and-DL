@@ -24,7 +24,7 @@ def load_and_preprocess_data(data_config, path_to_results=None):
                     path_to_labels: path to the labels associated with the images. This could be a .txt file with each row containing
                                     file name(ends with.png) and its label (not required when reading images from .npy)
                     split_type: how to split the data : "simple", "kfold", "kfoldStratified"
-                    save_to_npy: whether to save results in npy format or not
+                    save_to_pkl: whether to save results in npy format or not
 
                 data_config["data_preprocessing"]: dictionary with following structure:
                     preprocessing["name_of_processing_1"]["function"] = pointer to the function
@@ -89,9 +89,9 @@ def load_and_preprocess_data(data_config, path_to_results=None):
         raise ValueError ("Parameter 'split_type' is provided but 'path_to_labels' is not provided. ")
 
 
-    #save to npy
-    if "save_to_npy" in data_keys:
-        save_npy = data["save_to_npy"]
+    #save to pkl
+    if "save_to_pkl" in data_keys:
+        save_npy = data["save_to_pkl"]
     else:
         save_npy = False
     
@@ -264,7 +264,7 @@ def load_images(path_to_images, image_ids, data_preprocessing):
     and data preprocessing config
 
     """
-
+    verbose=False
     # for storing preprocessing default values
     config = {}
 
@@ -273,15 +273,15 @@ def load_images(path_to_images, image_ids, data_preprocessing):
         # read image
         path_to_image = os.path.join(path_to_images, img_id)
         img = cv2.imread(path_to_image)
-
-        print(f"\nLoaded image {img_id} Shape: {img.shape} ")
+        if verbose:
+            print(f"\nLoaded image {img_id} Shape: {img.shape} ")
         
         # make sure that every image has same shape
         if index == 0:
             temp_shape = img.shape
         
         if img.shape != temp_shape:
-            print(f"Different shape encountered. Image ID: {img_id} shape: {img.shape}")
+            print(f"Warning: Different shape encountered. Image ID: {img_id} shape: {img.shape}")
 
         img = np.expand_dims(img, axis=0)  
 
@@ -289,8 +289,8 @@ def load_images(path_to_images, image_ids, data_preprocessing):
         for preprocessing in data_preprocessing.keys():
 
             fnt_pointer = data_preprocessing[preprocessing]["function"]
-            
-            print(f"Applying Data Preprocessing: {preprocessing}")
+            if verbose:
+                print(f"Applying Data Preprocessing: {preprocessing}")
 
             img, fnt_config = fnt_pointer(img, data_preprocessing[preprocessing])            
             

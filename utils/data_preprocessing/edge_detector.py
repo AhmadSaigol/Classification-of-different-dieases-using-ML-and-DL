@@ -147,65 +147,65 @@ if __name__ == "__main__":
     """
 
 
-path_to_data = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train"
-path_to_labels = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train_multi.txt"
-#img_ids = ["0a1dd587-1656-4fe9-97ab-d29d99d368a8.png", "0a0aa8c9-6b33-445d-9b90-dfba8a1a3572.png", "0a0d4a73-a868-4078-8a27-3aa1d69323ad.png", "0a01d14b-2c8b-4155-ae95-095f625315bd.png"]
+    path_to_data = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train"
+    path_to_labels = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train_multi.txt"
+    #img_ids = ["0a1dd587-1656-4fe9-97ab-d29d99d368a8.png", "0a0aa8c9-6b33-445d-9b90-dfba8a1a3572.png", "0a0d4a73-a868-4078-8a27-3aa1d69323ad.png", "0a01d14b-2c8b-4155-ae95-095f625315bd.png"]
 
-#labels = ["Normal",  "Lung_Opacity", "pneumonia", "COVID"]
+    #labels = ["Normal",  "Lung_Opacity", "pneumonia", "COVID"]
 
-multilabels = np.loadtxt(path_to_labels, dtype=str, delimiter=" ")
-img_ids = multilabels[:,0]
+    multilabels = np.loadtxt(path_to_labels, dtype=str, delimiter=" ")
+    img_ids = multilabels[:,0]
 
-labels = multilabels[:,1]
+    labels = multilabels[:,1]
 
 
-path_to_results = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/experiments/canny_edges"
+    path_to_results = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/experiments/canny_edges"
 
-pipeline={}
-pipeline["canny_edges"] = {}
-pipeline["canny_edges"]["function"] =0 
-pipeline["canny_edges"]["blur"] = True
-pipeline["canny_edges"]["threshold1"] =250
-pipeline["canny_edges"]["threshold2"] = 500
-pipeline["canny_edges"]["apertureSize"] = 5
-pipeline["canny_edges"]["L2gradient"] = True
+    pipeline={}
+    pipeline["canny_edges"] = {}
+    pipeline["canny_edges"]["function"] =0 
+    pipeline["canny_edges"]["blur"] = True
+    pipeline["canny_edges"]["threshold1"] =250
+    pipeline["canny_edges"]["threshold2"] = 500
+    pipeline["canny_edges"]["apertureSize"] = 5
+    pipeline["canny_edges"]["L2gradient"] = True
 
-for i in range(len(img_ids)):
+    for i in range(len(img_ids)):
 
-    print("Processing Image: ", img_ids[i])
+        print("Processing Image: ", img_ids[i])
+        
+        img_path = os.path.join(path_to_data, img_ids[i])
+
+        # read image
+        img = cv2.imread(img_path, 0)
+        
+        #img = img /255
+        
+        img = np.expand_dims(img, axis=0)
+        img = np.expand_dims(img, axis=-1)
+        
+        if  i== 0:
+            images = img
+        else:
+            images = np.concatenate((images, img))
+
+    results, config = canny_edge_detector(images=images, parameters=pipeline["canny_edges"])
+
+    for i in range(len(img_ids)):
+        
+        print("Procesing label: ", labels[i])
+
+        fig, axes = plt.subplots(1,2, figsize=(15,15))
+
+        axes[0].imshow(images[i], cmap='gray', vmin=0, vmax=255)
+        axes[0].set_title("Original Image")
+
+        axes[1].imshow(results[i], cmap='gray', vmin=0, vmax=255)
+        axes[1].set_title("Canny Edges")
+
+        # save image
+        plt.savefig(path_to_results + "/" + labels[i] + "_" + img_ids[i] + ".png")
+
+
     
-    img_path = os.path.join(path_to_data, img_ids[i])
-
-    # read image
-    img = cv2.imread(img_path, 0)
-    
-    #img = img /255
-    
-    img = np.expand_dims(img, axis=0)
-    img = np.expand_dims(img, axis=-1)
-    
-    if  i== 0:
-        images = img
-    else:
-        images = np.concatenate((images, img))
-
-results, config = canny_edge_detector(images=images, parameters=pipeline["canny_edges"])
-
-for i in range(len(img_ids)):
-    
-    print("Procesing label: ", labels[i])
-
-    fig, axes = plt.subplots(1,2, figsize=(15,15))
-
-    axes[0].imshow(images[i], cmap='gray', vmin=0, vmax=255)
-    axes[0].set_title("Original Image")
-
-    axes[1].imshow(results[i], cmap='gray', vmin=0, vmax=255)
-    axes[1].set_title("Canny Edges")
-
-    # save image
-    plt.savefig(path_to_results + "/" + labels[i] + "_" + img_ids[i] + ".png")
-
-
-   
-print("Processing Completed")
+    print("Processing Completed")
