@@ -9,11 +9,16 @@ from utils.load_and_preprocess_data import load_and_preprocess_data
 from utils.data_preprocessing.change_colorspace import change_colorspace
 from utils.data_preprocessing.resize import resize
 from utils.data_preprocessing.normalize import normalize
+from utils.data_preprocessing.edge_detector import canny_edge_detector
+
 
 from utils.generate_feature_vector import generate_feature_vector
 from utils.feature_extractors.contrast import calculate_contrast
 from utils.feature_extractors.kurtosis import calculate_kurtosis
 from utils.feature_extractors.skewness import calculate_skew
+from utils.feature_extractors.histogram import calculate_histogram
+from utils.feature_extractors.haralick import calculate_haralick
+from utils.feature_extractors.zernike import calculate_zernike
 
 from utils.normalize_features import normalize_features
 
@@ -55,8 +60,8 @@ def generate_predictions(path_to_images, path_to_json, save_path):
 
 
     # replace function names with their pointers    
-    data_preprocessing = [normalize, change_colorspace, resize]
-    feature_extractors= [calculate_contrast, calculate_kurtosis, calculate_skew]
+    data_preprocessing = [normalize, change_colorspace, resize, canny_edge_detector]
+    feature_extractors= [calculate_contrast, calculate_kurtosis, calculate_skew, calculate_histogram, calculate_haralick, calculate_zernike]
     norm_features = [normalize_features]
     classifiers = [svm, rftree]
 
@@ -70,7 +75,8 @@ def generate_predictions(path_to_images, path_to_json, save_path):
     temp_config["data"] = pipeline["data"]
     temp_config["data_preprocessing"] = pipeline["data_preprocessing"]
     X, y, data_config = load_and_preprocess_data(
-    data_config=temp_config
+    data_config=temp_config,
+    path_to_results= save_path
     )
 
     print(f"Loaded Images Sucessfully.Shape of X: {X.shape} y: {y.shape}")

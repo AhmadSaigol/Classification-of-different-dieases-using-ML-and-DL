@@ -1,6 +1,7 @@
 import numpy as np
 import cv2 
 import os
+import pickle
 from copy import deepcopy
 
 from utils.compare_dicts import compare_dict
@@ -9,18 +10,21 @@ from utils.data_preprocessing.resize import resize
 from utils.data_preprocessing.normalize import normalize
 from utils.data_preprocessing.split_data import split_data
 
-def load_and_preprocess_data(data_config):
+def load_and_preprocess_data(data_config, path_to_results=None):
     """
         Loads and preprocess data
 
         Parameters:
+            path_to_results= path to the folder where processed data will be saved (required when saving to npy)
+
             data_config: dictionary with this structure:
 
                 data_config["data"]: dictionary with following keys
-                    path_to_images: path to the folder containing .png files
+                    path_to_images: path to the folder containing .png files (or .npy)
                     path_to_labels: path to the labels associated with the images. This could be a .txt file with each row containing
-                                    file name(ends with.png) and its label 
+                                    file name(ends with.png) and its label (not required when reading images from .npy)
                     split_type: how to split the data : "simple", "kfold", "kfoldStratified"
+                    save_to_npy: whether to save results in npy format or not
 
                 data_config["data_preprocessing"]: dictionary with following structure:
                     preprocessing["name_of_processing_1"]["function"] = pointer to the function
@@ -84,6 +88,12 @@ def load_and_preprocess_data(data_config):
     if split_type and not path_to_labels:
         raise ValueError ("Parameter 'split_type' is provided but 'path_to_labels' is not provided. ")
 
+
+    #save to npy
+    if "save_to_npy" in data_keys:
+        save_npy = data["save_to_npy"]
+    else:
+        save_npy = False
     
     # load from the folder
     if os.path.isdir(path_to_images):
@@ -184,7 +194,16 @@ def load_and_preprocess_data(data_config):
             output_config["processed_labels"] = {}
             output_config["processed_labels"]["train"] = train_labels
             output_config["processed_labels"]["valid"] = valid_labels
-                
+
+            if save_npy:
+                if path_to_results:
+                    print("Saving processed data to ", path_to_results)
+                    path_to_processed_dataset = path_to_results + "/processed_data.pkl"
+                    
+                    with open(path_to_processed_dataset, 'wb') as file:
+                        pickle.dump([X_train, y_train, X_valid, y_valid], file)
+                else:
+                    raise ValueError("Path to results must be provided when saving to npy")
 
             return X_train, y_train, X_valid, y_valid, output_config
         
@@ -202,9 +221,34 @@ def load_and_preprocess_data(data_config):
 
             y= np.expand_dims(y, axis=0)
             
+            # save to npy
+            if save_npy:
+                if path_to_results:
+                    print("Saving processed data to ", path_to_results)
+                    path_to_processed_dataset = path_to_results + "/processed_data.pkl"
+                    
+                    with open(path_to_processed_dataset, 'wb') as file:
+                        pickle.dump([X, y], file)
+                else:
+                    raise ValueError("Path to results must be provided when saving to npy")
+            
             return X, y, output_config
 
     
+    elif ".npy" in path_to_images:
+        print("Reading data from npy")
+
+        with open(path_to_images, 'rb') as file:
+            datas = pickle.load(file)
+            if len(datas) == 4:
+                #X_train, y_train, X_valid, y_valid
+                return datas [0], datas [1], datas [2], datas [3]
+            
+            elif len(datas) == 2:
+                # X, y
+                return datas[0],datas[1]
+            else:
+                raise ValueError("Unknown value for length of data in pickle encountered")
     else:
         raise ValueError("Unrecognised Value for the parameter 'path_to_images'. ")
 

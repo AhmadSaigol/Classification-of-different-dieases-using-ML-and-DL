@@ -7,11 +7,15 @@ from utils.load_and_preprocess_data import load_and_preprocess_data
 from utils.data_preprocessing.change_colorspace import change_colorspace
 from utils.data_preprocessing.resize import resize
 from utils.data_preprocessing.normalize import normalize
+from utils.data_preprocessing.edge_detector import canny_edge_detector
 
 from utils.generate_feature_vector import generate_feature_vector
 from utils.feature_extractors.contrast import calculate_contrast
 from utils.feature_extractors.kurtosis import calculate_kurtosis
 from utils.feature_extractors.skewness import calculate_skew
+from utils.feature_extractors.histogram import calculate_histogram
+from utils.feature_extractors.haralick import calculate_haralick
+from utils.feature_extractors.zernike import calculate_zernike
 
 from utils.normalize_features import normalize_features
 
@@ -45,11 +49,11 @@ change_txt_for_binary(path_to_multi_labels, path_to_binary_labels)
 
 
 #--------------------------------------Pipeline-------------------------------
-
+"""
 print("----------------------------_Binary Classification------------------------")
 
 pipeline = {}
-pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/binary/train"
+pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/histogram/binary/train"
 
 
 #------------------ setup data------------------------
@@ -64,15 +68,17 @@ pipeline["data"]["path_to_labels"] = path_to_binary_labels
 # split data
 pipeline["data"]["split_type"] = "simpleStratified" #"simple", "simpleStratified", "kfold", "kfoldStratified"
 
+pipeline["data"]["save_to_pkl"] = True
+
 pipeline["data"]["classes"] =  np.array(["NO_COVID", "COVID"])
 
 # ---------------------------------set up data preprocessing methods and parameters------------------------------------
 pipeline["data_preprocessing"] ={}
 
 # normalize image
-pipeline["data_preprocessing"]["normalize_image"] = {}
-pipeline["data_preprocessing"]["normalize_image"]["function"] = normalize
-pipeline["data_preprocessing"]["normalize_image"]["method"] = "minmax" 
+#pipeline["data_preprocessing"]["normalize_image"] = {}
+#pipeline["data_preprocessing"]["normalize_image"]["function"] = normalize
+#pipeline["data_preprocessing"]["normalize_image"]["method"] = "minmax" 
 
 # map to RGB
 pipeline["data_preprocessing"]["map_to_RGB"] = {}
@@ -82,33 +88,55 @@ pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY"
 # resize_image
 pipeline["data_preprocessing"]["resize_image"] = {}
 pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-pipeline["data_preprocessing"]["resize_image"]["output_size"] = (200,200) #(width, height)
+pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250,250) #(width, height)
 pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
 
 # ---------------------------------set up feature extractor methods and parameters------------------------------------
 pipeline["feature_extractors"] ={}
-
+"""
 # contrast
-pipeline["feature_extractors"]["contrast"] = {}
-pipeline["feature_extractors"]["contrast"]["function"] = calculate_contrast
-pipeline["feature_extractors"]["contrast"]["method"] = "michelson" 
+#pipeline["feature_extractors"]["contrast"] = {}
+#pipeline["feature_extractors"]["contrast"]["function"] = calculate_contrast
+#pipeline["feature_extractors"]["contrast"]["method"] = "michelson" 
 
 # skewness
-pipeline["feature_extractors"]["skewness"] = {}
-pipeline["feature_extractors"]["skewness"]["function"] =calculate_skew
-pipeline["feature_extractors"]["skewness"]["bias"] = True
+#pipeline["feature_extractors"]["skewness"] = {}
+#pipeline["feature_extractors"]["skewness"]["function"] =calculate_skew
+#pipeline["feature_extractors"]["skewness"]["bias"] = True
 
 # kurtosis
-pipeline["feature_extractors"]["kurtosis"] = {}
-pipeline["feature_extractors"]["kurtosis"]["function"] = calculate_kurtosis
-pipeline["feature_extractors"]["kurtosis"]["method"] = "pearson"
-pipeline["feature_extractors"]["kurtosis"]["bias"] = True
+#pipeline["feature_extractors"]["kurtosis"] = {}
+#pipeline["feature_extractors"]["kurtosis"]["function"] = calculate_kurtosis
+#pipeline["feature_extractors"]["kurtosis"]["method"] = "pearson"
+#pipeline["feature_extractors"]["kurtosis"]["bias"] = True
 
 # RMS
-pipeline["feature_extractors"]["RMS"] = {}
-pipeline["feature_extractors"]["RMS"]["function"] = calculate_contrast
-pipeline["feature_extractors"]["RMS"]["method"] = "rms"
+#pipeline["feature_extractors"]["RMS"] = {}
+#pipeline["feature_extractors"]["RMS"]["function"] = calculate_contrast
+#pipeline["feature_extractors"]["RMS"]["method"] = "rms"
 
+"""
+
+# histogram
+pipeline["feature_extractors"]["histogram"] = {}
+pipeline["feature_extractors"]["histogram"]["function"] = calculate_histogram
+pipeline["feature_extractors"]["histogram"]["bins"] = 256
+pipeline["feature_extractors"]["histogram"]["range"] = (0,256)
+pipeline["feature_extractors"]["histogram"]["density"] = False
+
+# haralick
+#pipeline["feature_extractors"]["haralick"] = {}
+#pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
+#pipeline["feature_extractors"]["haralick"]["blur"] = True
+#pipeline["feature_extractors"]["haralick"]["distance"] = 1
+
+# zernike
+#pipeline["feature_extractors"]["zernike_moments"] = {}
+#pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
+#pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
+#pipeline["feature_extractors"]["zernike_moments"]["radius"] = 100
+#pipeline["feature_extractors"]["zernike_moments"]["degree"] = 10
+#pipeline["feature_extractors"]["zernike_moments"]["cm"] = (100, 100)
 #---------------------------------Normalize feature vectors-----------------------
 pipeline["normalize_features"] = {}
 pipeline["normalize_features"]["norm_type"] = "StandardScaler"
@@ -198,7 +226,8 @@ temp_config ={}
 temp_config["data"] = pipeline["data"]
 temp_config["data_preprocessing"] = pipeline["data_preprocessing"]
 X_train, y_train, X_valid, y_valid, data_config = load_and_preprocess_data(
-    data_config=temp_config
+    data_config=temp_config,
+    path_to_results=pipeline["path_to_results"]
     )
 
 print(f"Loaded Images Sucessfully.Shape of X_train: {X_train.shape} y_train: {y_train.shape} X_valid: {X_valid.shape} y_valid: {y_valid.shape}")
@@ -396,7 +425,7 @@ print("\n --------------------Generating predictions for test data-------------.
 
 
 path_to_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/test"
-save_path_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/binary/test"
+save_path_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/histogram/binary/test"
 
 generate_predictions(
     path_to_json=path_to_json,
@@ -410,7 +439,7 @@ print("\n Completed predictions for test data\n")
 print("\n --------------------Generating predictions for noisy test data-------------.----- \n")
 
 path_to_noisy_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/noisy_test"
-save_path_noisy_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/binary/noisy_test"
+save_path_noisy_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/histogram/binary/noisy_test"
 
 generate_predictions(
     path_to_json=path_to_json,
@@ -422,13 +451,13 @@ generate_predictions(
 print("\n Completed predictions for noisy test data\n")
 
 print("Processing completed for binary classification")
-
+"""
 #------------------------------------------Multiclass Classification----------------------------
 
 print("\n--------------------------------Multiclass Classification--------------------------------------\n")
 
 pipeline = {}
-pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/multiclass/train"
+pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/histogram/multiclass/train"
 
 
 #------------------ setup data------------------------
@@ -443,31 +472,45 @@ pipeline["data"]["path_to_labels"] = path_to_multi_labels
 # split data
 pipeline["data"]["split_type"] = "simpleStratified"  #"simple", "simpleStratified", "kfold", "kfoldStratified"
 
+pipeline["data"]["save_to_pkl"] = True
+
 pipeline["data"]["classes"] = np.array(["Normal", "COVID", "pneumonia", "Lung_Opacity"]) 
 
 # ---------------------------------set up data preprocessing methods and parameters------------------------------------
 
 pipeline["data_preprocessing"] ={}
-
+"""
 # normalize image
 pipeline["data_preprocessing"]["normalize_image"] = {}
 pipeline["data_preprocessing"]["normalize_image"]["function"] = normalize
 pipeline["data_preprocessing"]["normalize_image"]["method"] = "minmax" 
+"""
 
 # map to RGB
 pipeline["data_preprocessing"]["map_to_RGB"] = {}
 pipeline["data_preprocessing"]["map_to_RGB"]["function"] = change_colorspace 
 pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY" 
 
+
 # resize_image
 pipeline["data_preprocessing"]["resize_image"] = {}
 pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-pipeline["data_preprocessing"]["resize_image"]["output_size"] = (200, 200) #(width, height)
+pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
 pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
+
+# edge detection
+#pipeline["data_preprocessing"]["canny_edges"] = {}
+#pipeline["data_preprocessing"]["canny_edges"]["function"] = canny_edge_detector
+#pipeline["data_preprocessing"]["canny_edges"]["blur"] = True
+#pipeline["data_preprocessing"]["canny_edges"]["threshold1"] = 250
+#pipeline["data_preprocessing"]["canny_edges"]["threshold2"] = 500
+#pipeline["data_preprocessing"]["canny_edges"]["apertureSize"] = 5
+#pipeline["data_preprocessing"]["canny_edges"]["L2gradient"] = True
+
 
 # ---------------------------------set up feature extractor methods and parameters------------------------------------
 pipeline["feature_extractors"] ={}
-
+"""
 # contrast
 pipeline["feature_extractors"]["contrast"] = {}
 pipeline["feature_extractors"]["contrast"]["function"] = calculate_contrast
@@ -488,6 +531,29 @@ pipeline["feature_extractors"]["kurtosis"]["bias"] = True
 pipeline["feature_extractors"]["RMS"] = {}
 pipeline["feature_extractors"]["RMS"]["function"] = calculate_contrast
 pipeline["feature_extractors"]["RMS"]["method"] = "rms"
+"""
+
+# histogram
+pipeline["feature_extractors"]["histogram"] = {}
+pipeline["feature_extractors"]["histogram"]["function"] = calculate_histogram
+pipeline["feature_extractors"]["histogram"]["bins"] = 256
+pipeline["feature_extractors"]["histogram"]["range"] = (0,256)
+pipeline["feature_extractors"]["histogram"]["density"] = False
+
+# haralick
+#pipeline["feature_extractors"]["haralick"] = {}
+#pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
+#pipeline["feature_extractors"]["haralick"]["blur"] = True
+#pipeline["feature_extractors"]["haralick"]["distance"] = 1
+
+# zernike
+#pipeline["feature_extractors"]["zernike_moments"] = {}
+#pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
+#pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
+#pipeline["feature_extractors"]["zernike_moments"]["radius"] = 100
+#pipeline["feature_extractors"]["zernike_moments"]["degree"] = 10
+#pipeline["feature_extractors"]["zernike_moments"]["cm"] = (100, 100)
+
 
 #---------------------------------Normalize feature vectors-----------------------
 pipeline["normalize_features"] = {}
@@ -578,7 +644,8 @@ temp_config ={}
 temp_config["data"] = pipeline["data"]
 temp_config["data_preprocessing"] = pipeline["data_preprocessing"]
 X_train, y_train, X_valid, y_valid, data_config = load_and_preprocess_data(
-    data_config=temp_config
+    data_config=temp_config, 
+    path_to_results=pipeline["path_to_results"]
     )
 
 print(f"Loaded Images Sucessfully.Shape of X_train: {X_train.shape} y_train: {y_train.shape} X_valid: {X_valid.shape} y_valid: {y_valid.shape}")
@@ -779,7 +846,7 @@ print("\n --------------------Generating predictions for test data-------------.
 
 
 path_to_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/test"
-save_path_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/multiclass/test"
+save_path_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/histogram/multiclass/test"
 
 generate_predictions(
     path_to_json=path_to_json,
@@ -793,7 +860,7 @@ print("\n Completed predictions for test data\n")
 print("\n --------------------Generating predictions for noisy test data-------------.----- \n")
 
 path_to_noisy_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/noisy_test"
-save_path_noisy_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/benchmark/multiclass/noisy_test"
+save_path_noisy_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/histogram/multiclass/noisy_test"
 
 generate_predictions(
     path_to_json=path_to_json,
