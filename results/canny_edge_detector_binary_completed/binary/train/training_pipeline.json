@@ -1,0 +1,157 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train",
+        "path_to_labels": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_binary.txt",
+        "split_type": "simpleStratified",
+        "classes": [
+            "NO_COVID",
+            "COVID"
+        ]
+    },
+    "data_preprocessing": {
+        "map_to_RGB": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        },
+        "canny_edges": {
+            "blur": true,
+            "threshold1": 250,
+            "threshold2": 500,
+            "apertureSize": 5,
+            "L2gradient": true,
+            "function": "canny_edge_detector"
+        },
+        "resize_image": {
+            "output_size": [
+                150,
+                150
+            ],
+            "interpolation": "area",
+            "function": "resize"
+        }
+    },
+    "original_labels": {
+        "COVID": "17.08",
+        "NO_COVID": "82.92"
+    },
+    "processed_labels": {
+        "train": {
+            "0": {
+                "COVID": "17.08",
+                "NO_COVID": "82.92"
+            }
+        },
+        "valid": {
+            "0": {
+                "COVID": "17.09",
+                "NO_COVID": "82.91"
+            }
+        }
+    },
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/canny_edge_detector/binary/train",
+    "feature_extractors": {
+        "contrast": {
+            "method": "michelson",
+            "function": "calculate_contrast"
+        },
+        "skewness": {
+            "bias": true,
+            "function": "calculate_skew"
+        },
+        "kurtosis": {
+            "method": "pearson",
+            "bias": true,
+            "function": "calculate_kurtosis"
+        },
+        "RMS": {
+            "method": "rms",
+            "function": "calculate_contrast"
+        },
+        "count_nonzeros": {
+            "function": "count_nonzeros"
+        }
+    },
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                1.0,
+                1.9881188996803894,
+                6.002492974983102,
+                44.845762579176466,
+                6618.533963378618
+            ]
+        ],
+        "var": [
+            [
+                0.0,
+                0.2976920785628418,
+                16.455963973376175,
+                21.082391967214956,
+                2711820.754457822
+            ]
+        ],
+        "scale": [
+            [
+                1.0,
+                0.5456116554499563,
+                4.056595120710986,
+                4.591556595231617,
+                1646.760685241733
+            ]
+        ]
+    },
+    "classifiers": {
+        "svm": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/canny_edge_detector/binary/train/0/models"
+            },
+            "svm_type": "C_SVC",
+            "kernel": "RBF",
+            "Gamma": 0.0022500000000000003,
+            "Degree": 0.0,
+            "P": 0.0,
+            "Nu": 0.0,
+            "Coef0": 0.0,
+            "C": 62.5,
+            "function": "svm"
+        },
+        "RFTree": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/canny_edge_detector/binary/train/0/models"
+            },
+            "ActiveVarCount": 0,
+            "function": "rftree"
+        }
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "type": "simple",
+            "function": "accuracy"
+        },
+        "balanced_accuracy": {
+            "type": "balanced",
+            "function": "accuracy"
+        },
+        "precision": {
+            "class_result": "COVID",
+            "function": "precision"
+        },
+        "sensitivity": {
+            "class_result": "COVID",
+            "function": "sensitivity"
+        },
+        "f1_score": {
+            "class_result": "COVID",
+            "function": "F1_score"
+        },
+        "mcc": {
+            "function": "mcc"
+        }
+    },
+    "plots": {
+        "CM": {
+            "function": "plot_CM"
+        }
+    }
+}

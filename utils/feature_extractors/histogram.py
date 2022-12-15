@@ -57,16 +57,13 @@ def calculate_histogram(X, parameters):
     
     num_images = X.shape[0]
 
-    
+    feature = []
     for img in range(num_images):
         temp = np.histogram(X[img].flatten(), bins=bins, range=rng, density=density)[0]
-        temp = np.expand_dims(temp, axis=0)
+        feature.append(temp)
 
-        if img == 0:
-            feature = temp
-        else:
-            feature = np.concatenate((feature, temp), axis=0)    
-    
+    feature = np.array(feature)
+        
     return feature, config
 
 

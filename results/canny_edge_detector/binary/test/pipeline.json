@@ -1,0 +1,75 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/test",
+        "path_to_labels": null,
+        "split_type": null,
+        "save_to_pkl": true,
+        "classes": [
+            "NO_COVID",
+            "COVID"
+        ]
+    },
+    "data_preprocessing": {
+        "map_to_RGB": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        },
+        "canny_edges": {
+            "blur": true,
+            "threshold1": 250,
+            "threshold2": 500,
+            "apertureSize": 5,
+            "L2gradient": true,
+            "function": "canny_edge_detector"
+        },
+        "resize_image": {
+            "output_size": [
+                150,
+                150
+            ],
+            "interpolation": "area",
+            "function": "resize"
+        }
+    },
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/canny_edge_detector/binary/test",
+    "feature_extractors": {
+        "count_nonzeros": {
+            "function": "count_nonzeros"
+        }
+    },
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                6613.71470761961
+            ]
+        ],
+        "var": [
+            [
+                2713396.38076335
+            ]
+        ],
+        "scale": [
+            [
+                1647.2390174966565
+            ]
+        ]
+    },
+    "classifiers": {
+        "svm": {
+            "svm_type": "C_SVC",
+            "kernel": "RBF",
+            "Gamma": 0.03375,
+            "Degree": 0.0,
+            "P": 0.0,
+            "Nu": 0.0,
+            "Coef0": 0.0,
+            "C": 2.5,
+            "function": "svm"
+        },
+        "RFTree": {
+            "ActiveVarCount": 0,
+            "function": "rftree"
+        }
+    }
+}

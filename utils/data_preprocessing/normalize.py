@@ -41,19 +41,13 @@ def normalize(images, parameters):
    
     elif method == "minmax":
 
-        flag = True
+        results = []
 
         for img in range(images.shape[0]):
 
-            temp = cv2.normalize(images[img], None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
+            results.append(cv2.normalize(images[img], None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F))
 
-            temp = np.expand_dims(temp, axis=0)
-
-            if flag:
-                results = temp
-                flag = False
-            else:
-                results = np.concatenate((results, temp))  
+        results = np.array(results)           
     else:
         raise ValueError("Unknown Value encountered for the parameter'method' while normalizing the image.")
 

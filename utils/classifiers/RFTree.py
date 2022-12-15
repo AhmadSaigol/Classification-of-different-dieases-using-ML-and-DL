@@ -68,7 +68,7 @@ def rftree(X, parameters, classes, y, save_model_path=None, path_to_model=None):
         # model.calcOOBError ()
 
         # can set termination criteria
-        # model.setTermCriteria()
+        model.setTermCriteria((cv2.TERM_CRITERIA_MAX_ITER, 10000, 1e-6))
 
         print("Training Random Forest Tree")
         model.train(X, cv2.ml.ROW_SAMPLE, labels)

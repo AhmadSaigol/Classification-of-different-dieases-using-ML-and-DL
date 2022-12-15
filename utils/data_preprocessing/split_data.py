@@ -19,8 +19,6 @@ def split_data(y, split_type):
     
     """
 
-    flag = True
-
     if split_type=="simple":
         
         test_size= 0.3
@@ -50,19 +48,15 @@ def split_data(y, split_type):
 
         # shuffle data before creating folds
         kf = KFold(n_splits=n_folds, shuffle=True)
-
+        
+        y_train = []
+        y_valid = []
         for train_index, valid_index in kf.split(X=np.ones(len(y))):
-            train_labels = np.expand_dims(y[train_index], axis=0)
-            valid_labels = np.expand_dims(y[valid_index], axis=0)
-            
-            if flag:
-                y_train = train_labels
-                y_valid = valid_labels
-                flag=False
-            else:
-                y_train = np.concatenate((y_train, train_labels))
-                y_valid = np.concatenate((y_valid, valid_labels))
-
+            y_train.append(y[train_index])
+            y_valid.append(y[valid_index])
+        
+        y_train = np.array(y_train)
+        y_valid = np.array(y_valid)
 
     
     elif split_type == "kfoldStratified":
@@ -71,19 +65,16 @@ def split_data(y, split_type):
 
         # shuffle data before creating folds
         skf = StratifiedKFold(n_splits=n_folds, shuffle=True)
-
+        y_train = []
+        y_valid = []
+        
         for train_index, valid_index in skf.split(X=np.ones(len(y)), y=y[:,1]):
 
-            train_labels = np.expand_dims(y[train_index], axis=0)
-            valid_labels = np.expand_dims(y[valid_index], axis=0)
-            
-            if flag:
-                y_train = train_labels
-                y_valid = valid_labels
-                flag=False
-            else:
-                y_train = np.concatenate((y_train, train_labels))
-                y_valid = np.concatenate((y_valid, valid_labels))
+            y_train.append(y[train_index])
+            y_valid.append(y[valid_index])
+
+        y_train = np.array(y_train)
+        y_valid = np.array(y_valid)
 
     else:
         raise ValueError(f"Unknown value encountered for the parameter 'split_type' during splitting of the data. received {split_type}")

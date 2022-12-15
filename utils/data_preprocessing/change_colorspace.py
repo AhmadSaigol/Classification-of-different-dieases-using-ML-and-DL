@@ -53,16 +53,12 @@ def change_colorspace(images, parameters):
         raise ValueError("Unknown Value encountered for the parameter'conversion' while changing the colorspace.")
 
 
-    flag = True
+    results = []
     for img in range(images.shape[0]):
-        temp = cv2.cvtColor(images[img], codes[index])
-        temp = np.expand_dims(temp, axis=0)
-        if flag:
-            results = temp
-            flag = False
-        else:
-            results = np.concatenate((results, temp ))   
-    
+        results.append(cv2.cvtColor(images[img], codes[index]))
+  
+    results =np.array(results)
+
     # add dim when converting to grayscale for consistency
     if conversion in ["BGR2GRAY", "RGB2GRAY"]:
         results = np.expand_dims(results, axis=-1)  
@@ -74,14 +70,14 @@ def change_colorspace(images, parameters):
 if __name__ == "__main__":
 
     path_to_image = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/test/0a23fc8b-01c1-4f0b-a33c-d749811da434.png"
-    image_c =cv2.imread(path_to_image, 0)
+    image_c =cv2.imread(path_to_image, 1)
 
     image_c = np.expand_dims(image_c, axis=0)
-    image_c = np.expand_dims(image_c, axis=-1)
+    #image_c = np.expand_dims(image_c, axis=-1)
     pipeline={}
     pipeline["map_to_RGB"] = {}
     pipeline["map_to_RGB"]["function"] =0 #some function pointer
-    pipeline["map_to_RGB"]["conversion"] = "GRAY2RGB"
+    pipeline["map_to_RGB"]["conversion"] = "RGB2GRAY"
     print(image_c.shape)
 
     new, config = change_colorspace(image_c, parameters=pipeline["map_to_RGB"])

@@ -16,6 +16,8 @@ from utils.feature_extractors.skewness import calculate_skew
 from utils.feature_extractors.histogram import calculate_histogram
 from utils.feature_extractors.haralick import calculate_haralick
 from utils.feature_extractors.zernike import calculate_zernike
+from utils.feature_extractors.non_zero_valules import count_nonzeros
+from utils.feature_extractors.local_binary_pattern import calculate_lbp
 
 from utils.normalize_features import normalize_features
 
@@ -49,11 +51,11 @@ change_txt_for_binary(path_to_multi_labels, path_to_binary_labels)
 
 
 #--------------------------------------Pipeline-------------------------------
-"""
+
 print("----------------------------_Binary Classification------------------------")
 
 pipeline = {}
-pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/histogram/binary/train"
+pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/haralick_zernlike/binary/train"
 
 
 #------------------ setup data------------------------
@@ -76,24 +78,34 @@ pipeline["data"]["classes"] =  np.array(["NO_COVID", "COVID"])
 pipeline["data_preprocessing"] ={}
 
 # normalize image
-#pipeline["data_preprocessing"]["normalize_image"] = {}
-#pipeline["data_preprocessing"]["normalize_image"]["function"] = normalize
-#pipeline["data_preprocessing"]["normalize_image"]["method"] = "minmax" 
+pipeline["data_preprocessing"]["normalize_image"] = {}
+pipeline["data_preprocessing"]["normalize_image"]["function"] = normalize
+pipeline["data_preprocessing"]["normalize_image"]["method"] = "minmax" 
 
 # map to RGB
 pipeline["data_preprocessing"]["map_to_RGB"] = {}
 pipeline["data_preprocessing"]["map_to_RGB"]["function"] = change_colorspace 
 pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY" 
 
+# canny edge detector
+#pipeline["data_preprocessing"]["canny_edges"] = {}
+#pipeline["data_preprocessing"]["canny_edges"]["function"] = canny_edge_detector
+#pipeline["data_preprocessing"]["canny_edges"]["blur"] = True
+#pipeline["data_preprocessing"]["canny_edges"]["threshold1"] =250
+#pipeline["data_preprocessing"]["canny_edges"]["threshold2"] = 500
+#pipeline["data_preprocessing"]["canny_edges"]["apertureSize"] = 5
+#pipeline["data_preprocessing"]["canny_edges"]["L2gradient"] = True
+
 # resize_image
-pipeline["data_preprocessing"]["resize_image"] = {}
-pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250,250) #(width, height)
-pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
+#pipeline["data_preprocessing"]["resize_image"] = {}
+#pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
+#pipeline["data_preprocessing"]["resize_image"]["output_size"] = (150, 150) #(width, height)
+#pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
+
 
 # ---------------------------------set up feature extractor methods and parameters------------------------------------
 pipeline["feature_extractors"] ={}
-"""
+
 # contrast
 #pipeline["feature_extractors"]["contrast"] = {}
 #pipeline["feature_extractors"]["contrast"]["function"] = calculate_contrast
@@ -115,28 +127,39 @@ pipeline["feature_extractors"] ={}
 #pipeline["feature_extractors"]["RMS"]["function"] = calculate_contrast
 #pipeline["feature_extractors"]["RMS"]["method"] = "rms"
 
-"""
+# count non zeros
+#pipeline["feature_extractors"]["count_nonzeros"] = {}
+#pipeline["feature_extractors"]["count_nonzeros"]["function"] = count_nonzeros
 
 # histogram
-pipeline["feature_extractors"]["histogram"] = {}
-pipeline["feature_extractors"]["histogram"]["function"] = calculate_histogram
-pipeline["feature_extractors"]["histogram"]["bins"] = 256
-pipeline["feature_extractors"]["histogram"]["range"] = (0,256)
-pipeline["feature_extractors"]["histogram"]["density"] = False
+#pipeline["feature_extractors"]["histogram"] = {}
+#pipeline["feature_extractors"]["histogram"]["function"] = calculate_histogram
+#pipeline["feature_extractors"]["histogram"]["bins"] = 256
+#pipeline["feature_extractors"]["histogram"]["range"] = (0,256)
+#pipeline["feature_extractors"]["histogram"]["density"] = False
 
 # haralick
-#pipeline["feature_extractors"]["haralick"] = {}
-#pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
-#pipeline["feature_extractors"]["haralick"]["blur"] = True
-#pipeline["feature_extractors"]["haralick"]["distance"] = 1
+pipeline["feature_extractors"]["haralick"] = {}
+pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
+pipeline["feature_extractors"]["haralick"]["blur"] = True
+pipeline["feature_extractors"]["haralick"]["distance"] = 10
 
 # zernike
-#pipeline["feature_extractors"]["zernike_moments"] = {}
-#pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
-#pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
+pipeline["feature_extractors"]["zernike_moments"] = {}
+pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
+pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
 #pipeline["feature_extractors"]["zernike_moments"]["radius"] = 100
 #pipeline["feature_extractors"]["zernike_moments"]["degree"] = 10
 #pipeline["feature_extractors"]["zernike_moments"]["cm"] = (100, 100)
+
+#lbp
+#pipeline["feature_extractors"]["lbp"] = {}
+#pipeline["feature_extractors"]["lbp"]["function"] = calculate_lbp
+#pipeline["feature_extractors"]["lbp"]["P"] = 40
+#pipeline["feature_extractors"]["lbp"]["R"] = 12
+#pipeline["feature_extractors"]["lbp"]["method"] = "uniform"
+
+
 #---------------------------------Normalize feature vectors-----------------------
 pipeline["normalize_features"] = {}
 pipeline["normalize_features"]["norm_type"] = "StandardScaler"
@@ -425,7 +448,7 @@ print("\n --------------------Generating predictions for test data-------------.
 
 
 path_to_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/test"
-save_path_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/histogram/binary/test"
+save_path_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/haralick_zernlike/binary/test"
 
 generate_predictions(
     path_to_json=path_to_json,
@@ -439,7 +462,7 @@ print("\n Completed predictions for test data\n")
 print("\n --------------------Generating predictions for noisy test data-------------.----- \n")
 
 path_to_noisy_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/noisy_test"
-save_path_noisy_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/histogram/binary/noisy_test"
+save_path_noisy_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/haralick_zernlike/binary/noisy_test"
 
 generate_predictions(
     path_to_json=path_to_json,
@@ -451,13 +474,14 @@ generate_predictions(
 print("\n Completed predictions for noisy test data\n")
 
 print("Processing completed for binary classification")
-"""
+
+
 #------------------------------------------Multiclass Classification----------------------------
 
 print("\n--------------------------------Multiclass Classification--------------------------------------\n")
 
 pipeline = {}
-pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/histogram/multiclass/train"
+pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/haralick_zernlike/multiclass/train"
 
 
 #------------------ setup data------------------------
@@ -492,12 +516,6 @@ pipeline["data_preprocessing"]["map_to_RGB"]["function"] = change_colorspace
 pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY" 
 
 
-# resize_image
-pipeline["data_preprocessing"]["resize_image"] = {}
-pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
-pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
-
 # edge detection
 #pipeline["data_preprocessing"]["canny_edges"] = {}
 #pipeline["data_preprocessing"]["canny_edges"]["function"] = canny_edge_detector
@@ -507,53 +525,67 @@ pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
 #pipeline["data_preprocessing"]["canny_edges"]["apertureSize"] = 5
 #pipeline["data_preprocessing"]["canny_edges"]["L2gradient"] = True
 
+# resize_image
+#pipeline["data_preprocessing"]["resize_image"] = {}
+#pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
+#pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
+#pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
 
 # ---------------------------------set up feature extractor methods and parameters------------------------------------
 pipeline["feature_extractors"] ={}
-"""
+
 # contrast
-pipeline["feature_extractors"]["contrast"] = {}
-pipeline["feature_extractors"]["contrast"]["function"] = calculate_contrast
-pipeline["feature_extractors"]["contrast"]["method"] = "michelson" 
+# pipeline["feature_extractors"]["contrast"] = {}
+#pipeline["feature_extractors"]["contrast"]["function"] = calculate_contrast
+#pipeline["feature_extractors"]["contrast"]["method"] = "michelson" 
 
 # skewness
-pipeline["feature_extractors"]["skewness"] = {}
-pipeline["feature_extractors"]["skewness"]["function"] =calculate_skew
-pipeline["feature_extractors"]["skewness"]["bias"] = True
+#pipeline["feature_extractors"]["skewness"] = {}
+#pipeline["feature_extractors"]["skewness"]["function"] =calculate_skew
+#pipeline["feature_extractors"]["skewness"]["bias"] = True
 
 # kurtosis
-pipeline["feature_extractors"]["kurtosis"] = {}
-pipeline["feature_extractors"]["kurtosis"]["function"] = calculate_kurtosis
-pipeline["feature_extractors"]["kurtosis"]["method"] = "pearson"
-pipeline["feature_extractors"]["kurtosis"]["bias"] = True
+#pipeline["feature_extractors"]["kurtosis"] = {}
+#pipeline["feature_extractors"]["kurtosis"]["function"] = calculate_kurtosis
+#pipeline["feature_extractors"]["kurtosis"]["method"] = "pearson"
+#pipeline["feature_extractors"]["kurtosis"]["bias"] = True
 
 # RMS
-pipeline["feature_extractors"]["RMS"] = {}
-pipeline["feature_extractors"]["RMS"]["function"] = calculate_contrast
-pipeline["feature_extractors"]["RMS"]["method"] = "rms"
-"""
+#pipeline["feature_extractors"]["RMS"] = {}
+#pipeline["feature_extractors"]["RMS"]["function"] = calculate_contrast
+#pipeline["feature_extractors"]["RMS"]["method"] = "rms"
+
+# count non zeros
+#pipeline["feature_extractors"]["count_nonzeros"] = {}
+#pipeline["feature_extractors"]["count_nonzeros"]["function"] = count_nonzeros
 
 # histogram
-pipeline["feature_extractors"]["histogram"] = {}
-pipeline["feature_extractors"]["histogram"]["function"] = calculate_histogram
-pipeline["feature_extractors"]["histogram"]["bins"] = 256
-pipeline["feature_extractors"]["histogram"]["range"] = (0,256)
-pipeline["feature_extractors"]["histogram"]["density"] = False
+#pipeline["feature_extractors"]["histogram"] = {}
+#pipeline["feature_extractors"]["histogram"]["function"] = calculate_histogram
+#pipeline["feature_extractors"]["histogram"]["bins"] = 256
+#pipeline["feature_extractors"]["histogram"]["range"] = (0,256)
+#pipeline["feature_extractors"]["histogram"]["density"] = False
 
 # haralick
-#pipeline["feature_extractors"]["haralick"] = {}
-#pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
-#pipeline["feature_extractors"]["haralick"]["blur"] = True
-#pipeline["feature_extractors"]["haralick"]["distance"] = 1
+pipeline["feature_extractors"]["haralick"] = {}
+pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
+pipeline["feature_extractors"]["haralick"]["blur"] = True
+pipeline["feature_extractors"]["haralick"]["distance"] = 10
 
 # zernike
-#pipeline["feature_extractors"]["zernike_moments"] = {}
-#pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
-#pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
+pipeline["feature_extractors"]["zernike_moments"] = {}
+pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
+pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
 #pipeline["feature_extractors"]["zernike_moments"]["radius"] = 100
 #pipeline["feature_extractors"]["zernike_moments"]["degree"] = 10
 #pipeline["feature_extractors"]["zernike_moments"]["cm"] = (100, 100)
 
+# lbp
+#pipeline["feature_extractors"]["lbp"] = {}
+#pipeline["feature_extractors"]["lbp"]["function"] = calculate_lbp
+#pipeline["feature_extractors"]["lbp"]["P"] = 40
+#pipeline["feature_extractors"]["lbp"]["R"] = 12
+#pipeline["feature_extractors"]["lbp"]["method"] = "uniform"
 
 #---------------------------------Normalize feature vectors-----------------------
 pipeline["normalize_features"] = {}
@@ -846,7 +878,7 @@ print("\n --------------------Generating predictions for test data-------------.
 
 
 path_to_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/test"
-save_path_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/histogram/multiclass/test"
+save_path_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/haralick_zernlike/multiclass/test"
 
 generate_predictions(
     path_to_json=path_to_json,
@@ -860,7 +892,7 @@ print("\n Completed predictions for test data\n")
 print("\n --------------------Generating predictions for noisy test data-------------.----- \n")
 
 path_to_noisy_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/noisy_test"
-save_path_noisy_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/histogram/multiclass/noisy_test"
+save_path_noisy_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/haralick_zernlike/multiclass/noisy_test"
 
 generate_predictions(
     path_to_json=path_to_json,

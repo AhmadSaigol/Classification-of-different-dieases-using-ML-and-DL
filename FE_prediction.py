@@ -20,6 +20,8 @@ from utils.feature_extractors.histogram import calculate_histogram
 from utils.feature_extractors.haralick import calculate_haralick
 from utils.feature_extractors.zernike import calculate_zernike
 from utils.feature_extractors.non_zero_valules import count_nonzeros
+from utils.feature_extractors.local_binary_pattern import calculate_lbp
+
 
 from utils.normalize_features import normalize_features
 
@@ -63,7 +65,7 @@ def generate_predictions(path_to_images, path_to_json, save_path):
     # replace function names with their pointers    
     data_preprocessing = [normalize, change_colorspace, resize, canny_edge_detector]
     feature_extractors= [calculate_contrast, calculate_kurtosis, calculate_skew, calculate_histogram, calculate_haralick, 
-                        calculate_zernike,  count_nonzeros]
+                        calculate_zernike,  count_nonzeros, calculate_lbp]
     norm_features = [normalize_features]
     classifiers = [svm, rftree]
 

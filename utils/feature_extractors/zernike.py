@@ -70,6 +70,8 @@ def calculate_zernike(X, parameters):
     
     num_images = X.shape[0]
 
+    feature = []
+
     for img in range(num_images):
         
         if blur:
@@ -82,13 +84,10 @@ def calculate_zernike(X, parameters):
         else:
             temp = mht.features.zernike_moments(proc_img, radius=radius, degree=degree, cm=cm)
         
-        temp = np.expand_dims(temp, axis=0)
+        feature.append(temp)
 
-        if img == 0:
-            feature = temp
-        else:
-            feature = np.concatenate((feature, temp), axis=0)    
-    
+    feature = np.array(feature)
+        
     return feature, config
 
 if __name__ == "__main__":

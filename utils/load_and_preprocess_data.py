@@ -91,10 +91,11 @@ def load_and_preprocess_data(data_config, path_to_results=None):
 
     #save to pkl
     if "save_to_pkl" in data_keys:
-        save_npy = data["save_to_pkl"]
+        save_pkl = data["save_to_pkl"]
     else:
-        save_npy = False
-    
+        save_pkl = False
+    output_config["data"]["save_to_pkl"] = save_pkl
+
     # load from the folder
     if os.path.isdir(path_to_images):
 
@@ -140,6 +141,8 @@ def load_and_preprocess_data(data_config, path_to_results=None):
             
             num_folds = y_train.shape[0]
 
+            X_train= []
+            X_valid = []
             for fold_no in range(num_folds):
                 print("Loading Images of Fold No: ", fold_no)
                 
@@ -147,28 +150,33 @@ def load_and_preprocess_data(data_config, path_to_results=None):
                                                         image_ids=y_train[fold_no,:,0],
                                                         data_preprocessing=data_config["data_preprocessing"])
 
-                print(f"\nFold No: {fold_no}s Shape of Training Images: {train_images.shape}")
+                print(f"\nFold No: {fold_no} Shape of Training Images: {train_images.shape}")
 
                 valid_images, valid_config = load_images(path_to_images=path_to_images, 
                                             image_ids=y_valid[fold_no,:,0],
                                             data_preprocessing=train_config)
                 
-                print(f"\nFold No: {fold_no} Shape of Validation Images: {train_images.shape}")
+                print(f"\nFold No: {fold_no} Shape of Validation Images: {valid_images.shape}")
 
                 if not compare_dict(train_config, valid_config):
                     raise ValueError("While loading images for validation data, a function changed the values of the configuration")
 
                 # store images
-                train_images = np.expand_dims(train_images, axis=0)
-                valid_images = np.expand_dims(valid_images, axis=0)                                                         
-                if fold_no==0:
-                    X_train = train_images
-                    X_valid = valid_images
-                else:
-                    X_train = np.concatenate((X_train, train_images))
-                    X_valid = np.concatenate((X_valid, valid_images))
+                X_train.append(train_images)
+                X_valid.append(valid_images)
+                #train_images = np.expand_dims(train_images, axis=0)
+                #valid_images = np.expand_dims(valid_images, axis=0)                                                         
+                #if fold_no==0:
+                #    X_train = train_images
+                #     X_valid = valid_images
+                #else:
+                #    X_train = np.concatenate((X_train, train_images))
+                #    X_valid = np.concatenate((X_valid, valid_images))
             
             
+            X_train = np.array(X_train)
+            X_valid = np.array(X_valid)
+
             output_config ["data_preprocessing"] = train_config
 
             train_labels = {}
@@ -178,15 +186,19 @@ def load_and_preprocess_data(data_config, path_to_results=None):
                 # ratio in y_train
                 train_labels[str(fold_no)] = {}
                 unique_labels, counts =np.unique(y_train[fold_no, :,1], return_counts=True)
+                
                 print(f"\nFold No: {fold_no} Training data: Unique labels: ")
+                
                 for ul, c in zip(unique_labels, counts):
                     train_labels[str(fold_no)][ul] = format(c*100/y_train.shape[1], '.2f')
                     print(f"Label: {ul}, %age: {format(c*100/y_train.shape[1], '.2f')}")
-
+                
                 # ratio in y_valid
-                unique_labels, counts =np.unique(y_valid[fold_no, :,1], return_counts=True)
                 valid_labels[str(fold_no)] = {}
+                unique_labels, counts =np.unique(y_valid[fold_no, :,1], return_counts=True)
+                
                 print(f"\nFold No: {fold_no} Validation data: Unique labels: ")
+
                 for ul, c in zip(unique_labels, counts):
                     valid_labels[str(fold_no)][ul] = format(c*100/y_valid.shape[1], '.2f')
                     print(f"Label: {ul}, %age: {format(c*100/y_valid.shape[1], '.2f')}")
@@ -195,7 +207,7 @@ def load_and_preprocess_data(data_config, path_to_results=None):
             output_config["processed_labels"]["train"] = train_labels
             output_config["processed_labels"]["valid"] = valid_labels
 
-            if save_npy:
+            if save_pkl:
                 if path_to_results:
                     print("Saving processed data to ", path_to_results)
                     path_to_processed_dataset = path_to_results + "/processed_data.pkl"
@@ -222,7 +234,7 @@ def load_and_preprocess_data(data_config, path_to_results=None):
             y= np.expand_dims(y, axis=0)
             
             # save to npy
-            if save_npy:
+            if save_pkl:
                 if path_to_results:
                     print("Saving processed data to ", path_to_results)
                     path_to_processed_dataset = path_to_results + "/processed_data.pkl"
@@ -235,18 +247,18 @@ def load_and_preprocess_data(data_config, path_to_results=None):
             return X, y, output_config
 
     
-    elif ".npy" in path_to_images:
+    elif ".pkl" in path_to_images:
         print("Reading data from npy")
 
         with open(path_to_images, 'rb') as file:
             datas = pickle.load(file)
             if len(datas) == 4:
                 #X_train, y_train, X_valid, y_valid
-                return datas [0], datas [1], datas [2], datas [3]
+                return datas [0], datas [1], datas [2], datas [3], output_config
             
             elif len(datas) == 2:
                 # X, y
-                return datas[0],datas[1]
+                return datas[0],datas[1], output_config
             else:
                 raise ValueError("Unknown value for length of data in pickle encountered")
     else:
@@ -323,12 +335,12 @@ if __name__ == "__main__":
     pipeline["data"] = {}
 
     # path to folder containing images 
-    pipeline["data"]["path_to_images"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train"
+    pipeline["data"]["path_to_images"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train"
     # can be to .txt
-    pipeline["data"]["path_to_labels"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train.txt"
+    pipeline["data"]["path_to_labels"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train_multi.txt"
 
     # split data
-    pipeline["data"]["split_type"] =  "simpleStratified" #"simple" #"simpleStrafied", "kfold", "kfoldStratified"
+    pipeline["data"]["split_type"] =  "simple" #"simple" #"simpleStrafied", "kfold", "kfoldStratified"
 
 
     # ---------------------------------set up data preprocessing methods and parameters------------------------------------

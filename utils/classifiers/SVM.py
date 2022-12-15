@@ -106,7 +106,7 @@ def svm(X, parameters, classes, y, save_model_path=None, path_to_model=None):
             auto = False
         
         # set stopping criteria
-        model.setTermCriteria((cv2.TERM_CRITERIA_MAX_ITER, 100, 1e-6))
+        model.setTermCriteria((cv2.TERM_CRITERIA_MAX_ITER, 10000, 1e-6))
 
         # can also class weights in case of misclassification of a class
         # svm.setClassWeights ()

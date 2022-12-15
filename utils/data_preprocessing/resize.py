@@ -55,20 +55,16 @@ def resize(images, parameters):
 
 
     # apply resizing
-    flag = True
+    results = []
     for img in range(images.shape[0]):
 
         temp = cv2.resize(images[img], dsize=dsize, interpolation=interpolation_methods[index])
-        temp = np.expand_dims(temp, axis=0)
         if images[img].shape[-1] == 1:
             temp = np.expand_dims(temp, axis=-1)
 
-        if flag:
-            results = temp
-            flag = False
-        else:
-            results = np.concatenate((results, temp))   
+        results.append(temp)
 
+    results = np.array(results)
 
     return results, config
 

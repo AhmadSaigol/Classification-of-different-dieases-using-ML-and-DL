@@ -79,6 +79,7 @@ def canny_edge_detector(images, parameters):
         raise ValueError("Currently, calculating edge detction is only supported for grayscale images")
     
     num_images = images.shape[0]
+    results = []
 
     for img in range(num_images):
         
@@ -88,19 +89,11 @@ def canny_edge_detector(images, parameters):
             proc_img = np.squeeze(images[img], axis=-1)
         
         temp = cv2.Canny(proc_img, threshold1=th1, threshold2=th2, apertureSize=apertureSize, L2gradient=L2gradient)
-
-        temp = np.expand_dims(temp, axis=0)
-        temp = np.expand_dims(temp, axis=-1)
         
+        results.append(np.expand_dims(temp, axis=-1))
+        
+    results = np.array(results)
 
-
-        if img == 0:
-            results = temp
-        else:
-            results = np.concatenate((results, temp), axis=0)    
-    
-    
-    
     return results, config
 
 
@@ -190,7 +183,8 @@ if __name__ == "__main__":
             images = np.concatenate((images, img))
 
     results, config = canny_edge_detector(images=images, parameters=pipeline["canny_edges"])
-
+    print(results.shape)
+    
     for i in range(len(img_ids)):
         
         print("Procesing label: ", labels[i])
@@ -204,7 +198,7 @@ if __name__ == "__main__":
         axes[1].set_title("Canny Edges")
 
         # save image
-        plt.savefig(path_to_results + "/" + labels[i] + "_" + img_ids[i] + ".png")
+        plt.savefig(path_to_results + "/" + labels[i] + "_" + img_ids[i] + "test.png")
 
 
     
