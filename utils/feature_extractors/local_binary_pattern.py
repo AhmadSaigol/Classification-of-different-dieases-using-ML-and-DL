@@ -67,16 +67,8 @@ def calculate_lbp(X, parameters):
 
     for img in range(num_images):
 
-        fig, axes = plt.subplots(2,2, figsize=(15,15))
-
-        axes[0,0].imshow(np.squeeze(X[img]), cmap='gray', vmin=0, vmax=255)
-        axes[0,0].set_title("Original Image")
-
         lbp_img = lbp(np.squeeze(X[img]), P=p, R=r, method=method)
 
-        axes[0,1].imshow(lbp_img, cmap='gray', vmin=0, vmax=255)
-        axes[0,1].set_title("LBP")
-    
         (hist, _) = np.histogram(lbp_img.ravel(), 
                                 bins=np.arange(0, p + 3), 
                                 range=(0, p + 2))
@@ -84,15 +76,7 @@ def calculate_lbp(X, parameters):
         # normalize the histogram
         hist = hist.astype("float")
         hist /= (hist.sum() + 1e-7)
-
-        axes[1,0].plot(hist)
         
-        hist2, _ = np.histogram(X[img].flatten())
-        axes[1,1].plot(hist2)
-        
-        # save image
-        plt.savefig(f"/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/experiments/lbp/{imgs[img]}.png")
-
         feature.append(hist)
 
     

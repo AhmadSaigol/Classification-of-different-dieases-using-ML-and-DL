@@ -31,6 +31,8 @@ def generate_feature_vector(X, extractors):
         In the latter case, all elements in the second dim will be considered a separate feature
     
     """
+    verbose = False
+
     config = {}
 
     num_folds = X.shape[0]
@@ -41,8 +43,8 @@ def generate_feature_vector(X, extractors):
         
         # apply all extractors
         for extractor in extractors.keys():
-
-            print(f"Fold No: {fold_no} Feature Extractor: {extractor}")
+            if verbose:
+                print(f"Fold No: {fold_no} Feature Extractor: {extractor}")
             fnt_pointer = extractors[extractor]["function"]
 
             feature, fnt_config = fnt_pointer(X[fold_no], extractors[extractor])

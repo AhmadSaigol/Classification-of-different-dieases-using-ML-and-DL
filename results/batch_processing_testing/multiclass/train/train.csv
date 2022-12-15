@@ -1,0 +1,13 @@
+,Classifier,Fold No,Metric,Score
+0,svm,0,simple_accuracy,1.0
+1,svm,0,balanced_accuracy,1.0
+2,svm,0,precision,1.0
+3,svm,0,sensitivity,1.0
+4,svm,0,f1_score,1.0
+5,svm,0,mcc,1.0
+6,RFTree,0,simple_accuracy,0.4
+7,RFTree,0,balanced_accuracy,0.25
+8,RFTree,0,precision,0.16
+9,RFTree,0,sensitivity,0.4
+10,RFTree,0,f1_score,0.22857143
+11,RFTree,0,mcc,0.0

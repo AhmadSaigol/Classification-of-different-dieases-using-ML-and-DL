@@ -97,10 +97,10 @@ pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY"
 #pipeline["data_preprocessing"]["canny_edges"]["L2gradient"] = True
 
 # resize_image
-#pipeline["data_preprocessing"]["resize_image"] = {}
-#pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-#pipeline["data_preprocessing"]["resize_image"]["output_size"] = (150, 150) #(width, height)
-#pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
+pipeline["data_preprocessing"]["resize_image"] = {}
+pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
+pipeline["data_preprocessing"]["resize_image"]["output_size"] = (200, 200) #(width, height)
+pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
 
 
 # ---------------------------------set up feature extractor methods and parameters------------------------------------
@@ -526,10 +526,10 @@ pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY"
 #pipeline["data_preprocessing"]["canny_edges"]["L2gradient"] = True
 
 # resize_image
-#pipeline["data_preprocessing"]["resize_image"] = {}
-#pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-#pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
-#pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
+pipeline["data_preprocessing"]["resize_image"] = {}
+pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
+pipeline["data_preprocessing"]["resize_image"]["output_size"] = (200, 200) #(width, height)
+pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
 
 # ---------------------------------set up feature extractor methods and parameters------------------------------------
 pipeline["feature_extractors"] ={}

@@ -21,6 +21,8 @@ def calculate_haralick(X, parameters):
         features: numpy array of shape (num_images, 13)
         config: dictionary with keys
     
+    Notes:
+        works with integer values
     See more under:
     "https://cvexplained.wordpress.com/2020/07/22/10-6-haralick-texture/"
     "https://mahotas.readthedocs.io/en/latest/api.html"
@@ -59,7 +61,6 @@ def calculate_haralick(X, parameters):
             proc_img = cv2.bilateralFilter(np.squeeze(X[img], axis=-1) , d=5, sigmaColor=75, sigmaSpace=75)
         else:
             proc_img = np.squeeze(X[img], axis=-1)
-        
         
         temp = mht.features.haralick(proc_img, distance=distance, return_mean=True)
         feature.append(temp)

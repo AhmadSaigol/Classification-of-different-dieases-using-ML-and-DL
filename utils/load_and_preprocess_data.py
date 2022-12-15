@@ -164,14 +164,6 @@ def load_and_preprocess_data(data_config, path_to_results=None):
                 # store images
                 X_train.append(train_images)
                 X_valid.append(valid_images)
-                #train_images = np.expand_dims(train_images, axis=0)
-                #valid_images = np.expand_dims(valid_images, axis=0)                                                         
-                #if fold_no==0:
-                #    X_train = train_images
-                #     X_valid = valid_images
-                #else:
-                #    X_train = np.concatenate((X_train, train_images))
-                #    X_valid = np.concatenate((X_valid, valid_images))
             
             
             X_train = np.array(X_train)
