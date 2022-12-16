@@ -53,12 +53,12 @@ from utils.json_processing import save_to_json
 from utils.misc import add_function_names, generate_txt_file, save_results, change_txt_for_binary
 #--------------------------------- raw data image dir------------------------------
 
-images_folder = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing"
+images_folder = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data"
 
 #-------------------------------- Results directory----------------------------
 results_folder = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results"
 
-run_name = "batch_processing_testing"
+run_name = "haralick_zernike_svm_poly"
 
 run_path = os.path.join(results_folder, run_name)
 if not os.path.exists(run_path):
@@ -97,7 +97,7 @@ pipeline["path_to_results"] = os.path.join(binary_path, "train")
 pipeline["save_to_pkl"] = True
 
 # number of images to process at a time
-pipeline["batch_size"] = 3
+pipeline["batch_size"] = 500
 
 #------------------ setup data------------------------
 
@@ -109,7 +109,7 @@ pipeline["data"]["path_to_images"] = os.path.join(images_folder, "train")
 pipeline["data"]["path_to_labels"] = path_to_binary_labels
 
 # split data
-pipeline["data"]["split_type"] = "simple" #"simpleStratified" #"simple", "simpleStratified", "kfold", "kfoldStratified"
+pipeline["data"]["split_type"] = "simpleStratified" #"simple", "simpleStratified", "kfold", "kfoldStratified"
 
 
 # names of the class
@@ -140,7 +140,7 @@ pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY"
 # resize_image
 pipeline["data_preprocessing"]["resize_image"] = {}
 pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-pipeline["data_preprocessing"]["resize_image"]["output_size"] = (200, 200) #(width, height)
+pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
 pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
 
 
@@ -212,10 +212,11 @@ pipeline["classifiers"] ={}
 # SVM
 pipeline["classifiers"]["svm"] = {}
 pipeline["classifiers"]["svm"]["function"] = svm 
-pipeline["classifiers"]["svm"]["trainAuto"] = False
+pipeline["classifiers"]["svm"]["trainAuto"] = True
 pipeline["classifiers"]["svm"]['svm_type'] =  'C_SVC' 
-pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
-
+#pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
+pipeline["classifiers"]["svm"]['kernel'] =  'POLY'
+pipeline["classifiers"]["svm"]['Degree'] = 3
 
 # kNN
 #pipeline["classifiers"]["kNN"] = {}
@@ -326,7 +327,7 @@ pipeline["path_to_results"] = os.path.join(multi_path, "train")
 pipeline["save_to_pkl"] = True
 
 # number of images to process at a time
-pipeline["batch_size"] = 3
+pipeline["batch_size"] = 500
 
 #------------------ setup data------------------------
 
@@ -338,7 +339,7 @@ pipeline["data"]["path_to_images"] = os.path.join(images_folder, "train")
 pipeline["data"]["path_to_labels"] = path_to_multi_labels
 
 # split data
-pipeline["data"]["split_type"] = "simple" #"simpleStratified" #"simple", "simpleStratified", "kfold", "kfoldStratified"
+pipeline["data"]["split_type"] = "simpleStratified" #"simple", "simpleStratified", "kfold", "kfoldStratified"
 
 
 # names of the class
@@ -369,7 +370,7 @@ pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY"
 # resize_image
 pipeline["data_preprocessing"]["resize_image"] = {}
 pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-pipeline["data_preprocessing"]["resize_image"]["output_size"] = (200, 200) #(width, height)
+pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
 pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
 
 
@@ -441,10 +442,11 @@ pipeline["classifiers"] ={}
 # SVM
 pipeline["classifiers"]["svm"] = {}
 pipeline["classifiers"]["svm"]["function"] = svm 
-pipeline["classifiers"]["svm"]["trainAuto"] = False
+pipeline["classifiers"]["svm"]["trainAuto"] = True
 pipeline["classifiers"]["svm"]['svm_type'] =  'C_SVC' 
-pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
-
+#pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
+pipeline["classifiers"]["svm"]['kernel'] =  'POLY'
+pipeline["classifiers"]["svm"]['Degree'] = 3
 
 # kNN
 #pipeline["classifiers"]["kNN"] = {}
@@ -485,17 +487,17 @@ pipeline["metrics"]["balanced_accuracy"]["type"] = "balanced"
 # precision
 pipeline["metrics"]["precision"] = {}
 pipeline["metrics"]["precision"]["function"] = precision
-pipeline["metrics"]["precision"]["class_result"] = "COVID"
+pipeline["metrics"]["precision"]["average"] = "weighted"
 
 # recall
 pipeline["metrics"]["sensitivity"] = {}
 pipeline["metrics"]["sensitivity"]["function"] = sensitivity
-pipeline["metrics"]["sensitivity"]["class_result"]  = "COVID"
+pipeline["metrics"]["sensitivity"]["average"]  = "weighted"
 
 # F1 score
 pipeline["metrics"]["f1_score"] = {}
 pipeline["metrics"]["f1_score"]["function"] = F1_score 
-pipeline["metrics"]["f1_score"]["class_result"] = "COVID"
+pipeline["metrics"]["f1_score"]["average"] = "weighted"
 
 # mcc
 pipeline["metrics"]["mcc"] = {}

@@ -1,0 +1,105 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/test",
+        "path_to_labels": null,
+        "split_type": null,
+        "classes": [
+            "NO_COVID",
+            "COVID"
+        ]
+    },
+    "data_preprocessing": {
+        "map_to_RGB": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        },
+        "canny_edges": {
+            "blur": true,
+            "threshold1": 250,
+            "threshold2": 500,
+            "apertureSize": 5,
+            "L2gradient": true,
+            "function": "canny_edge_detector"
+        },
+        "resize_image": {
+            "output_size": [
+                250,
+                250
+            ],
+            "interpolation": "area",
+            "function": "resize"
+        }
+    },
+    "batch_size": 500,
+    "save_to_pkl": true,
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/canny_edge_detector_new/binary/test",
+    "feature_extractors": {
+        "contrast": {
+            "method": "michelson",
+            "function": "calculate_contrast"
+        },
+        "skewness": {
+            "bias": true,
+            "function": "calculate_skew"
+        },
+        "kurtosis": {
+            "method": "pearson",
+            "bias": true,
+            "function": "calculate_kurtosis"
+        },
+        "RMS": {
+            "method": "rms",
+            "function": "calculate_contrast"
+        },
+        "count_nonzeros": {
+            "function": "count_nonzeros"
+        }
+    },
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                1.0,
+                2.5401432256317826,
+                8.762643181861266,
+                53.91430509410151,
+                13383.77546198633
+            ]
+        ],
+        "var": [
+            [
+                0.0,
+                0.3705050954162122,
+                33.51927887854707,
+                37.64530953709657,
+                11097398.45190316
+            ]
+        ],
+        "scale": [
+            [
+                1.0,
+                0.6086912973061239,
+                5.789583653299006,
+                6.135577359719016,
+                3331.2757994352796
+            ]
+        ]
+    },
+    "classifiers": {
+        "svm": {
+            "svm_type": "C_SVC",
+            "kernel": "RBF",
+            "Gamma": 0.0022500000000000003,
+            "Degree": 0.0,
+            "P": 0.0,
+            "Nu": 0.0,
+            "Coef0": 0.0,
+            "C": 12.5,
+            "function": "svm"
+        },
+        "RFTree": {
+            "ActiveVarCount": 0,
+            "function": "rftree"
+        }
+    }
+}

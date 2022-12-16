@@ -1,0 +1,130 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train",
+        "path_to_labels": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_binary.txt",
+        "split_type": "simpleStratified",
+        "classes": [
+            "NO_COVID",
+            "COVID"
+        ]
+    },
+    "data_preprocessing": {
+        "map_to_RGB": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        },
+        "canny_edges": {
+            "blur": true,
+            "threshold1": 250,
+            "threshold2": 500,
+            "apertureSize": 5,
+            "L2gradient": true,
+            "function": "canny_edge_detector"
+        },
+        "resize_image": {
+            "output_size": [
+                250,
+                250
+            ],
+            "interpolation": "area",
+            "function": "resize"
+        }
+    },
+    "batch_size": 500,
+    "save_to_pkl": true,
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/canny_edge_detector_only_nonzero_count/binary/train",
+    "original_labels": {
+        "COVID": "17.08",
+        "NO_COVID": "82.92"
+    },
+    "processed_labels": {
+        "train": {
+            "0": {
+                "COVID": "17.08",
+                "NO_COVID": "82.92"
+            }
+        },
+        "valid": {
+            "0": {
+                "COVID": "17.09",
+                "NO_COVID": "82.91"
+            }
+        }
+    },
+    "feature_extractors": {
+        "count_nonzeros": {
+            "function": "count_nonzeros"
+        }
+    },
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                13371.984895789385
+            ]
+        ],
+        "var": [
+            [
+                11144960.067361096
+            ]
+        ],
+        "scale": [
+            [
+                3338.406815737276
+            ]
+        ]
+    },
+    "classifiers": {
+        "svm": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/canny_edge_detector_only_nonzero_count/binary/train/0/models"
+            },
+            "svm_type": "C_SVC",
+            "kernel": "RBF",
+            "Gamma": 0.5062500000000001,
+            "Degree": 0.0,
+            "P": 0.0,
+            "Nu": 0.0,
+            "Coef0": 0.0,
+            "C": 2.5,
+            "function": "svm"
+        },
+        "RFTree": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/canny_edge_detector_only_nonzero_count/binary/train/0/models"
+            },
+            "ActiveVarCount": 0,
+            "function": "rftree"
+        }
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "type": "simple",
+            "function": "accuracy"
+        },
+        "balanced_accuracy": {
+            "type": "balanced",
+            "function": "accuracy"
+        },
+        "precision": {
+            "class_result": "COVID",
+            "function": "precision"
+        },
+        "sensitivity": {
+            "class_result": "COVID",
+            "function": "sensitivity"
+        },
+        "f1_score": {
+            "class_result": "COVID",
+            "function": "F1_score"
+        },
+        "mcc": {
+            "function": "mcc"
+        }
+    },
+    "plots": {
+        "CM": {
+            "function": "plot_CM"
+        }
+    }
+}

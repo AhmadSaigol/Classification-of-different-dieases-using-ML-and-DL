@@ -20,7 +20,7 @@ def calculate_zernike(X, parameters):
             cm: centre of mass (default:image centre of mass)
 
     Returns:
-        features: numpy array of shape (num_images, 36)
+        features: numpy array of shape (num_images, num_features)
         config: dictionary with keys
     
     See more under:
@@ -86,8 +86,7 @@ def calculate_zernike(X, parameters):
         
         feature.append(temp)
 
-    feature = np.array(feature)
-        
+    feature = np.array(feature)  
     return feature, config
 
 if __name__ == "__main__":

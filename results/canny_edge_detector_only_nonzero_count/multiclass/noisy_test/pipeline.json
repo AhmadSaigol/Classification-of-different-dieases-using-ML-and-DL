@@ -1,0 +1,78 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/noisy_test",
+        "path_to_labels": null,
+        "split_type": null,
+        "classes": [
+            "Normal",
+            "COVID",
+            "pneumonia",
+            "Lung_Opacity"
+        ]
+    },
+    "data_preprocessing": {
+        "map_to_RGB": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        },
+        "canny_edges": {
+            "blur": true,
+            "threshold1": 250,
+            "threshold2": 500,
+            "apertureSize": 5,
+            "L2gradient": true,
+            "function": "canny_edge_detector"
+        },
+        "resize_image": {
+            "output_size": [
+                250,
+                250
+            ],
+            "interpolation": "area",
+            "function": "resize"
+        }
+    },
+    "batch_size": 500,
+    "save_to_pkl": true,
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/canny_edge_detector_only_nonzero_count/multiclass/noisy_test",
+    "feature_extractors": {
+        "count_nonzeros": {
+            "function": "count_nonzeros"
+        }
+    },
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                13383.269681883385
+            ]
+        ],
+        "var": [
+            [
+                11306858.300911037
+            ]
+        ],
+        "scale": [
+            [
+                3362.567218794449
+            ]
+        ]
+    },
+    "classifiers": {
+        "svm": {
+            "svm_type": "C_SVC",
+            "kernel": "RBF",
+            "Gamma": 0.5062500000000001,
+            "Degree": 0.0,
+            "P": 0.0,
+            "Nu": 0.0,
+            "Coef0": 0.0,
+            "C": 2.5,
+            "function": "svm"
+        },
+        "RFTree": {
+            "ActiveVarCount": 0,
+            "function": "rftree"
+        }
+    }
+}

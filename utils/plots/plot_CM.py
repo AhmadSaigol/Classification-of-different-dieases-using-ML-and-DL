@@ -7,17 +7,17 @@ from sklearn.metrics import ConfusionMatrixDisplay
 from matplotlib import pyplot as plt
 import numpy as np
 
-def plot_CM(y_true, y_pred, path_to_results):
+def plot_CM(y_true, y_pred, path_to_results, path_to_images):
     """
     Plots and save Confusion Matrix
     
-    y_true: numpy array of shape (num_of_images,)
-    y_pred: numpy array of shape (num_of_images, )
+    y_true: numpy array of shape (num_of_images,2)
+    y_pred: numpy array of shape (num_of_images,2)
     path_to_results: path where plot will be saved
 
     """
 
-    ConfusionMatrixDisplay.from_predictions(y_pred=y_pred, y_true =y_true)
+    ConfusionMatrixDisplay.from_predictions(y_pred=y_pred[:,1], y_true =y_true[:,1])
 
     plt.savefig(path_to_results + "_CM")
 

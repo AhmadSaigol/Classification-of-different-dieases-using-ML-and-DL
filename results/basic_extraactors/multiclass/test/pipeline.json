@@ -1,0 +1,97 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/test",
+        "path_to_labels": null,
+        "split_type": null,
+        "classes": [
+            "Normal",
+            "COVID",
+            "pneumonia",
+            "Lung_Opacity"
+        ]
+    },
+    "data_preprocessing": {
+        "normalize_image": {
+            "method": "minmax",
+            "function": "normalize"
+        },
+        "map_to_RGB": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        },
+        "resize_image": {
+            "output_size": [
+                250,
+                250
+            ],
+            "interpolation": "area",
+            "function": "resize"
+        }
+    },
+    "batch_size": 500,
+    "save_to_pkl": true,
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/basic_extraactors/multiclass/test",
+    "feature_extractors": {
+        "contrast": {
+            "method": "michelson",
+            "function": "calculate_contrast"
+        },
+        "skewness": {
+            "bias": true,
+            "function": "calculate_skew"
+        },
+        "kurtosis": {
+            "method": "pearson",
+            "bias": true,
+            "function": "calculate_kurtosis"
+        },
+        "RMS": {
+            "method": "rms",
+            "function": "calculate_contrast"
+        }
+    },
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                0.996261856363007,
+                -0.4663599325105037,
+                2.604197373455284,
+                0.24134194141887388
+            ]
+        ],
+        "var": [
+            [
+                0.0001231689036652588,
+                0.19416792698456165,
+                0.797849511331438,
+                0.0015401095422375144
+            ]
+        ],
+        "scale": [
+            [
+                0.01109814865936021,
+                0.4406448989657791,
+                0.8932242223156726,
+                0.03924422941322093
+            ]
+        ]
+    },
+    "classifiers": {
+        "svm": {
+            "svm_type": "C_SVC",
+            "kernel": "RBF",
+            "Gamma": 0.5062500000000001,
+            "Degree": 0.0,
+            "P": 0.0,
+            "Nu": 0.0,
+            "Coef0": 0.0,
+            "C": 2.5,
+            "function": "svm"
+        },
+        "RFTree": {
+            "ActiveVarCount": 0,
+            "function": "rftree"
+        }
+    }
+}

@@ -1,0 +1,167 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train",
+        "path_to_labels": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_multi.txt",
+        "split_type": "simpleStratified",
+        "classes": [
+            "Normal",
+            "COVID",
+            "pneumonia",
+            "Lung_Opacity"
+        ]
+    },
+    "data_preprocessing": {
+        "map_to_RGB": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        },
+        "canny_edges": {
+            "blur": true,
+            "threshold1": 250,
+            "threshold2": 500,
+            "apertureSize": 5,
+            "L2gradient": true,
+            "function": "canny_edge_detector"
+        },
+        "resize_image": {
+            "output_size": [
+                250,
+                250
+            ],
+            "interpolation": "area",
+            "function": "resize"
+        }
+    },
+    "batch_size": 500,
+    "save_to_pkl": true,
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/canny_edge_detector_new/multiclass/train",
+    "original_labels": {
+        "COVID": "17.08",
+        "Lung_Opacity": "28.41",
+        "Normal": "48.16",
+        "pneumonia": "6.36"
+    },
+    "processed_labels": {
+        "train": {
+            "0": {
+                "COVID": "17.09",
+                "Lung_Opacity": "28.40",
+                "Normal": "48.16",
+                "pneumonia": "6.35"
+            }
+        },
+        "valid": {
+            "0": {
+                "COVID": "17.07",
+                "Lung_Opacity": "28.41",
+                "Normal": "48.16",
+                "pneumonia": "6.36"
+            }
+        }
+    },
+    "feature_extractors": {
+        "contrast": {
+            "method": "michelson",
+            "function": "calculate_contrast"
+        },
+        "skewness": {
+            "bias": true,
+            "function": "calculate_skew"
+        },
+        "kurtosis": {
+            "method": "pearson",
+            "bias": true,
+            "function": "calculate_kurtosis"
+        },
+        "RMS": {
+            "method": "rms",
+            "function": "calculate_contrast"
+        },
+        "count_nonzeros": {
+            "function": "count_nonzeros"
+        }
+    },
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                1.0,
+                2.5406962346517576,
+                8.752577849630663,
+                53.8983337865068,
+                13375.20243017467
+            ]
+        ],
+        "var": [
+            [
+                0.0,
+                0.3581859342205763,
+                30.129818232074776,
+                37.67252163456035,
+                11178444.376286393
+            ]
+        ],
+        "scale": [
+            [
+                1.0,
+                0.5984863692855305,
+                5.489063511390151,
+                6.1377945252802615,
+                3343.418067829148
+            ]
+        ]
+    },
+    "classifiers": {
+        "svm": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/canny_edge_detector_new/multiclass/train/0/models"
+            },
+            "svm_type": "C_SVC",
+            "kernel": "RBF",
+            "Gamma": 0.03375,
+            "Degree": 0.0,
+            "P": 0.0,
+            "Nu": 0.0,
+            "Coef0": 0.0,
+            "C": 12.5,
+            "function": "svm"
+        },
+        "RFTree": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/canny_edge_detector_new/multiclass/train/0/models"
+            },
+            "ActiveVarCount": 0,
+            "function": "rftree"
+        }
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "type": "simple",
+            "function": "accuracy"
+        },
+        "balanced_accuracy": {
+            "type": "balanced",
+            "function": "accuracy"
+        },
+        "precision": {
+            "average": "weighted",
+            "function": "precision"
+        },
+        "sensitivity": {
+            "average": "weighted",
+            "function": "sensitivity"
+        },
+        "f1_score": {
+            "average": "weighted",
+            "function": "F1_score"
+        },
+        "mcc": {
+            "function": "mcc"
+        }
+    },
+    "plots": {
+        "CM": {
+            "function": "plot_CM"
+        }
+    }
+}

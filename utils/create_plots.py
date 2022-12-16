@@ -5,7 +5,7 @@ import os
 import numpy as np
 #from plots.plot_CM import plot_CM
 
-def create_plots(y_true, y_pred, path_to_results, plots, classifiers, name_of_file):
+def create_plots(y_true, y_pred, path_to_results, path_to_images, plots, classifiers, name_of_file):
     """
     Generates differenet plots
     Parameters:
@@ -63,7 +63,7 @@ def create_plots(y_true, y_pred, path_to_results, plots, classifiers, name_of_fi
 
                 fnt_pointer = plots[pl]["function"]
 
-                fnt_pointer(y_true=y_true[fold_no,:,1], y_pred=y_pred[cl, fold_no, :, 1], path_to_results=path_to_plots+f"/{classifiers[cl]}_{name_of_file}")
+                fnt_pointer(y_true=y_true[fold_no], y_pred=y_pred[cl, fold_no], path_to_results=path_to_plots+f"/{classifiers[cl]}_{name_of_file}")
 
 
     return plots

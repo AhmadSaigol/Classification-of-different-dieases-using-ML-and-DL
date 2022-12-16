@@ -169,6 +169,7 @@ def FE_batch_training (pipeline):
         y_pred=y_pred_train, 
         plots= pipeline["plots"], 
         path_to_results=pipeline["path_to_results"],
+        path_to_images=pipeline["data"]["path_to_images"],
         classifiers=classifers_train_list,
         name_of_file = "train"
         )
@@ -180,6 +181,7 @@ def FE_batch_training (pipeline):
         y_pred=y_pred_valid, 
         plots= pipeline["plots"], 
         path_to_results=pipeline["path_to_results"],
+        path_to_images=pipeline["data"]["path_to_images"],
         classifiers=classifers_valid_list, 
         name_of_file = "valid"
         )
