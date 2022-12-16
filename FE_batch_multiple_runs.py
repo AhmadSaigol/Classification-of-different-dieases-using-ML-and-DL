@@ -58,7 +58,7 @@ images_folder = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Me
 #-------------------------------- Results directory----------------------------
 results_folder = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results"
 
-run_name = "haralick_zernike_svm_poly"
+run_name = "haralick_zernike_without_blur"
 
 run_path = os.path.join(results_folder, run_name)
 if not os.path.exists(run_path):
@@ -138,10 +138,10 @@ pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY"
 #pipeline["data_preprocessing"]["canny_edges"]["L2gradient"] = True
 
 # resize_image
-pipeline["data_preprocessing"]["resize_image"] = {}
-pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
-pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
+#pipeline["data_preprocessing"]["resize_image"] = {}
+#pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
+#pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
+#pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
 
 
 # ---------------------------------set up feature extractor methods and parameters------------------------------------
@@ -182,13 +182,13 @@ pipeline["feature_extractors"] ={}
 # haralick
 pipeline["feature_extractors"]["haralick"] = {}
 pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
-pipeline["feature_extractors"]["haralick"]["blur"] = True
+pipeline["feature_extractors"]["haralick"]["blur"] = False
 pipeline["feature_extractors"]["haralick"]["distance"] = 10
 
 # zernike
 pipeline["feature_extractors"]["zernike_moments"] = {}
 pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
-pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
+pipeline["feature_extractors"]["zernike_moments"]["blur"] = False
 #pipeline["feature_extractors"]["zernike_moments"]["radius"] = 100
 #pipeline["feature_extractors"]["zernike_moments"]["degree"] = 10
 #pipeline["feature_extractors"]["zernike_moments"]["cm"] = (100, 100)
@@ -214,9 +214,9 @@ pipeline["classifiers"]["svm"] = {}
 pipeline["classifiers"]["svm"]["function"] = svm 
 pipeline["classifiers"]["svm"]["trainAuto"] = True
 pipeline["classifiers"]["svm"]['svm_type'] =  'C_SVC' 
-#pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
-pipeline["classifiers"]["svm"]['kernel'] =  'POLY'
-pipeline["classifiers"]["svm"]['Degree'] = 3
+pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
+#pipeline["classifiers"]["svm"]['kernel'] =  'POLY'
+#pipeline["classifiers"]["svm"]['Degree'] = 3
 
 # kNN
 #pipeline["classifiers"]["kNN"] = {}
@@ -296,14 +296,14 @@ FE_batch_prediction(
 
 
 # noisy test images
-print("Generating predictions on noisy test data")
-noisy_test_images_path = os.path.join(images_folder, "noisy_test")
-noisy_test_save_path = os.path.join(binary_path, "noisy_test")
+#print("Generating predictions on noisy test data")
+#noisy_test_images_path = os.path.join(images_folder, "noisy_test")
+#noisy_test_save_path = os.path.join(binary_path, "noisy_test")
 
-FE_batch_prediction(
-     path_to_images=noisy_test_images_path,
-     path_to_json=path_to_json,
-     save_path=noisy_test_save_path)
+#FE_batch_prediction(
+#     path_to_images=noisy_test_images_path,
+#     path_to_json=path_to_json,
+#     save_path=noisy_test_save_path)
 
 
 #------------------------------- Multiclass Classification --------------------------
@@ -368,10 +368,10 @@ pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY"
 #pipeline["data_preprocessing"]["canny_edges"]["L2gradient"] = True
 
 # resize_image
-pipeline["data_preprocessing"]["resize_image"] = {}
-pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
-pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
+#pipeline["data_preprocessing"]["resize_image"] = {}
+#pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
+#pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
+#pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
 
 
 # ---------------------------------set up feature extractor methods and parameters------------------------------------
@@ -412,13 +412,13 @@ pipeline["feature_extractors"] ={}
 # haralick
 pipeline["feature_extractors"]["haralick"] = {}
 pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
-pipeline["feature_extractors"]["haralick"]["blur"] = True
+pipeline["feature_extractors"]["haralick"]["blur"] = False
 pipeline["feature_extractors"]["haralick"]["distance"] = 10
 
 # zernike
 pipeline["feature_extractors"]["zernike_moments"] = {}
 pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
-pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
+pipeline["feature_extractors"]["zernike_moments"]["blur"] = False
 #pipeline["feature_extractors"]["zernike_moments"]["radius"] = 100
 #pipeline["feature_extractors"]["zernike_moments"]["degree"] = 10
 #pipeline["feature_extractors"]["zernike_moments"]["cm"] = (100, 100)
@@ -444,9 +444,9 @@ pipeline["classifiers"]["svm"] = {}
 pipeline["classifiers"]["svm"]["function"] = svm 
 pipeline["classifiers"]["svm"]["trainAuto"] = True
 pipeline["classifiers"]["svm"]['svm_type'] =  'C_SVC' 
-#pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
-pipeline["classifiers"]["svm"]['kernel'] =  'POLY'
-pipeline["classifiers"]["svm"]['Degree'] = 3
+pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
+#pipeline["classifiers"]["svm"]['kernel'] =  'POLY'
+#pipeline["classifiers"]["svm"]['Degree'] = 3
 
 # kNN
 #pipeline["classifiers"]["kNN"] = {}
@@ -525,14 +525,14 @@ FE_batch_prediction(
      save_path=test_save_path)
 
 # noisy test images
-print("Generating predicitons on noisy test data.")
-noisy_test_images_path = os.path.join(images_folder, "noisy_test")
-noisy_test_save_path = os.path.join(multi_path, "noisy_test")
+#print("Generating predicitons on noisy test data.")
+#noisy_test_images_path = os.path.join(images_folder, "noisy_test")
+#noisy_test_save_path = os.path.join(multi_path, "noisy_test")
 
-FE_batch_prediction(
-     path_to_images=noisy_test_images_path,
-     path_to_json=path_to_json,
-     save_path=noisy_test_save_path)
+#FE_batch_prediction(
+#     path_to_images=noisy_test_images_path,
+#     path_to_json=path_to_json,
+#     save_path=noisy_test_save_path)
 
 
 print("Processing Completed")
