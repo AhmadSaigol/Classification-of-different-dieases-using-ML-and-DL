@@ -154,6 +154,10 @@ def svm(X, parameters, classes, y, save_model_path=None, path_to_model=None):
     config["Nu"] = model.getNu()     
     config["Coef0"] = model.getCoef0()
     config["C"] = model.getC()
+    
+    sc, num_iters, eps = model.getTermCriteria()
+    config['max_nums_iter'] = num_iters
+    config['epsilon'] = eps
 
 
     return y_pred, config

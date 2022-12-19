@@ -16,6 +16,7 @@ def rftree(X, parameters, classes, y, save_model_path=None, path_to_model=None):
             X: numpy array of shape (num_images, num_features)
             parameters: dictionary containing the keys:
                 ActiveVarCount: (default=sqrt(num_features))The size of the randomly selected subset of features at each tree node and that are used to find the best split(s).
+                MaxDepth: depth of trees (default = 5)
 
             classes: numpy array with names of classes
             y: labels of the data. numpy array of shape (num_of_images, 2) or (num_of_images, 1)
@@ -60,12 +61,50 @@ def rftree(X, parameters, classes, y, save_model_path=None, path_to_model=None):
    
         if "ActiveVarCount" in clf_keys:
             model.setActiveVarCount( parameters["ActiveVarCount"])
+
         
         # can calculate each variable importance (during training phase)
         # model.setCalculateVarImportance(True)
 
         # can get OOB error calculated during training phase
         # model.calcOOBError ()
+        
+        # set depth of trees
+        if "MaxDepth" in clf_keys:
+            model.setMaxDepth (parameters["MaxDepth"])
+        else:
+            model.setMaxDepth (5)
+
+        # can get weights for each class
+        # model.setPriors([])
+        """
+        # get stopping critera
+        if 'stopping_criteria' in clf_keys:
+            sc = parameters['stopping_criteria'] 
+        else:
+            sc = 'both'
+
+        if sc == 'max_iters':
+            sc_type = cv2.TERM_CRITERIA_MAX_ITER
+        elif sc == 'accu':
+            sc_type = cv2.TERM_CRITERIA_EPS
+        elif sc == 'both':
+            sc_type = cv2.TERM_CRITERIA_MAX_ITER + cv2.TERM_CRITERIA_EPS
+        else:
+            raise ValueError("Unknown value encountered for 'stopping_criteria' in RFTree parameters")
+
+        
+        if 'max_nums_iter' in clf_keys:
+            max_nums_iter = parameters['max_nums_iter']
+        else:
+            max_nums_iter = 10
+
+        if 'epsilon' in clf_keys:
+            ep = parameters['epsilon']
+        else:
+            ep = 1e-6
+        """
+
 
         # can set termination criteria
         model.setTermCriteria((cv2.TERM_CRITERIA_MAX_ITER, 10000, 1e-6))
@@ -93,7 +132,24 @@ def rftree(X, parameters, classes, y, save_model_path=None, path_to_model=None):
     # setup output config
     config = {}
     config["ActiveVarCount"] = model.getActiveVarCount()
+    config["MaxDepth"] =model.getMaxDepth()
+    
+    sc, num_iters, eps = model.getTermCriteria()
+    """
+    if sc == cv2.TERM_CRITERIA_MAX_ITER:
+        config['stopping_criteria'] = 'max_iters'
+    elif sc == cv2.TERM_CRITERIA_EPS:
+        config['stopping_criteria'] = 'accu'
+    elif sc == (cv2.TERM_CRITERIA_MAX_ITER + cv2.TERM_CRITERIA_EPS):
+        config["stopping_criteria"] = 'both'
+    else:
+        raise ValueError ("Unknown Value Encountered while reading stopping critera type from RFTree model")
+    """
 
+    config['max_nums_iter'] = num_iters
+    config['epsilon'] = eps
+
+    
     return y_pred, config
 
 
@@ -112,13 +168,14 @@ if __name__ == "__main__":
 
     classes =np.array(["a", "b", "c"])
     
-    save_model_path= "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/new_code_testing/"
+    save_model_path= "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/experiments/stopping_criteria/"
     
     # SVM
     clf={}
     clf["rftree"] = {}
     clf["rftree"]["function"] = 0 #some function pointer
-    #clf["rftree"]["ActiveVarCount"] = 1
+    clf["rftree"]["ActiveVarCount"] = 1
+
     
     print("y")
     print(y)
