@@ -23,6 +23,7 @@ from utils.feature_extractors.haralick import calculate_haralick
 from utils.feature_extractors.zernike import calculate_zernike
 from utils.feature_extractors.non_zero_valules import count_nonzeros
 from utils.feature_extractors.local_binary_pattern import calculate_lbp
+from utils.feature_extractors.wavelet import feature_GLCM
 
 
 from utils.normalize_features import normalize_features
@@ -30,6 +31,7 @@ from utils.normalize_features import normalize_features
 from utils.apply_classifiers import apply_classifiers
 from utils.classifiers.SVM import svm
 from utils.classifiers.RFTree import rftree
+from utils.classifiers.boosting import boosting
 
 from utils.json_processing import load_from_json, save_to_json
 
@@ -69,9 +71,9 @@ def FE_batch_prediction(path_to_images, path_to_json, save_path):
     # replace function names with their pointers    
     data_preprocessing = [normalize, change_colorspace, resize, canny_edge_detector]
     feature_extractors= [calculate_contrast, calculate_kurtosis, calculate_skew, calculate_histogram, calculate_haralick, 
-                        calculate_zernike,  count_nonzeros, calculate_lbp]
+                        calculate_zernike,  count_nonzeros, calculate_lbp, feature_GLCM]
     norm_features = [normalize_features]
-    classifiers = [svm, rftree]
+    classifiers = [svm, rftree, boosting]
 
     replace_function_names(
         pipeline, 

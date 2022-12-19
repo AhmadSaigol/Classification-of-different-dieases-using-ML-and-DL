@@ -31,12 +31,14 @@ from utils.feature_extractors.haralick import calculate_haralick
 from utils.feature_extractors.zernike import calculate_zernike
 from utils.feature_extractors.non_zero_valules import count_nonzeros
 from utils.feature_extractors.local_binary_pattern import calculate_lbp
+from utils.feature_extractors.wavelet import feature_GLCM
 
 from utils.normalize_features import normalize_features
 
 from utils.apply_classifiers import apply_classifiers
 from utils.classifiers.SVM import svm
 from utils.classifiers.RFTree import rftree
+from utils.classifiers.boosting import boosting
 
 from utils.evaluate_metrics import evaluate_metrics
 from utils.metrics.accuracy import accuracy
@@ -58,7 +60,7 @@ images_folder = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Me
 #-------------------------------- Results directory----------------------------
 results_folder = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results"
 
-run_name = "haralick_zernike_without_blur"
+run_name = "wavelet"
 
 run_path = os.path.join(results_folder, run_name)
 if not os.path.exists(run_path):
@@ -124,16 +126,16 @@ pipeline["data_preprocessing"] ={}
 #pipeline["data_preprocessing"]["normalize_image"]["method"] = "minmax" 
 
 # map to RGB
-pipeline["data_preprocessing"]["map_to_RGB"] = {}
-pipeline["data_preprocessing"]["map_to_RGB"]["function"] = change_colorspace 
-pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY" 
+pipeline["data_preprocessing"]["map_to_grayscale"] = {}
+pipeline["data_preprocessing"]["map_to_grayscale"]["function"] = change_colorspace 
+pipeline["data_preprocessing"]["map_to_grayscale"]["conversion"] ="BGR2GRAY" 
 
 # canny edge detector
 #pipeline["data_preprocessing"]["canny_edges"] = {}
 #pipeline["data_preprocessing"]["canny_edges"]["function"] = canny_edge_detector
 #pipeline["data_preprocessing"]["canny_edges"]["blur"] = True
-#pipeline["data_preprocessing"]["canny_edges"]["threshold1"] =250
-#pipeline["data_preprocessing"]["canny_edges"]["threshold2"] = 500
+#pipeline["data_preprocessing"]["canny_edges"]["threshold1"] =100
+#pipeline["data_preprocessing"]["canny_edges"]["threshold2"] = 250
 #pipeline["data_preprocessing"]["canny_edges"]["apertureSize"] = 5
 #pipeline["data_preprocessing"]["canny_edges"]["L2gradient"] = True
 
@@ -175,22 +177,22 @@ pipeline["feature_extractors"] ={}
 # histogram
 #pipeline["feature_extractors"]["histogram"] = {}
 #pipeline["feature_extractors"]["histogram"]["function"] = calculate_histogram
-#pipeline["feature_extractors"]["histogram"]["bins"] = 256
+#pipeline["feature_extractors"]["histogram"]["bins"] = 10
 #pipeline["feature_extractors"]["histogram"]["range"] = (0,256)
 #pipeline["feature_extractors"]["histogram"]["density"] = False
 
 # haralick
-pipeline["feature_extractors"]["haralick"] = {}
-pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
-pipeline["feature_extractors"]["haralick"]["blur"] = False
-pipeline["feature_extractors"]["haralick"]["distance"] = 10
+#pipeline["feature_extractors"]["haralick"] = {}
+#pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
+#pipeline["feature_extractors"]["haralick"]["blur"] = True
+#pipeline["feature_extractors"]["haralick"]["distance"] = 1
 
 # zernike
-pipeline["feature_extractors"]["zernike_moments"] = {}
-pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
-pipeline["feature_extractors"]["zernike_moments"]["blur"] = False
-#pipeline["feature_extractors"]["zernike_moments"]["radius"] = 100
-#pipeline["feature_extractors"]["zernike_moments"]["degree"] = 10
+#pipeline["feature_extractors"]["zernike_moments"] = {}
+#pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
+#pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
+#pipeline["feature_extractors"]["zernike_moments"]["radius"] = 180
+#pipeline["feature_extractors"]["zernike_moments"]["degree"] = 8
 #pipeline["feature_extractors"]["zernike_moments"]["cm"] = (100, 100)
 
 #lbp
@@ -199,6 +201,11 @@ pipeline["feature_extractors"]["zernike_moments"]["blur"] = False
 #pipeline["feature_extractors"]["lbp"]["P"] = 40
 #pipeline["feature_extractors"]["lbp"]["R"] = 12
 #pipeline["feature_extractors"]["lbp"]["method"] = "uniform"
+
+# feature GLCM
+pipeline["feature_extractors"]["GLCM"] = {}
+pipeline["feature_extractors"]["GLCM"]["function"] = feature_GLCM
+pipeline["feature_extractors"]["GLCM"]["wavelet_type"] = 'bior1.3'
 
 
 #-----------------Normalize feature vectors--------------------
@@ -232,6 +239,15 @@ pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
 pipeline["classifiers"]["RFTree"] = {}
 pipeline["classifiers"]["RFTree"]["function"] =rftree
 pipeline["classifiers"]["RFTree"]["ActiveVarCount"] =0 
+pipeline["classifiers"]["RFTree"]['MaxDepth'] = 10 
+pipeline["classifiers"]["RFTree"]['num_iters'] =  5000
+
+# random forest tree
+pipeline["classifiers"]["Boosting"] = {}
+pipeline["classifiers"]["Boosting"]["function"] = boosting
+pipeline["classifiers"]["Boosting"]["boost_type"] = "REAL"
+pipeline["classifiers"]["Boosting"]['num_weak_classifiers'] =  100
+pipeline["classifiers"]["Boosting"]['max_depth'] = 10 
 
 
 # ensemble learning
@@ -354,16 +370,16 @@ pipeline["data_preprocessing"] ={}
 #pipeline["data_preprocessing"]["normalize_image"]["method"] = "minmax" 
 
 # map to RGB
-pipeline["data_preprocessing"]["map_to_RGB"] = {}
-pipeline["data_preprocessing"]["map_to_RGB"]["function"] = change_colorspace 
-pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY" 
+pipeline["data_preprocessing"]["map_to_grayscale"] = {}
+pipeline["data_preprocessing"]["map_to_grayscale"]["function"] = change_colorspace 
+pipeline["data_preprocessing"]["map_to_grayscale"]["conversion"] ="BGR2GRAY" 
 
 # canny edge detector
 #pipeline["data_preprocessing"]["canny_edges"] = {}
 #pipeline["data_preprocessing"]["canny_edges"]["function"] = canny_edge_detector
 #pipeline["data_preprocessing"]["canny_edges"]["blur"] = True
-#pipeline["data_preprocessing"]["canny_edges"]["threshold1"] =250
-#pipeline["data_preprocessing"]["canny_edges"]["threshold2"] = 500
+#pipeline["data_preprocessing"]["canny_edges"]["threshold1"] =100
+#pipeline["data_preprocessing"]["canny_edges"]["threshold2"] = 250
 #pipeline["data_preprocessing"]["canny_edges"]["apertureSize"] = 5
 #pipeline["data_preprocessing"]["canny_edges"]["L2gradient"] = True
 
@@ -394,7 +410,7 @@ pipeline["feature_extractors"] ={}
 #pipeline["feature_extractors"]["kurtosis"]["bias"] = True
 
 # RMS
-#pipeline["feature_extractors"]["RMS"] = {}
+# pipeline["feature_extractors"]["RMS"] = {}
 #pipeline["feature_extractors"]["RMS"]["function"] = calculate_contrast
 #pipeline["feature_extractors"]["RMS"]["method"] = "rms"
 
@@ -405,30 +421,34 @@ pipeline["feature_extractors"] ={}
 # histogram
 #pipeline["feature_extractors"]["histogram"] = {}
 #pipeline["feature_extractors"]["histogram"]["function"] = calculate_histogram
-#pipeline["feature_extractors"]["histogram"]["bins"] = 256
+#pipeline["feature_extractors"]["histogram"]["bins"] = 10
 #pipeline["feature_extractors"]["histogram"]["range"] = (0,256)
 #pipeline["feature_extractors"]["histogram"]["density"] = False
 
 # haralick
-pipeline["feature_extractors"]["haralick"] = {}
-pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
-pipeline["feature_extractors"]["haralick"]["blur"] = False
-pipeline["feature_extractors"]["haralick"]["distance"] = 10
+#pipeline["feature_extractors"]["haralick"] = {}
+#pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
+#pipeline["feature_extractors"]["haralick"]["blur"] = True
+#pipeline["feature_extractors"]["haralick"]["distance"] = 1
 
 # zernike
-pipeline["feature_extractors"]["zernike_moments"] = {}
-pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
-pipeline["feature_extractors"]["zernike_moments"]["blur"] = False
-#pipeline["feature_extractors"]["zernike_moments"]["radius"] = 100
-#pipeline["feature_extractors"]["zernike_moments"]["degree"] = 10
+#pipeline["feature_extractors"]["zernike_moments"] = {}
+#pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
+#pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
+#pipeline["feature_extractors"]["zernike_moments"]["radius"] = 180
+#pipeline["feature_extractors"]["zernike_moments"]["degree"] = 8
 #pipeline["feature_extractors"]["zernike_moments"]["cm"] = (100, 100)
 
 #lbp
 #pipeline["feature_extractors"]["lbp"] = {}
 #pipeline["feature_extractors"]["lbp"]["function"] = calculate_lbp
 #pipeline["feature_extractors"]["lbp"]["P"] = 40
-#pipeline["feature_extractors"]["lbp"]["R"] = 12
-#pipeline["feature_extractors"]["lbp"]["method"] = "uniform"
+#pipeline["feature_extractors"]["lbp"]["R"] = 12pipeline["feature_extractors"]["lbp"]["method"] = "uniform"
+
+# feature GLCM
+pipeline["feature_extractors"]["GLCM"] = {}
+pipeline["feature_extractors"]["GLCM"]["function"] = feature_GLCM
+pipeline["feature_extractors"]["GLCM"]["wavelet_type"] = 'bior1.3'
 
 
 #-----------------Normalize feature vectors--------------------
@@ -447,6 +467,8 @@ pipeline["classifiers"]["svm"]['svm_type'] =  'C_SVC'
 pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
 #pipeline["classifiers"]["svm"]['kernel'] =  'POLY'
 #pipeline["classifiers"]["svm"]['Degree'] = 3
+#pipeline["classifiers"]["svm"]['num_iters'] =  10000
+
 
 # kNN
 #pipeline["classifiers"]["kNN"] = {}
@@ -462,7 +484,15 @@ pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
 pipeline["classifiers"]["RFTree"] = {}
 pipeline["classifiers"]["RFTree"]["function"] =rftree
 pipeline["classifiers"]["RFTree"]["ActiveVarCount"] =0 
+pipeline["classifiers"]["RFTree"]['MaxDepth'] = 10 
+pipeline["classifiers"]["RFTree"]['num_iters'] =  5000
 
+# boosting
+pipeline["classifiers"]["Boosting"] = {}
+pipeline["classifiers"]["Boosting"]["function"] = boosting
+pipeline["classifiers"]["Boosting"]["boost_type"] = "REAL"
+pipeline["classifiers"]["Boosting"]['num_weak_classifiers'] =  100
+pipeline["classifiers"]["Boosting"]['max_depth'] = 10 
 
 # ensemble learning
 #pipeline["classifiers"]["ensemble"] = {}
@@ -473,7 +503,7 @@ pipeline["classifiers"]["RFTree"]["ActiveVarCount"] =0
 #--------------------Evaluation Metrics---------------------------
 
 
-pipeline["metrics"] = {}
+pipeline["metrics"] ={}
 
 # accuracy
 pipeline["metrics"]["simple_accuracy"] = {}
