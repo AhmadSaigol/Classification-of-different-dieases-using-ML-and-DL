@@ -60,7 +60,7 @@ images_folder = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Me
 #-------------------------------- Results directory----------------------------
 results_folder = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results"
 
-run_name = "wavelet"
+run_name = "zernike"
 
 run_path = os.path.join(results_folder, run_name)
 if not os.path.exists(run_path):
@@ -188,10 +188,10 @@ pipeline["feature_extractors"] ={}
 #pipeline["feature_extractors"]["haralick"]["distance"] = 1
 
 # zernike
-#pipeline["feature_extractors"]["zernike_moments"] = {}
-#pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
-#pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
-#pipeline["feature_extractors"]["zernike_moments"]["radius"] = 180
+pipeline["feature_extractors"]["zernike_moments"] = {}
+pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
+pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
+pipeline["feature_extractors"]["zernike_moments"]["radius"] = 180
 #pipeline["feature_extractors"]["zernike_moments"]["degree"] = 8
 #pipeline["feature_extractors"]["zernike_moments"]["cm"] = (100, 100)
 
@@ -203,9 +203,9 @@ pipeline["feature_extractors"] ={}
 #pipeline["feature_extractors"]["lbp"]["method"] = "uniform"
 
 # feature GLCM
-pipeline["feature_extractors"]["GLCM"] = {}
-pipeline["feature_extractors"]["GLCM"]["function"] = feature_GLCM
-pipeline["feature_extractors"]["GLCM"]["wavelet_type"] = 'bior1.3'
+#pipeline["feature_extractors"]["GLCM"] = {}
+#pipeline["feature_extractors"]["GLCM"]["function"] = feature_GLCM
+#pipeline["feature_extractors"]["GLCM"]["wavelet_type"] = 'bior1.3'
 
 
 #-----------------Normalize feature vectors--------------------
@@ -239,15 +239,15 @@ pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
 pipeline["classifiers"]["RFTree"] = {}
 pipeline["classifiers"]["RFTree"]["function"] =rftree
 pipeline["classifiers"]["RFTree"]["ActiveVarCount"] =0 
-pipeline["classifiers"]["RFTree"]['MaxDepth'] = 10 
-pipeline["classifiers"]["RFTree"]['num_iters'] =  5000
+pipeline["classifiers"]["RFTree"]['MaxDepth'] = 20 
+pipeline["classifiers"]["RFTree"]['num_iters'] =  10000
 
 # random forest tree
 pipeline["classifiers"]["Boosting"] = {}
 pipeline["classifiers"]["Boosting"]["function"] = boosting
 pipeline["classifiers"]["Boosting"]["boost_type"] = "REAL"
 pipeline["classifiers"]["Boosting"]['num_weak_classifiers'] =  100
-pipeline["classifiers"]["Boosting"]['max_depth'] = 10 
+pipeline["classifiers"]["Boosting"]['max_depth'] = 20 
 
 
 # ensemble learning
@@ -429,13 +429,13 @@ pipeline["feature_extractors"] ={}
 #pipeline["feature_extractors"]["haralick"] = {}
 #pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
 #pipeline["feature_extractors"]["haralick"]["blur"] = True
-#pipeline["feature_extractors"]["haralick"]["distance"] = 1
+# pipeline["feature_extractors"]["haralick"]["distance"] = 1
 
 # zernike
-#pipeline["feature_extractors"]["zernike_moments"] = {}
-#pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
-#pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
-#pipeline["feature_extractors"]["zernike_moments"]["radius"] = 180
+pipeline["feature_extractors"]["zernike_moments"] = {}
+pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
+pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
+pipeline["feature_extractors"]["zernike_moments"]["radius"] = 180
 #pipeline["feature_extractors"]["zernike_moments"]["degree"] = 8
 #pipeline["feature_extractors"]["zernike_moments"]["cm"] = (100, 100)
 
@@ -443,12 +443,13 @@ pipeline["feature_extractors"] ={}
 #pipeline["feature_extractors"]["lbp"] = {}
 #pipeline["feature_extractors"]["lbp"]["function"] = calculate_lbp
 #pipeline["feature_extractors"]["lbp"]["P"] = 40
-#pipeline["feature_extractors"]["lbp"]["R"] = 12pipeline["feature_extractors"]["lbp"]["method"] = "uniform"
+#pipeline["feature_extractors"]["lbp"]["R"] = 12
+# pipeline["feature_extractors"]["lbp"]["method"] = "uniform"
 
 # feature GLCM
-pipeline["feature_extractors"]["GLCM"] = {}
-pipeline["feature_extractors"]["GLCM"]["function"] = feature_GLCM
-pipeline["feature_extractors"]["GLCM"]["wavelet_type"] = 'bior1.3'
+#pipeline["feature_extractors"]["GLCM"] = {}
+#pipeline["feature_extractors"]["GLCM"]["function"] = feature_GLCM
+#pipeline["feature_extractors"]["GLCM"]["wavelet_type"] = 'bior1.3'
 
 
 #-----------------Normalize feature vectors--------------------
@@ -484,14 +485,14 @@ pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
 pipeline["classifiers"]["RFTree"] = {}
 pipeline["classifiers"]["RFTree"]["function"] =rftree
 pipeline["classifiers"]["RFTree"]["ActiveVarCount"] =0 
-pipeline["classifiers"]["RFTree"]['MaxDepth'] = 10 
-pipeline["classifiers"]["RFTree"]['num_iters'] =  5000
+pipeline["classifiers"]["RFTree"]['MaxDepth'] = 20 
+pipeline["classifiers"]["RFTree"]['num_iters'] =  10000
 
 # boosting
 pipeline["classifiers"]["Boosting"] = {}
 pipeline["classifiers"]["Boosting"]["function"] = boosting
 pipeline["classifiers"]["Boosting"]["boost_type"] = "REAL"
-pipeline["classifiers"]["Boosting"]['num_weak_classifiers'] =  100
+pipeline["classifiers"]["Boosting"]['num_weak_classifiers'] =  200
 pipeline["classifiers"]["Boosting"]['max_depth'] = 10 
 
 # ensemble learning
