@@ -1,0 +1,19 @@
+,Classifier,Fold No,Metric,Score
+0,svm,0,simple_accuracy,0.92979497
+1,svm,0,balanced_accuracy,0.81427807
+2,svm,0,precision,0.9275466
+3,svm,0,sensitivity,0.638834
+4,svm,0,f1_score,0.7565828
+5,svm,0,mcc,0.73421776
+6,RFTree,0,simple_accuracy,0.984052
+7,RFTree,0,balanced_accuracy,0.95331025
+8,RFTree,0,precision,1.0
+9,RFTree,0,sensitivity,0.90662056
+10,RFTree,0,f1_score,0.9510236
+11,RFTree,0,mcc,0.94313985
+12,Boosting,0,simple_accuracy,0.8220403
+13,Boosting,0,balanced_accuracy,0.75793487
+14,Boosting,0,precision,0.48459587
+15,Boosting,0,sensitivity,0.6605731
+16,Boosting,0,f1_score,0.5590634
+17,Boosting,0,mcc,0.4593569

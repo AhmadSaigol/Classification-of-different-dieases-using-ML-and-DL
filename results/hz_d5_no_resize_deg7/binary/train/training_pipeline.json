@@ -1,0 +1,214 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train",
+        "path_to_labels": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_binary.txt",
+        "split_type": "simpleStratified",
+        "classes": [
+            "NO_COVID",
+            "COVID"
+        ]
+    },
+    "data_preprocessing": {
+        "map_to_grayscale": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        }
+    },
+    "batch_size": 500,
+    "save_to_pkl": true,
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/hz_d5_no_resize_deg7/binary/train",
+    "original_labels": {
+        "COVID": "17.08",
+        "NO_COVID": "82.92"
+    },
+    "processed_labels": {
+        "train": {
+            "0": {
+                "COVID": "17.08",
+                "NO_COVID": "82.92"
+            }
+        },
+        "valid": {
+            "0": {
+                "COVID": "17.09",
+                "NO_COVID": "82.91"
+            }
+        }
+    },
+    "feature_extractors": {
+        "haralick": {
+            "blur": true,
+            "distance": 5,
+            "function": "calculate_haralick"
+        },
+        "zernike_moments": {
+            "blur": true,
+            "radius": 180,
+            "degree": 7,
+            "cm": "image's centre of mass",
+            "function": "calculate_zernike"
+        }
+    },
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                0.0036105368342057753,
+                363.1037276894981,
+                0.9461075485043923,
+                3473.848638071407,
+                0.1790122389642505,
+                260.628667753836,
+                13532.290824596135,
+                8.37926475595473,
+                12.537202400171447,
+                0.00023425233631225965,
+                4.8076073548850475,
+                -0.3056016679666627,
+                0.9921224151049376,
+                0.3183098861837456,
+                0.006629508513333529,
+                0.209069437674764,
+                0.035457598788384254,
+                0.08139465669565278,
+                0.030953805148442374,
+                0.1064331867347449,
+                0.04516170889776206,
+                0.07884417146182832,
+                0.045367360155566715,
+                0.02786714678953655,
+                0.026522065203040013,
+                0.03529494339564183,
+                0.03894189183749818,
+                0.02748153253379309,
+                0.03196190803767129,
+                0.0462482357288895,
+                0.02708917472597355,
+                0.054868595071610654,
+                0.027414017006978913
+            ]
+        ],
+        "var": [
+            [
+                0.0003104103067774393,
+                39620.61721571418,
+                0.0006351190671190075,
+                1568736.3207841127,
+                0.0025477954165363643,
+                2235.8212077382022,
+                24102193.66325355,
+                0.13644076225958515,
+                0.5003524273179825,
+                1.2556056505442921e-08,
+                0.15454864760758047,
+                0.002018692879773621,
+                3.5381320903949395e-05,
+                1.5340177699730274e-27,
+                2.0251930792124836e-05,
+                0.0037343965779337144,
+                0.0007662887111515391,
+                0.0016342975978091616,
+                0.00038307591440864985,
+                0.001977194632830252,
+                0.0011116412973729097,
+                0.0005264519591082957,
+                0.0006145797784581145,
+                0.0004451601327801833,
+                0.00024755951118926036,
+                0.0008538137649041746,
+                0.0006760243944777383,
+                0.00038051903653685206,
+                0.00043805713285301537,
+                0.0004668497243794546,
+                0.00023961653365945398,
+                0.0005950374618562031,
+                0.0002617917948636398
+            ]
+        ],
+        "scale": [
+            [
+                0.01761846493816755,
+                199.04928338407595,
+                0.02520156874321532,
+                1252.4920441999272,
+                0.050475691342827235,
+                47.28447110561989,
+                4909.398503203172,
+                0.3693788871329616,
+                0.7073559410353337,
+                0.00011205381075823758,
+                0.3931267576845673,
+                0.044929866233649314,
+                0.0059482199777706095,
+                1.0,
+                0.004500214527344761,
+                0.06110970935893669,
+                0.027681920293786324,
+                0.04042644676210316,
+                0.01957232521722061,
+                0.04446565677947704,
+                0.03334128517878262,
+                0.022944540943507577,
+                0.024790719603474894,
+                0.021098818279235054,
+                0.015734023998623503,
+                0.029220091801775275,
+                0.026000469120339702,
+                0.019506897152977765,
+                0.02092981444860454,
+                0.02160670554201761,
+                0.015479552114304018,
+                0.024393389716400694,
+                0.016179981299854453
+            ]
+        ]
+    },
+    "classifiers": {
+        "svm": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/hz_d5_no_resize_deg7/binary/train/0/models"
+            },
+            "svm_type": "C_SVC",
+            "kernel": "RBF",
+            "Gamma": 0.03375,
+            "Degree": 0.0,
+            "P": 0.0,
+            "Nu": 0.0,
+            "Coef0": 0.0,
+            "C": 12.5,
+            "max_nums_iter": 10000,
+            "epsilon": 2.220446049250313e-16,
+            "function": "svm"
+        }
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "type": "simple",
+            "function": "accuracy"
+        },
+        "balanced_accuracy": {
+            "type": "balanced",
+            "function": "accuracy"
+        },
+        "precision": {
+            "class_result": "COVID",
+            "function": "precision"
+        },
+        "sensitivity": {
+            "class_result": "COVID",
+            "function": "sensitivity"
+        },
+        "f1_score": {
+            "class_result": "COVID",
+            "function": "F1_score"
+        },
+        "mcc": {
+            "function": "mcc"
+        }
+    },
+    "plots": {
+        "CM": {
+            "function": "plot_CM"
+        }
+    }
+}

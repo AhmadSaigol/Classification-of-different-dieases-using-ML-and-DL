@@ -1,0 +1,245 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train",
+        "path_to_labels": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_multi.txt",
+        "split_type": "simpleStratified",
+        "classes": [
+            "Normal",
+            "COVID",
+            "pneumonia",
+            "Lung_Opacity"
+        ]
+    },
+    "data_preprocessing": {
+        "map_to_grayscale": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        },
+        "resize_image": {
+            "output_size": [
+                200,
+                200
+            ],
+            "interpolation": "area",
+            "function": "resize"
+        }
+    },
+    "batch_size": 500,
+    "save_to_pkl": true,
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/hz_resize_200/multiclass/train",
+    "original_labels": {
+        "COVID": "17.08",
+        "Lung_Opacity": "28.41",
+        "Normal": "48.16",
+        "pneumonia": "6.36"
+    },
+    "processed_labels": {
+        "train": {
+            "0": {
+                "COVID": "17.09",
+                "Lung_Opacity": "28.40",
+                "Normal": "48.16",
+                "pneumonia": "6.35"
+            }
+        },
+        "valid": {
+            "0": {
+                "COVID": "17.07",
+                "Lung_Opacity": "28.41",
+                "Normal": "48.16",
+                "pneumonia": "6.36"
+            }
+        }
+    },
+    "feature_extractors": {
+        "haralick": {
+            "blur": true,
+            "distance": 10,
+            "function": "calculate_haralick"
+        },
+        "zernike_moments": {
+            "blur": true,
+            "radius": 140,
+            "degree": 8,
+            "cm": "image's centre of mass",
+            "function": "calculate_zernike"
+        }
+    },
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                0.0019151978800188475,
+                1278.8994387597663,
+                0.797107389371268,
+                3252.3823253309693,
+                0.08694786435948598,
+                263.71705365925664,
+                11730.62986256416,
+                8.386616488999175,
+                13.28667746885598,
+                9.991764211633328e-05,
+                5.883298624147051,
+                -0.20369011725034486,
+                0.9671163038762256,
+                0.31830988618375194,
+                0.0005107371148082351,
+                0.38383002157968615,
+                0.026641997015572655,
+                0.060756311498377354,
+                0.020818046527986984,
+                0.07496688513961675,
+                0.055731641923014566,
+                0.060161909312476884,
+                0.09581549759499967,
+                0.041064810337874666,
+                0.011578312924024005,
+                0.12351450304081717,
+                0.04178371825173224,
+                0.08226982218105988,
+                0.014791318562725336,
+                0.028089573361691732,
+                0.028086576992319864,
+                0.04295062965641771,
+                0.014282107696882755,
+                0.08042827366394092,
+                0.04713257855028711,
+                0.03531756425494641,
+                0.03568169360475398,
+                0.029383823732970347
+            ]
+        ],
+        "var": [
+            [
+                0.0001361444148106877,
+                353920.0641778507,
+                0.005149036889096277,
+                1456229.9509524158,
+                0.0014211130981447195,
+                2214.1901835238814,
+                19818509.337299436,
+                0.11336518203273051,
+                0.4224522545340395,
+                4.291249007334122e-09,
+                0.15262826478989833,
+                0.0013084286098452138,
+                0.00039689268677054715,
+                3.2970574800250953e-28,
+                5.008006342164848e-07,
+                0.002531345139827175,
+                0.00041703088788762327,
+                0.0008575256862556852,
+                0.00017248376215158332,
+                0.0031947393140871264,
+                0.0018754135722073594,
+                0.0004359708978897708,
+                0.002350963546726677,
+                0.0007141244179630022,
+                5.40561510619289e-05,
+                0.0015549428691361519,
+                0.0007413713534537709,
+                0.00045291301177364927,
+                9.159805368614083e-05,
+                0.0003451199666114842,
+                0.00045377307703669775,
+                0.0005005598804020849,
+                7.124402377816493e-05,
+                0.0022427458279295053,
+                0.0009460302716620039,
+                0.0005862593549462684,
+                0.0005483995163212261,
+                0.00017517409479370568
+            ]
+        ],
+        "scale": [
+            [
+                0.011668093880779657,
+                594.9118121014666,
+                0.07175678984664989,
+                1206.7435315560701,
+                0.03769765374853877,
+                47.05518232377685,
+                4451.798438530145,
+                0.33669746365651537,
+                0.6499632716808231,
+                6.550762556629665e-05,
+                0.3906766755130108,
+                0.03617220769935412,
+                0.019922165714865117,
+                1.0,
+                0.0007076726886184635,
+                0.050312474992065086,
+                0.02042133413583998,
+                0.029283539510374854,
+                0.013133307357691104,
+                0.056522025035265024,
+                0.0433060454464196,
+                0.02087991613703874,
+                0.04848673578131113,
+                0.02672310644298305,
+                0.007352288831508791,
+                0.039432763904349286,
+                0.027228135328255052,
+                0.021281753023979232,
+                0.009570687210756646,
+                0.01857740473294061,
+                0.021301950075913186,
+                0.022373195578684887,
+                0.008440617499813917,
+                0.0473576374825593,
+                0.03075760510283601,
+                0.024212793208266338,
+                0.023417931512437772,
+                0.01323533508430012
+            ]
+        ]
+    },
+    "classifiers": {
+        "svm": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/hz_resize_200/multiclass/train/0/models"
+            },
+            "svm_type": "C_SVC",
+            "kernel": "RBF",
+            "Gamma": 0.03375,
+            "Degree": 0.0,
+            "P": 0.0,
+            "Nu": 0.0,
+            "Coef0": 0.0,
+            "C": 12.5,
+            "max_nums_iter": 10000,
+            "epsilon": 2.220446049250313e-16,
+            "function": "svm"
+        }
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "type": "simple",
+            "function": "accuracy"
+        },
+        "balanced_accuracy": {
+            "type": "balanced",
+            "function": "accuracy"
+        },
+        "precision": {
+            "average": "weighted",
+            "function": "precision"
+        },
+        "sensitivity": {
+            "average": "weighted",
+            "function": "sensitivity"
+        },
+        "f1_score": {
+            "average": "weighted",
+            "function": "F1_score"
+        },
+        "mcc": {
+            "function": "mcc"
+        }
+    },
+    "plots": {
+        "CM": {
+            "function": "plot_CM"
+        }
+    }
+}

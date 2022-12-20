@@ -1,0 +1,189 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train",
+        "path_to_labels": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_multi.txt",
+        "split_type": "simpleStratified",
+        "classes": [
+            "Normal",
+            "COVID",
+            "pneumonia",
+            "Lung_Opacity"
+        ]
+    },
+    "data_preprocessing": {
+        "map_to_grayscale": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        }
+    },
+    "batch_size": 500,
+    "save_to_pkl": true,
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/hz_d1_no_resize_deg4/multiclass/train",
+    "original_labels": {
+        "COVID": "17.08",
+        "Lung_Opacity": "28.41",
+        "Normal": "48.16",
+        "pneumonia": "6.36"
+    },
+    "processed_labels": {
+        "train": {
+            "0": {
+                "COVID": "17.09",
+                "Lung_Opacity": "28.40",
+                "Normal": "48.16",
+                "pneumonia": "6.35"
+            }
+        },
+        "valid": {
+            "0": {
+                "COVID": "17.07",
+                "Lung_Opacity": "28.41",
+                "Normal": "48.16",
+                "pneumonia": "6.36"
+            }
+        }
+    },
+    "feature_extractors": {
+        "haralick": {
+            "blur": true,
+            "distance": 1,
+            "function": "calculate_haralick"
+        },
+        "zernike_moments": {
+            "blur": true,
+            "radius": 180,
+            "degree": 4,
+            "cm": "image's centre of mass",
+            "function": "calculate_zernike"
+        }
+    },
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                0.00533073523031186,
+                28.964035828030095,
+                0.9957800101157389,
+                3541.427357762898,
+                0.44445534133693343,
+                258.9604436789414,
+                14136.745395223406,
+                8.351957329312098,
+                10.70763007187655,
+                0.0008175604725523336,
+                2.917771183604348,
+                -0.5528692086759069,
+                0.9997839213747679,
+                0.3183098861837459,
+                0.006642312592405665,
+                0.20909075622343692,
+                0.03548776597488341,
+                0.08128022990110098,
+                0.030996968680083156,
+                0.10635324523724013,
+                0.0451519029646558,
+                0.07889628868459526
+            ]
+        ],
+        "var": [
+            [
+                0.00035914410172397824,
+                414.1241227996952,
+                7.012991946081879e-06,
+                1591664.3935047667,
+                0.004411168035915413,
+                2228.3163961733,
+                25386535.28599164,
+                0.14706047280449355,
+                0.42188301314105875,
+                6.448756252274788e-08,
+                0.10926019772293802,
+                0.0019526150987756155,
+                1.5055382578818442e-07,
+                1.6520654671088987e-27,
+                2.0598666831189152e-05,
+                0.003736576552930954,
+                0.0007711494939522305,
+                0.001621261053743149,
+                0.0003810539623879232,
+                0.0019622055325750503,
+                0.0011032396938274725,
+                0.00052214999723435
+            ]
+        ],
+        "scale": [
+            [
+                0.018951097639028146,
+                20.350039872189324,
+                0.002648205419917775,
+                1261.6118236227683,
+                0.06641662469529307,
+                47.205046299874546,
+                5038.505263070749,
+                0.3834846448092721,
+                0.649525221327901,
+                0.00025394401454404845,
+                0.33054530358626794,
+                0.04418840457377496,
+                0.00038801266189157337,
+                1.0,
+                0.004538575418695733,
+                0.06112754332484624,
+                0.027769578569942874,
+                0.04026488611362447,
+                0.01952060353544232,
+                0.04429678919035837,
+                0.03321505221774418,
+                0.022850601682107848
+            ]
+        ]
+    },
+    "classifiers": {
+        "svm": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/hz_d1_no_resize_deg4/multiclass/train/0/models"
+            },
+            "svm_type": "C_SVC",
+            "kernel": "RBF",
+            "Gamma": 0.03375,
+            "Degree": 0.0,
+            "P": 0.0,
+            "Nu": 0.0,
+            "Coef0": 0.0,
+            "C": 12.5,
+            "max_nums_iter": 10000,
+            "epsilon": 2.220446049250313e-16,
+            "function": "svm"
+        }
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "type": "simple",
+            "function": "accuracy"
+        },
+        "balanced_accuracy": {
+            "type": "balanced",
+            "function": "accuracy"
+        },
+        "precision": {
+            "average": "weighted",
+            "function": "precision"
+        },
+        "sensitivity": {
+            "average": "weighted",
+            "function": "sensitivity"
+        },
+        "f1_score": {
+            "average": "weighted",
+            "function": "F1_score"
+        },
+        "mcc": {
+            "function": "mcc"
+        }
+    },
+    "plots": {
+        "CM": {
+            "function": "plot_CM"
+        }
+    }
+}
