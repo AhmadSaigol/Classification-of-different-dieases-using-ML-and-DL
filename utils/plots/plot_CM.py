@@ -20,6 +20,7 @@ def plot_CM(y_true, y_pred, path_to_results, path_to_images):
     ConfusionMatrixDisplay.from_predictions(y_pred=y_pred[:,1], y_true =y_true[:,1])
 
     plt.savefig(path_to_results + "_CM")
+    plt.close()
 
 
 

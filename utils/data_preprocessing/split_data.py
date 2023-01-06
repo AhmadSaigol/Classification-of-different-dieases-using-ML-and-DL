@@ -5,14 +5,15 @@ Splits the dataset into simple, "simpleStratified", kfold or kfoldStratified
 from sklearn.model_selection import ShuffleSplit, StratifiedShuffleSplit, StratifiedKFold, KFold
 import numpy as np
 
-def split_data(y, split_type):
+def split_data(y, split_type, test_size=0.3, n_folds=5):
     """
     Split the datasets
 
     Parameters:
         y: array of labels and image ids with shape (num_images, 2)
         split_type: type of splitting ("simple", "simpleStratified", "kfold", "kfoldStratified")
-        
+        test_size: fraction of data for testing (default=0.3)
+        n_folds: number of folds (default=5)
     Returns:
         train_labels: numpy array of shape(folds, num_images, 2)
         valid_labels: numpy array of shape(folds, num_images, 2)
@@ -20,9 +21,7 @@ def split_data(y, split_type):
     """
 
     if split_type=="simple":
-        
-        test_size= 0.3
-
+       
         # shuffle data before split
         ss = ShuffleSplit(n_splits=1, test_size=test_size)
 
@@ -31,8 +30,6 @@ def split_data(y, split_type):
             y_valid = np.expand_dims(y[valid_index], axis=0)
     
     elif split_type=="simpleStratified":
-        
-        test_size= 0.3
 
         # shuffle data before split
         ss = StratifiedShuffleSplit(n_splits=1, test_size=test_size)
@@ -43,8 +40,6 @@ def split_data(y, split_type):
 
     
     elif split_type=="kfold":
-
-        n_folds = 5
 
         # shuffle data before creating folds
         kf = KFold(n_splits=n_folds, shuffle=True)
@@ -60,8 +55,6 @@ def split_data(y, split_type):
 
     
     elif split_type == "kfoldStratified":
-        
-        n_folds = 5
 
         # shuffle data before creating folds
         skf = StratifiedKFold(n_splits=n_folds, shuffle=True)

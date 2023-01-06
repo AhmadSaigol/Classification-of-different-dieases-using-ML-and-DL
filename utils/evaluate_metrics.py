@@ -10,7 +10,7 @@ from utils.metrics.mcc import mcc
 from utils.metrics.precision import precision
 from utils.metrics.sensitivity import sensitivity
 
-def evaluate_metrics(y_true, y_pred, metrics, classifiers):
+def evaluate_metrics(y_true, y_pred, metrics, classifiers, y_pred_probs=None):
     """
     Applies each metric and generates evaluation score
 

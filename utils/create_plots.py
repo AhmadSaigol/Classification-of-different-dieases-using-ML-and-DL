@@ -5,7 +5,7 @@ import os
 import numpy as np
 #from plots.plot_CM import plot_CM
 
-def create_plots(y_true, y_pred, path_to_results, path_to_images, plots, classifiers, name_of_file):
+def create_plots(y_true, y_pred, path_to_results, path_to_images, plots, classifiers, name_of_file, training_metric_scores=None, y_pred_probs = None):
     """
     Generates differenet plots
     Parameters:
@@ -21,7 +21,8 @@ def create_plots(y_true, y_pred, path_to_results, path_to_images, plots, classif
                 plots["plots_2"]["parameter_1"] = value
                 plots["plots_2"]["parameter_2"] = value
         classifiers: numpay array with numes of classifiers
-        name_of_file:  
+        name_of_file:
+        training_metric_scores: (default=None) list of numpy array with each having shape of (folds, metrics, epochs).Each item in list should represent results of a network.
 
     Returns:
         output_config:
@@ -42,7 +43,13 @@ def create_plots(y_true, y_pred, path_to_results, path_to_images, plots, classif
     else:
         raise ValueError("Shape of y_pred is not correct.")
 
-
+    # determine whether to plot learning curves or not
+    if training_metric_scores:
+        lc = True
+    else:
+        lc = False
+   
+    
     for cl in range(num_classifiers):
 
         for fold_no in range(num_folds):
@@ -58,12 +65,22 @@ def create_plots(y_true, y_pred, path_to_results, path_to_images, plots, classif
                 os.mkdir(path_to_plots)
 
             for pl in plots.keys():
-
+                
+                # if dict has key "learning_curves" but no metric score is provided,
+                if pl == "learning_curves" and not lc:
+                    print("Warning: key'learning_curves' provided in dict 'plots' but metric score not found. Skipping ploting learning curves" )
+                    continue 
+                
+                
                 print(f"Creating Plot: {pl} Classifier: {classifiers[cl]} Fold No: {fold_no}")
-
+                
                 fnt_pointer = plots[pl]["function"]
+                path_to_figs = path_to_plots+f"/{classifiers[cl]}_{name_of_file}"
 
-                fnt_pointer(y_true=y_true[fold_no], y_pred=y_pred[cl, fold_no], path_to_results=path_to_plots+f"/{classifiers[cl]}_{name_of_file}", path_to_images=path_to_images)
+                if pl == "learning_curves":
+                    fnt_pointer(metric_score= training_metric_scores[cl][fold_no], path_to_results=path_to_figs, path_to_images=path_to_images)
+                else:
+                    fnt_pointer(y_true=y_true[fold_no], y_pred=y_pred[cl, fold_no], path_to_results=path_to_figs, path_to_images=path_to_images)
 
 
     return plots

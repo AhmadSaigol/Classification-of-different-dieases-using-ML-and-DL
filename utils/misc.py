@@ -67,7 +67,7 @@ def replace_function_names(dic, functions):
 
 
 
-def generate_txt_file(y, path_to_results, classifiers, name_of_file):
+def generate_txt_file(y, path_to_results, classifiers, name_of_file, y_probs=None):
     """
     Generates a text file with structure as follows:
     file_name_1 label
@@ -137,7 +137,7 @@ def save_results(results, classifiers, metrics, path_to_results, name_of_file):
         metrics: numpy array of name of the metrics
         path_to_results: path to the folder where the results will be stored
         name_of_file: file name
-
+       
     """
     df = pd.DataFrame([], columns=["Classifier", "Fold No", "Metric", "Score"])
     num_classifiers = results.shape[0]
@@ -149,6 +149,7 @@ def save_results(results, classifiers, metrics, path_to_results, name_of_file):
             for metric_no in range(num_metrics):
                 temp = pd.DataFrame([[classifiers[cl_no], fold_no, metrics[metric_no], results[cl_no, fold_no, metric_no]]], columns=["Classifier", "Fold No", "Metric", "Score"])
                 df = pd.concat([df, temp])
+    
     df.reset_index(inplace=True, drop=True ) 
        
     df.to_csv(path_to_results + "/" + name_of_file +".csv")

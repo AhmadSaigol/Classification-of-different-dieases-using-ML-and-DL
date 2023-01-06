@@ -45,12 +45,29 @@ def generate_feature_vector_using_batches(pipeline):
         path_to_labels = None
     output_config["data"]["path_to_labels"] = path_to_labels
 
-    
+    # get splitting parameters
     if "split_type" in data_keys:
         split_type = data["split_type"]
     else:
         split_type = None
     output_config["data"]["split_type"] = split_type
+    
+    if split_type:
+        if "simple" in split_type:
+            if "test_size" in data_keys:
+                test_size = data["test_size"]
+            else:
+                test_size = 0.3
+            output_config["data"]["test_size"] = test_size
+        
+        elif "kfold" in split_type:
+            if "num_folds" in data_keys:
+                num_folds = data["num_folds"]
+            else:
+                num_folds = 5
+            output_config["data"]["num_folds"] = num_folds
+        else:
+            raise ValueError("Unable to read parameters associated with splitting type")
 
     # get batch size
     if "batch_size" in pipeline_ops:
@@ -124,8 +141,11 @@ def generate_feature_vector_using_batches(pipeline):
         
         if split_type:
             print( f"Spliting the data: type: {split_type}")
-            
-            y_train, y_valid = split_data(y=img_ids_labels, split_type=split_type)
+
+            if "simple" in split_type:
+                y_train, y_valid = split_data(y=img_ids_labels, split_type=split_type, test_size=test_size)
+            else:
+                y_train, y_valid = split_data(y=img_ids_labels, split_type=split_type, n_folds=num_folds)
             
             print(f"Shape of y_train: {y_train.shape} y_valid:  {y_valid.shape}")
             
@@ -177,7 +197,7 @@ def generate_feature_vector_using_batches(pipeline):
 
                 print(f"Generated Features for training data successfully. Shape: {features_train_fold.shape}, y: {y_train.shape}")
 
-                print ("Processing validation data")
+                print ("Processing Testing data")
                 #valid data
                 features_valid_fold, _ = get_features(path_to_images=path_to_images,
                             y=y_valid[fold_no], 
@@ -188,7 +208,7 @@ def generate_feature_vector_using_batches(pipeline):
                 #if not compare_dict(features_train_config, features_valid_config):
                 #    raise ValueError("during feature generation, features config values got changed")
 
-                print(f"Generated Features for validation data successfully. Shape: {features_valid_fold.shape}, y: {y_valid.shape}")
+                print(f"Generated Features for testing data successfully. Shape: {features_valid_fold.shape}, y: {y_valid.shape}")
 
                 if fold_no ==0:
                     features_train = features_train_fold
@@ -209,7 +229,7 @@ def generate_feature_vector_using_batches(pipeline):
                     raise ValueError("Path to results must be provided when saving features to pkl")
 
             print("Shape training features: ", features_train.shape)
-            print("Shape valdidation features: ", features_valid.shape)
+            print("Shape testing features: ", features_valid.shape)
             output_config = {**output_config, **features_train_config}
 
             return features_train, y_train, features_valid, y_valid, output_config

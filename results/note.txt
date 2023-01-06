@@ -1,2 +1,0 @@
-all those results where stopping criteria is not in avaliable in json, they make use of model.setTermCriteria(cv2.TERM_CRITERIA_MAX_ITER, 10000, 1e-6).
-In most cases, this is true but in earlier runs it was 100 instead of 10000 --> implying not good results for them.
