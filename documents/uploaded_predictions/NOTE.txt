@@ -1,0 +1,7 @@
+One of the prediction2 of phase 2 is not correct. Under time pressue, my guess is that predict1 file got renamed to predict 2.
+
+prediction3 is correct. 
+
+Predictions2 results may not give true picture of the model
+
+other files  represent correct model name files

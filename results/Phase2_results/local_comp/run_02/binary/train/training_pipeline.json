@@ -1,0 +1,412 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train",
+        "path_to_labels": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_binary.txt",
+        "split_type": "simpleStratified",
+        "test_size": 0.3,
+        "classes": [
+            "NO_COVID",
+            "COVID"
+        ]
+    },
+    "data_preprocessing": {
+        "map_to_grayscale": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        }
+    },
+    "batch_size": 500,
+    "save_to_pkl": true,
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/run_02/binary/train",
+    "original_labels": {
+        "COVID": "17.08",
+        "NO_COVID": "82.92"
+    },
+    "processed_labels": {
+        "train": {
+            "0": {
+                "COVID": "17.08",
+                "NO_COVID": "82.92"
+            }
+        },
+        "valid": {
+            "0": {
+                "COVID": "17.09",
+                "NO_COVID": "82.91"
+            }
+        }
+    },
+    "feature_extractors": {
+        "haralick": {
+            "blur": true,
+            "distance": 1,
+            "function": "calculate_haralick"
+        },
+        "zernike_moments": {
+            "blur": true,
+            "radius": 180,
+            "degree": 8,
+            "cm": "image's centre of mass",
+            "function": "calculate_zernike"
+        }
+    },
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                0.005188932674137277,
+                28.93391998007401,
+                0.9957754387088255,
+                3533.0110215681843,
+                0.4442536167374684,
+                259.23234912694613,
+                14103.110166292678,
+                8.35234212628232,
+                10.708365881014277,
+                0.0008173926772225939,
+                2.917733927847147,
+                -0.5527623159716407,
+                0.9997863719373166,
+                0.3183098861837462,
+                0.006630316082160886,
+                0.20875797291684334,
+                0.03540675489513991,
+                0.08102066654066237,
+                0.030854945344925087,
+                0.10666830795204424,
+                0.04492326324247113,
+                0.07892923167079255,
+                0.04503218343061794,
+                0.027779116322956224,
+                0.026451821794669803,
+                0.03513556248795145,
+                0.03873326899149786,
+                0.027387618964948447,
+                0.031934301391463034,
+                0.046124941280162125,
+                0.02701080464444272,
+                0.054647987881338456,
+                0.027319117301518512,
+                0.08949311960481747,
+                0.03580567407074679,
+                0.052649532496947926,
+                0.01917318320541138,
+                0.0424295200567367
+            ]
+        ],
+        "var": [
+            [
+                0.00033051943547710775,
+                419.66675884940446,
+                6.954557343417657e-06,
+                1580672.5853441905,
+                0.004353191598254444,
+                2227.9467806630646,
+                25210211.15062075,
+                0.14412257100286366,
+                0.41580953179176494,
+                6.43471302106914e-08,
+                0.10812790539238537,
+                0.0019229476870943542,
+                6.017309146498476e-08,
+                1.6721036473203842e-27,
+                2.0353955493316964e-05,
+                0.003648652883154805,
+                0.000777438875720798,
+                0.0016459789836785746,
+                0.00038120424022502217,
+                0.0018820108121030017,
+                0.001107250007929272,
+                0.0005254376303187206,
+                0.000604638801599783,
+                0.000442481457370636,
+                0.0002459976330042224,
+                0.0007999817445248568,
+                0.0006579597048420078,
+                0.00037847571239792935,
+                0.00043549901025922516,
+                0.00046447824082769106,
+                0.00023917441677330208,
+                0.0005933283195302757,
+                0.0002571869622940774,
+                0.0014211221205583681,
+                0.00046877164835310985,
+                0.0004999251038940264,
+                0.00016507861158972172,
+                0.0002243567083913619
+            ]
+        ],
+        "scale": [
+            [
+                0.01818019349394026,
+                20.485769667000664,
+                0.002637149473089771,
+                1257.248020616533,
+                0.06597872079886397,
+                47.201131137538056,
+                5020.977111142885,
+                0.37963478634453884,
+                0.6448329487485615,
+                0.00025366736134294337,
+                0.32882807877732306,
+                0.04385142742368091,
+                0.00024530204129803886,
+                1.0,
+                0.004511535824230698,
+                0.06040408002076354,
+                0.027882590907603942,
+                0.040570666542202316,
+                0.019524452366840462,
+                0.04338214854180233,
+                0.03327536638309595,
+                0.022922426361943464,
+                0.024589404254674065,
+                0.021035243221095304,
+                0.015684311684107225,
+                0.028283948531364157,
+                0.025650725230332336,
+                0.019454452251295315,
+                0.020868613041101346,
+                0.021551757256142504,
+                0.015465264846529532,
+                0.024358331624523787,
+                0.01603704967548824,
+                0.037697773416454826,
+                0.021651135036138632,
+                0.022359004984435833,
+                0.012848292166265589,
+                0.01497854159761096
+            ]
+        ]
+    },
+    "networks": {
+        "NN1": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/run_02/binary/train/0/models"
+            },
+            "hidder_layers": [
+                8
+            ],
+            "alpha": 0.01,
+            "batch_size": 256,
+            "epochs": 10000,
+            "betas": [
+                0.9,
+                0.999
+            ],
+            "lmbda": 0.01,
+            "lr": 0.001,
+            "use_single_neuron": true,
+            "best_model": {
+                "epoch": 3179,
+                "train": {
+                    "cross_entropy_loss": 0.26649796962738037,
+                    "balanced_accuracy": 0.7056835225689004,
+                    "mcc": 0.5587218894504081
+                },
+                "valid": {
+                    "cross_entropy_loss": 0.25935062766075134,
+                    "balanced_accuracy": 0.7310999445166105,
+                    "mcc": 0.5936378030679552
+                }
+            }
+        },
+        "NN2": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/run_02/binary/train/0/models"
+            },
+            "hidder_layers": [
+                8
+            ],
+            "alpha": 0.01,
+            "batch_size": 256,
+            "epochs": 10000,
+            "betas": [
+                0.9,
+                0.999
+            ],
+            "lmbda": 0.01,
+            "lr": 0.001,
+            "use_single_neuron": false,
+            "best_model": {
+                "epoch": 8556,
+                "train": {
+                    "cross_entropy_loss": 0.252194344997406,
+                    "balanced_accuracy": 0.7301828802311612,
+                    "mcc": 0.5880199546979372
+                },
+                "valid": {
+                    "cross_entropy_loss": 0.24430571496486664,
+                    "balanced_accuracy": 0.7532926163318148,
+                    "mcc": 0.6211678312061837
+                }
+            }
+        },
+        "NN3": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/run_02/binary/train/0/models"
+            },
+            "hidder_layers": [
+                16,
+                8
+            ],
+            "alpha": 0.01,
+            "batch_size": 256,
+            "epochs": 10000,
+            "betas": [
+                0.9,
+                0.999
+            ],
+            "lmbda": 0.2,
+            "lr": 0.001,
+            "use_single_neuron": true,
+            "best_model": {
+                "epoch": 3075,
+                "train": {
+                    "cross_entropy_loss": 0.5146356225013733,
+                    "balanced_accuracy": 0.5,
+                    "mcc": 0.0
+                },
+                "valid": {
+                    "cross_entropy_loss": 0.5147202610969543,
+                    "balanced_accuracy": 0.5,
+                    "mcc": 0.0
+                }
+            }
+        },
+        "NN4": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/run_02/binary/train/0/models"
+            },
+            "hidder_layers": [
+                16,
+                8
+            ],
+            "alpha": 0.01,
+            "batch_size": 256,
+            "epochs": 10000,
+            "betas": [
+                0.9,
+                0.999
+            ],
+            "lmbda": 0.2,
+            "lr": 0.001,
+            "use_single_neuron": false,
+            "best_model": {
+                "epoch": 4867,
+                "train": {
+                    "cross_entropy_loss": 0.4842968285083771,
+                    "balanced_accuracy": 0.5,
+                    "mcc": 0.0
+                },
+                "valid": {
+                    "cross_entropy_loss": 0.48440903425216675,
+                    "balanced_accuracy": 0.5,
+                    "mcc": 0.0
+                }
+            }
+        },
+        "NN5": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/run_02/binary/train/0/models"
+            },
+            "hidder_layers": [
+                32,
+                16,
+                8
+            ],
+            "alpha": 0.01,
+            "batch_size": 256,
+            "epochs": 10000,
+            "betas": [
+                0.9,
+                0.999
+            ],
+            "lmbda": 0.4,
+            "lr": 0.001,
+            "use_single_neuron": true,
+            "best_model": {
+                "epoch": 4541,
+                "train": {
+                    "cross_entropy_loss": 0.5570054054260254,
+                    "balanced_accuracy": 0.5,
+                    "mcc": 0.0
+                },
+                "valid": {
+                    "cross_entropy_loss": 0.5570629835128784,
+                    "balanced_accuracy": 0.5,
+                    "mcc": 0.0
+                }
+            }
+        },
+        "NN6": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/run_02/binary/train/0/models"
+            },
+            "hidder_layers": [
+                32,
+                16,
+                8
+            ],
+            "alpha": 0.01,
+            "batch_size": 256,
+            "epochs": 10000,
+            "betas": [
+                0.9,
+                0.999
+            ],
+            "lmbda": 0.4,
+            "lr": 0.001,
+            "use_single_neuron": false,
+            "best_model": {
+                "epoch": 4591,
+                "train": {
+                    "cross_entropy_loss": 0.5145880579948425,
+                    "balanced_accuracy": 0.5,
+                    "mcc": 0.0
+                },
+                "valid": {
+                    "cross_entropy_loss": 0.5146726369857788,
+                    "balanced_accuracy": 0.5,
+                    "mcc": 0.0
+                }
+            }
+        }
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "type": "simple",
+            "function": "accuracy"
+        },
+        "balanced_accuracy": {
+            "type": "balanced",
+            "function": "accuracy"
+        },
+        "precision": {
+            "class_result": "COVID",
+            "function": "precision"
+        },
+        "sensitivity": {
+            "class_result": "COVID",
+            "function": "sensitivity"
+        },
+        "f1_score": {
+            "class_result": "COVID",
+            "function": "F1_score"
+        },
+        "mcc": {
+            "function": "mcc"
+        }
+    },
+    "plots": {
+        "CM": {
+            "function": "plot_CM"
+        },
+        "learning_curves": {
+            "function": "plot_LC"
+        },
+        "misidentified samples": {
+            "function": "plot_MS"
+        }
+    }
+}

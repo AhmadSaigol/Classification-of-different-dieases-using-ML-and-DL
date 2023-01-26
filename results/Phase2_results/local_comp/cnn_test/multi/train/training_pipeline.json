@@ -1,0 +1,225 @@
+{
+    "device": "cpu",
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/local_comp/cnn_test/multi/train",
+    "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/code_testing/train",
+    "batch_size": 256,
+    "num_epochs": 5,
+    "path_to_labels": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/code_testing/train_multi.txt",
+    "original_labels": {
+        "COVID": "25.0000",
+        "Lung_Opacity": "25.0000",
+        "Normal": "25.0000",
+        "pneumonia": "25.0000"
+    },
+    "split_type": "kfoldStratified",
+    "num_folds": 2,
+    "classes": [
+        "Normal",
+        "COVID",
+        "pneumonia",
+        "Lung_Opacity"
+    ],
+    "data_preprocessing": {
+        "train": {
+            "normalize_0_1": {
+                "name": "normalize",
+                "mean": 0,
+                "std": 255
+            },
+            "resize": {
+                "name": "resize",
+                "output_shape": [
+                    250,
+                    250
+                ]
+            }
+        },
+        "valid": {
+            "normalize_0_1": {
+                "name": "normalize",
+                "mean": 0,
+                "std": 255
+            },
+            "resize": {
+                "name": "resize",
+                "output_shape": [
+                    250,
+                    250
+                ]
+            }
+        }
+    },
+    "input_shape": [
+        250,
+        250
+    ],
+    "model": {
+        "conv1": {
+            "name": "conv",
+            "number_of_kernels": 32,
+            "kernel_size": 7
+        },
+        "lrelu1": {
+            "name": "lrelu"
+        },
+        "maxpool1": {
+            "name": "max_pool",
+            "kernel_size": 2
+        },
+        "conv2": {
+            "name": "conv",
+            "number_of_kernels": 64,
+            "kernel_size": 5
+        },
+        "lrelu2": {
+            "name": "lrelu"
+        },
+        "maxpool2": {
+            "name": "max_pool",
+            "kernel_size": 2
+        },
+        "conv3": {
+            "name": "conv",
+            "number_of_kernels": 128,
+            "kernel_size": 3
+        },
+        "lrelu3": {
+            "name": "lrelu"
+        },
+        "maxpool3": {
+            "name": "max_pool",
+            "kernel_size": 3
+        },
+        "flatten4": {
+            "name": "flatten"
+        },
+        "linear5": {
+            "name": "linear",
+            "neurons": 256
+        },
+        "lrelu5": {
+            "name": "lrelu"
+        },
+        "linear6": {
+            "name": "linear",
+            "neurons": 128
+        },
+        "lrelu6": {
+            "name": "lrelu"
+        },
+        "output": {
+            "name": "linear",
+            "neurons": 4
+        }
+    },
+    "loss": {
+        "type": "cross_entropy",
+        "use_weighted_loss": true,
+        "use_single_neuron": false
+    },
+    "optimizer": {
+        "name": "adam"
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "name": "accuracy",
+            "type": "simple"
+        },
+        "balanced_accuracy": {
+            "name": "accuracy",
+            "type": "balanced"
+        },
+        "mcc": {
+            "name": "mcc"
+        }
+    },
+    "plots": [
+        "CM",
+        "LC",
+        "MS"
+    ],
+    "model_parameters": {
+        "parameters": {
+            "seq_model.conv1.weight": {},
+            "trainable": 4,
+            "total": 4,
+            "seq_model.conv1.bias": {},
+            "seq_model.conv2.weight": {},
+            "seq_model.conv2.bias": {},
+            "seq_model.conv3.weight": {},
+            "seq_model.conv3.bias": {},
+            "seq_model.linear5.weight": {},
+            "seq_model.linear5.bias": {},
+            "seq_model.linear6.weight": {},
+            "seq_model.linear6.bias": {},
+            "seq_model.output.weight": {},
+            "seq_model.output.bias": {}
+        },
+        "total_trainable_parameters": 25850500,
+        "total_parameters": 25850500
+    },
+    "train_labels": {
+        "0": {
+            "0": "25.0000",
+            "1": "25.0000",
+            "2": "25.0000",
+            "3": "25.0000"
+        },
+        "1": {
+            "0": "25.0000",
+            "1": "25.0000",
+            "2": "25.0000",
+            "3": "25.0000"
+        }
+    },
+    "valid_labels": {
+        "0": {
+            "0": "25.0000",
+            "1": "25.0000",
+            "2": "25.0000",
+            "3": "25.0000"
+        },
+        "1": {
+            "0": "25.0000",
+            "1": "25.0000",
+            "2": "25.0000",
+            "3": "25.0000"
+        }
+    },
+    "results": {
+        "best_model": {
+            "epoch_number": [
+                3,
+                3
+            ],
+            "train": {
+                "loss": [
+                    1.2288880348205566,
+                    1.253387451171875
+                ],
+                "balanced_accuracy": [
+                    0.75,
+                    0.5
+                ],
+                "mcc": [
+                    0.7302967433402214,
+                    0.47140452079103173
+                ]
+            },
+            "valid": {
+                "loss": [
+                    1.3540292978286743,
+                    1.3240137100219727
+                ],
+                "balanced_accuracy": [
+                    0.25,
+                    0.25
+                ],
+                "mcc": [
+                    0.0,
+                    0.0
+                ]
+            }
+        }
+    }
+}

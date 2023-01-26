@@ -1,0 +1,248 @@
+{
+    "device": "cuda",
+    "path_to_results": "/kaggle/working/results/CNN_with_offline_aug_21-01/multi/train",
+    "path_to_images": "/kaggle/input/ismdatasetforclassificationofdieases/raw_data_augmented-21-01/raw_data_augmented-21-01/train",
+    "batch_size": 256,
+    "read_img_color": "gray",
+    "num_epochs": 50,
+    "path_to_labels": "/kaggle/input/ismdatasetforclassificationofdieases/raw_data_augmented-21-01/raw_data_augmented-21-01/train_multi.txt",
+    "original_labels": {
+        "COVID": "17.0820",
+        "Lung_Opacity": "28.3847",
+        "Normal": "48.1674",
+        "pneumonia": "6.3659"
+    },
+    "split_type": "simpleStratified",
+    "test_size": 0.3,
+    "classes": [
+        "Normal",
+        "COVID",
+        "pneumonia",
+        "Lung_Opacity"
+    ],
+    "data_preprocessing": {
+        "train": {
+            "normalize_0_1": {
+                "name": "normalize",
+                "mean": 0,
+                "std": 255
+            },
+            "resize": {
+                "name": "resize",
+                "output_shape": 250
+            }
+        },
+        "valid": {
+            "normalize_0_1": {
+                "name": "normalize",
+                "mean": 0,
+                "std": 255
+            },
+            "resize": {
+                "name": "resize",
+                "output_shape": 250
+            }
+        }
+    },
+    "input_shape": [
+        250,
+        250
+    ],
+    "model": {
+        "conv1": {
+            "name": "conv",
+            "number_of_kernels": 32,
+            "kernel_size": 7
+        },
+        "lrelu1": {
+            "name": "lrelu"
+        },
+        "maxpool1": {
+            "name": "max_pool",
+            "kernel_size": 2
+        },
+        "conv2": {
+            "name": "conv",
+            "number_of_kernels": 64,
+            "kernel_size": 5
+        },
+        "lrelu2": {
+            "name": "lrelu"
+        },
+        "maxpool2": {
+            "name": "max_pool",
+            "kernel_size": 2
+        },
+        "conv3": {
+            "name": "conv",
+            "number_of_kernels": 128,
+            "kernel_size": 3
+        },
+        "lrelu3": {
+            "name": "lrelu"
+        },
+        "maxpool3": {
+            "name": "max_pool",
+            "kernel_size": 3
+        },
+        "flatten4": {
+            "name": "flatten"
+        },
+        "linear5": {
+            "name": "linear",
+            "neurons": 256
+        },
+        "lrelu5": {
+            "name": "lrelu"
+        },
+        "linear6": {
+            "name": "linear",
+            "neurons": 128
+        },
+        "lrelu6": {
+            "name": "lrelu"
+        },
+        "output": {
+            "name": "linear",
+            "neurons": 4
+        }
+    },
+    "use_pretrained_model": false,
+    "loss": {
+        "type": "cross_entropy",
+        "use_weighted_loss": true,
+        "use_single_neuron": false
+    },
+    "optimizer": {
+        "name": "adam"
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "name": "accuracy",
+            "type": "simple"
+        },
+        "balanced_accuracy": {
+            "name": "accuracy",
+            "type": "balanced"
+        },
+        "precision": {
+            "name": "precision",
+            "class_result": "COVID"
+        },
+        "sensitivity": {
+            "name": "sensitivity",
+            "class_result": "COVID"
+        },
+        "f1_score": {
+            "name": "F1_score",
+            "class_result": "COVID"
+        },
+        "mcc": {
+            "name": "mcc"
+        }
+    },
+    "plots": [
+        "CM",
+        "LC",
+        "MS"
+    ],
+    "model_parameters": {
+        "parameters": {
+            "seq_model.conv1.weight": {
+                "trainable": 1568,
+                "total": 1568
+            },
+            "seq_model.conv1.bias": {
+                "trainable": 32,
+                "total": 32
+            },
+            "seq_model.conv2.weight": {
+                "trainable": 51200,
+                "total": 51200
+            },
+            "seq_model.conv2.bias": {
+                "trainable": 64,
+                "total": 64
+            },
+            "seq_model.conv3.weight": {
+                "trainable": 73728,
+                "total": 73728
+            },
+            "seq_model.conv3.bias": {
+                "trainable": 128,
+                "total": 128
+            },
+            "seq_model.linear5.weight": {
+                "trainable": 25690112,
+                "total": 25690112
+            },
+            "seq_model.linear5.bias": {
+                "trainable": 256,
+                "total": 256
+            },
+            "seq_model.linear6.weight": {
+                "trainable": 32768,
+                "total": 32768
+            },
+            "seq_model.linear6.bias": {
+                "trainable": 128,
+                "total": 128
+            },
+            "seq_model.output.weight": {
+                "trainable": 512,
+                "total": 512
+            },
+            "seq_model.output.bias": {
+                "trainable": 4,
+                "total": 4
+            }
+        },
+        "total_trainable_parameters": 25850500,
+        "total_parameters": 25850500
+    },
+    "train_labels": {
+        "0": {
+            "0": "48.1665",
+            "1": "17.0810",
+            "2": "6.3667",
+            "3": "28.3858"
+        }
+    },
+    "valid_labels": {
+        "0": {
+            "0": "48.1695",
+            "1": "17.0844",
+            "2": "6.3640",
+            "3": "28.3821"
+        }
+    },
+    "results": {
+        "best_model": {
+            "epoch_number": [
+                6
+            ],
+            "train": {
+                "loss": [
+                    0.2297952239304211
+                ],
+                "balanced_accuracy": [
+                    0.9240809078795079
+                ],
+                "mcc": [
+                    0.8664927376050789
+                ]
+            },
+            "valid": {
+                "loss": [
+                    0.4565516701834578
+                ],
+                "balanced_accuracy": [
+                    0.8537287948013181
+                ],
+                "mcc": [
+                    0.7674258821743863
+                ]
+            }
+        }
+    }
+}

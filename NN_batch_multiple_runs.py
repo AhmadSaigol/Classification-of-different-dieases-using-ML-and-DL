@@ -21,6 +21,16 @@ from utils.data_preprocessing.resize import resize
 from utils.data_preprocessing.normalize import normalize
 from utils.data_preprocessing.edge_detector import canny_edge_detector
 
+from utils.data_preprocessing.center_crop import center_crop
+from utils.data_preprocessing.random_apply_rotation import random_apply_rotation
+from utils.data_preprocessing.random_vertical_flip import random_vertical_flip
+from utils.data_preprocessing.random_resized_crop import random_resized_crop
+from utils.data_preprocessing.random_horizontal_flip import random_horizontal_flip
+from utils.data_preprocessing.random_apply_affine import random_apply_affine
+from utils.data_preprocessing.random_auto_contrast import random_auto_contrast
+from utils.data_preprocessing.random_adjust_sharpness import random_adjust_sharpness
+
+
 from utils.generate_feature_vector import generate_feature_vector
 from utils.generate_feature_vector_using_batches import generate_feature_vector_using_batches
 from utils.feature_extractors.contrast import calculate_contrast
@@ -59,7 +69,7 @@ images_folder = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Me
 #-------------------------------- Results directory----------------------------
 results_folder = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results"
 
-run_name = "run_02_weighted_loss_no_reg"
+run_name = "run_03_weighted_loss_no_reg_data_aug_online"
 
 run_path = os.path.join(results_folder, run_name)
 if not os.path.exists(run_path):
@@ -140,6 +150,46 @@ pipeline["data_preprocessing"]["map_to_grayscale"]["conversion"] ="BGR2GRAY"
 #pipeline["data_preprocessing"]["canny_edges"]["apertureSize"] = 5
 #pipeline["data_preprocessing"]["canny_edges"]["L2gradient"] = True
 
+# random adjust sharpness
+pipeline["data_preprocessing"]["random_adjust_sharpness"] = {}
+pipeline["data_preprocessing"]["random_adjust_sharpness"]["function"] = random_adjust_sharpness
+pipeline["data_preprocessing"]["random_adjust_sharpness"]["sharpness_factor"] = 2
+
+#random auto contrast
+pipeline["data_preprocessing"]["random_auto_contrast"] = {}
+pipeline["data_preprocessing"]["random_auto_contrast"]["function"] = random_auto_contrast
+
+# random appyly rotation
+pipeline["data_preprocessing"]["random_apply_rotation"] = {}
+pipeline["data_preprocessing"]["random_apply_rotation"]["function"] = random_apply_rotation 
+pipeline["data_preprocessing"]["random_apply_rotation"]["degrees"] =90 
+pipeline["data_preprocessing"]["random_apply_rotation"]["expand"] = True
+
+# random affine
+pipeline["data_preprocessing"]["random_apply_affine"] = {}
+pipeline["data_preprocessing"]["random_apply_affine"]["function"] =random_apply_affine
+pipeline["data_preprocessing"]["random_apply_affine"]["degrees"] = (-15, 15)
+pipeline["data_preprocessing"]["random_apply_affine"]["scale"] = (0.1, 0.3)
+pipeline["data_preprocessing"]["random_apply_affine"]["translate"] = (0.1, 0.3)
+
+# random resized crop
+pipeline["data_preprocessing"]["random_resized_crop"] = {}
+pipeline["data_preprocessing"]["random_resized_crop"]["function"] = random_resized_crop
+pipeline["data_preprocessing"]["random_resized_crop"]["output_size"] = (250, 250) #(width, height)
+
+# horziontal flip
+pipeline["data_preprocessing"]["horizontal_flip"] = {}
+pipeline["data_preprocessing"]["horizontal_flip"]["function"] = random_horizontal_flip
+
+# vertical flip
+pipeline["data_preprocessing"]["vertical_flip"] = {}
+pipeline["data_preprocessing"]["vertical_flip"]["function"] = random_vertical_flip
+
+# normalize image
+pipeline["data_preprocessing"]["normalize_image"] = {}
+pipeline["data_preprocessing"]["normalize_image"]["function"] = normalize
+pipeline["data_preprocessing"]["normalize_image"]["method"] = "minmax_255" 
+
 # resize_image
 #pipeline["data_preprocessing"]["resize_image"] = {}
 #pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
@@ -219,66 +269,66 @@ pipeline["networks"] ={}
 
 # NN1
 pipeline["networks"]["NN1"] = {}
-pipeline["networks"]["NN1"]["hidden_layers"] = [8]
+pipeline["networks"]["NN1"]["hidden_layers"] = [32]
 #pipeline["networks"]["NN1"]["alpha"] = 0.2
 pipeline["networks"]["NN1"]["batch_size"] = 256
 pipeline["networks"]["NN1"]["lmbda"] = 0
-pipeline["networks"]["NN1"]["lr"] = 1e-3
-pipeline["networks"]["NN1"]["epochs"] = 1000
+pipeline["networks"]["NN1"]["lr"] = 0.001
+pipeline["networks"]["NN1"]["epochs"] = 10000
 pipeline["networks"]["NN1"]["use_single_neuron"] = True
 pipeline["networks"]["NN1"]["use_weighted_loss"] = True
 
 
 # NN2
 pipeline["networks"]["NN2"] = {}
-pipeline["networks"]["NN2"]["hidden_layers"] = [8]
+pipeline["networks"]["NN2"]["hidden_layers"] = [32]
 #pipeline["networks"]["NN2"]["alpha"] = 0.2
 pipeline["networks"]["NN2"]["batch_size"] = 256
 pipeline["networks"]["NN2"]["lmbda"] = 0
-pipeline["networks"]["NN2"]["lr"] = 1e-3
-pipeline["networks"]["NN2"]["epochs"] = 1000
+pipeline["networks"]["NN2"]["lr"] = 0.001
+pipeline["networks"]["NN2"]["epochs"] = 10000
 pipeline["networks"]["NN2"]["use_weighted_loss"] = True
 
 # NN3
 pipeline["networks"]["NN3"] = {}
-pipeline["networks"]["NN3"]["hidden_layers"] = [16, 8]
+pipeline["networks"]["NN3"]["hidden_layers"] = [32, 16]
 #pipeline["networks"]["NN3"]["alpha"] = 0.2
 pipeline["networks"]["NN3"]["batch_size"] = 256
 pipeline["networks"]["NN3"]["lmbda"] = 0
-pipeline["networks"]["NN3"]["lr"] = 1e-3
-pipeline["networks"]["NN3"]["epochs"] = 1000
+pipeline["networks"]["NN3"]["lr"] = 0.001
+pipeline["networks"]["NN3"]["epochs"] = 10000
 pipeline["networks"]["NN3"]["use_single_neuron"] = True
 pipeline["networks"]["NN3"]["use_weighted_loss"] = True
 
 # NN4
 pipeline["networks"]["NN4"] = {}
-pipeline["networks"]["NN4"]["hidden_layers"] = [16, 8]
+pipeline["networks"]["NN4"]["hidden_layers"] = [32, 16]
 #pipeline["networks"]["NN4"]["alpha"] = 0.2
 pipeline["networks"]["NN4"]["batch_size"] = 256
 pipeline["networks"]["NN4"]["lmbda"] = 0
-pipeline["networks"]["NN4"]["lr"] = 1e-3
-pipeline["networks"]["NN4"]["epochs"] = 1000
+pipeline["networks"]["NN4"]["lr"] = 0.001
+pipeline["networks"]["NN4"]["epochs"] = 10000
 pipeline["networks"]["NN4"]["use_weighted_loss"] = True
 
 # NN5
 pipeline["networks"]["NN5"] = {}
-pipeline["networks"]["NN5"]["hidden_layers"] = [32, 16, 8]
+pipeline["networks"]["NN5"]["hidden_layers"] = [64, 32, 16]
 #pipeline["networks"]["NN5"]["alpha"] = 0.2
 pipeline["networks"]["NN5"]["batch_size"] = 256
 pipeline["networks"]["NN5"]["lmbda"] = 0
-pipeline["networks"]["NN5"]["lr"] = 1e-3
-pipeline["networks"]["NN5"]["epochs"] = 1000
+pipeline["networks"]["NN5"]["lr"] =0.001
+pipeline["networks"]["NN5"]["epochs"] = 10000
 pipeline["networks"]["NN5"]["use_single_neuron"] = True
 pipeline["networks"]["NN5"]["use_weighted_loss"] = True
 
 # NN6
 pipeline["networks"]["NN6"] = {}
-pipeline["networks"]["NN6"]["hidden_layers"] = [32, 16, 8]
+pipeline["networks"]["NN6"]["hidden_layers"] = [64, 32, 16]
 #pipeline["networks"]["NN6"]["alpha"] = 0.2
 pipeline["networks"]["NN6"]["batch_size"] = 256
 pipeline["networks"]["NN6"]["lmbda"] = 0
-pipeline["networks"]["NN6"]["lr"] = 1e-3
-pipeline["networks"]["NN6"]["epochs"] = 1000
+pipeline["networks"]["NN6"]["lr"] = 0.001
+pipeline["networks"]["NN6"]["epochs"] = 10000
 pipeline["networks"]["NN6"]["use_weighted_loss"] = True
 
 # ensemble learning
@@ -339,29 +389,29 @@ pipeline["plots"]["misidentified samples"]["function"] = plot_MS
 NN_batch_training (pipeline)
 
 #-------prediction---------
-path_to_json = os.path.join(binary_path, "train", "training_pipeline.json")
+#path_to_json = os.path.join(binary_path, "train", "training_pipeline.json")
 
 # test images
-print("Generating predictions on test data")
-test_images_path = os.path.join(images_folder, "test")
-test_save_path = os.path.join(binary_path, "test")
+#print("Generating predictions on test data")
+#test_images_path = os.path.join(images_folder, "test")
+#test_save_path = os.path.join(binary_path, "test")
 
-NN_batch_prediction(
-     path_to_images=test_images_path,
-     path_to_json=path_to_json,
-     save_path=test_save_path)
+#NN_batch_prediction(
+#     path_to_images=test_images_path,
+ #    path_to_json=path_to_json,
+  #   save_path=test_save_path)
 
 
 # noisy test images
-print("Generating predictions on noisy test data")
-noisy_test_images_path = os.path.join(images_folder, "noisy_test")
-noisy_test_save_path = os.path.join(binary_path, "noisy_test")
+#print("Generating predictions on noisy test data")
+#noisy_test_images_path = os.path.join(images_folder, "noisy_test")
+#noisy_test_save_path = os.path.join(binary_path, "noisy_test")
 
-NN_batch_prediction(
-     path_to_images=noisy_test_images_path,
-     path_to_json=path_to_json,
-     save_path=noisy_test_save_path,
-     batch_size=1)
+#NN_batch_prediction(
+  #   path_to_images=noisy_test_images_path,
+   #  path_to_json=path_to_json,
+    # save_path=noisy_test_save_path,
+    # batch_size=1)
 
 
 #------------------------------- Multiclass Classification --------------------------
@@ -425,11 +475,52 @@ pipeline["data_preprocessing"]["map_to_grayscale"]["conversion"] ="BGR2GRAY"
 #pipeline["data_preprocessing"]["canny_edges"]["apertureSize"] = 5
 #pipeline["data_preprocessing"]["canny_edges"]["L2gradient"] = True
 
+# random adjust sharpness
+pipeline["data_preprocessing"]["random_adjust_sharpness"] = {}
+pipeline["data_preprocessing"]["random_adjust_sharpness"]["function"] = random_adjust_sharpness
+pipeline["data_preprocessing"]["random_adjust_sharpness"]["sharpness_factor"] = 2
+
+#random auto contrast
+pipeline["data_preprocessing"]["random_auto_contrast"] = {}
+pipeline["data_preprocessing"]["random_auto_contrast"]["function"] = random_auto_contrast
+
+# random appyly rotation
+pipeline["data_preprocessing"]["random_apply_rotation"] = {}
+pipeline["data_preprocessing"]["random_apply_rotation"]["function"] = random_apply_rotation 
+pipeline["data_preprocessing"]["random_apply_rotation"]["degrees"] =90 
+pipeline["data_preprocessing"]["random_apply_rotation"]["expand"] = True
+
+# random affine
+pipeline["data_preprocessing"]["random_apply_affine"] = {}
+pipeline["data_preprocessing"]["random_apply_affine"]["function"] =random_apply_affine
+pipeline["data_preprocessing"]["random_apply_affine"]["degrees"] = (-15, 15)
+pipeline["data_preprocessing"]["random_apply_affine"]["scale"] = (0.1, 0.3)
+pipeline["data_preprocessing"]["random_apply_affine"]["translate"] = (0.1, 0.3)
+
+# random resized crop
+pipeline["data_preprocessing"]["random_resized_crop"] = {}
+pipeline["data_preprocessing"]["random_resized_crop"]["function"] = random_resized_crop
+pipeline["data_preprocessing"]["random_resized_crop"]["output_size"] = (250, 250) #(width, height)
+
+# horziontal flip
+pipeline["data_preprocessing"]["horizontal_flip"] = {}
+pipeline["data_preprocessing"]["horizontal_flip"]["function"] = random_horizontal_flip
+
+# vertical flip
+pipeline["data_preprocessing"]["vertical_flip"] = {}
+pipeline["data_preprocessing"]["vertical_flip"]["function"] = random_vertical_flip
+
+
 # resize_image
-pipeline["data_preprocessing"]["resize_image"] = {}
-pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
-pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
+#pipeline["data_preprocessing"]["resize_image"] = {}
+#pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
+#pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
+#pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
+
+# normalize image
+pipeline["data_preprocessing"]["normalize_image"] = {}
+pipeline["data_preprocessing"]["normalize_image"]["function"] = normalize
+pipeline["data_preprocessing"]["normalize_image"]["method"] = "minmax_255" 
 
 
 # ---------------------------------set up feature extractor methods and parameters------------------------------------
@@ -504,33 +595,33 @@ pipeline["networks"] ={}
 
 # NN1
 pipeline["networks"]["NN1"] = {}
-pipeline["networks"]["NN1"]["hidden_layers"] = [8]
+pipeline["networks"]["NN1"]["hidden_layers"] = [32]
 #pipeline["networks"]["NN1"]["alpha"] = 0.2
 pipeline["networks"]["NN1"]["batch_size"] = 256
 pipeline["networks"]["NN1"]["lmbda"] = 0
-pipeline["networks"]["NN1"]["lr"] = 1e-3
-pipeline["networks"]["NN1"]["epochs"] = 1000
+pipeline["networks"]["NN1"]["lr"] = 0.001
+pipeline["networks"]["NN1"]["epochs"] = 10000
 pipeline["networks"]["NN1"]["use_weighted_loss"] = True
 
 
 # NN2
 pipeline["networks"]["NN2"] = {}
-pipeline["networks"]["NN2"]["hidden_layers"] = [16, 8]
+pipeline["networks"]["NN2"]["hidden_layers"] = [32, 16]
 #pipeline["networks"]["NN2"]["alpha"] = 0.2
 pipeline["networks"]["NN2"]["batch_size"] = 256
 pipeline["networks"]["NN2"]["lmbda"] = 0
-pipeline["networks"]["NN2"]["lr"] = 1e-3
-pipeline["networks"]["NN2"]["epochs"] = 1000
+pipeline["networks"]["NN2"]["lr"] = 0.001
+pipeline["networks"]["NN2"]["epochs"] = 10000
 pipeline["networks"]["NN2"]["use_weighted_loss"] = True
 
 # NN3
 pipeline["networks"]["NN3"] = {}
-pipeline["networks"]["NN3"]["hidden_layers"] = [32,16,8]
+pipeline["networks"]["NN3"]["hidden_layers"] = [64,32,16]
 #pipeline["networks"]["NN3"]["alpha"] = 0.2
 pipeline["networks"]["NN3"]["batch_size"] = 256
 pipeline["networks"]["NN3"]["lmbda"] = 0
-pipeline["networks"]["NN3"]["lr"] = 1e-3
-pipeline["networks"]["NN3"]["epochs"] = 1000
+pipeline["networks"]["NN3"]["lr"] = 0.001
+pipeline["networks"]["NN3"]["epochs"] = 10000
 pipeline["networks"]["NN3"]["use_weighted_loss"] = True
 
 # ensemble learning
@@ -591,28 +682,28 @@ pipeline["plots"]["misidentified samples"]["function"] = plot_MS
 NN_batch_training (pipeline)
 
 #-------prediction---------
-path_to_json = os.path.join(multi_path, "train", "training_pipeline.json")
+#path_to_json = os.path.join(multi_path, "train", "training_pipeline.json")
 
 # test images
-print("Generating predicitons on test data.")
-test_images_path = os.path.join(images_folder, "test")
-test_save_path = os.path.join(multi_path, "test")
+#print("Generating predicitons on test data.")
+#test_images_path = os.path.join(images_folder, "test")
+#test_save_path = os.path.join(multi_path, "test")
 
-NN_batch_prediction(
-     path_to_images=test_images_path,
-     path_to_json=path_to_json,
-     save_path=test_save_path)
+#NN_batch_prediction(
+#     path_to_images=test_images_path,
+ #    path_to_json=path_to_json,
+  #   save_path=test_save_path)
 
 # noisy test images
-print("Generating predicitons on noisy test data.")
-noisy_test_images_path = os.path.join(images_folder, "noisy_test")
-noisy_test_save_path = os.path.join(multi_path, "noisy_test")
+#print("Generating predicitons on noisy test data.")
+#noisy_test_images_path = os.path.join(images_folder, "noisy_test")
+#noisy_test_save_path = os.path.join(multi_path, "noisy_test")
 
-NN_batch_prediction(
-    path_to_images=noisy_test_images_path,
-     path_to_json=path_to_json,
-     save_path=noisy_test_save_path,
-     batch_size=1)
+#NN_batch_prediction(
+ #   path_to_images=noisy_test_images_path,
+  #   path_to_json=path_to_json,
+   #  save_path=noisy_test_save_path,
+    # batch_size=1)
 
 
 print("Processing Completed")

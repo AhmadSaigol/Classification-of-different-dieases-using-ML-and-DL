@@ -1,0 +1,490 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train",
+        "path_to_labels": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_binary.txt",
+        "split_type": "simpleStratified",
+        "test_size": 0.3,
+        "classes": [
+            "NO_COVID",
+            "COVID"
+        ]
+    },
+    "data_preprocessing": {
+        "map_to_grayscale": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        },
+        "random_adjust_sharpness": {
+            "sharpness_factor": 2,
+            "p": 0.5,
+            "function": "random_adjust_sharpness"
+        },
+        "random_auto_contrast": {
+            "p": 0.5,
+            "function": "random_auto_contrast"
+        },
+        "random_apply_rotation": {
+            "degrees": 90,
+            "expand": true,
+            "p": 0.5,
+            "function": "random_apply_rotation"
+        },
+        "random_apply_affine": {
+            "degrees": [
+                -15,
+                15
+            ],
+            "translate": [
+                0.1,
+                0.3
+            ],
+            "scale": [
+                0.1,
+                0.3
+            ],
+            "p": 0.5,
+            "function": "random_apply_affine"
+        },
+        "random_resized_crop": {
+            "output_size": [
+                250,
+                250
+            ],
+            "function": "random_resized_crop"
+        },
+        "horizontal_flip": {
+            "p": 0.5,
+            "function": "random_horizontal_flip"
+        },
+        "vertical_flip": {
+            "p": 0.5,
+            "function": "random_vertical_flip"
+        },
+        "normalize_image": {
+            "method": "minmax_255",
+            "function": "normalize"
+        }
+    },
+    "batch_size": 500,
+    "save_to_pkl": true,
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/run_03_weighted_loss_no_reg_data_aug_online/binary/train",
+    "original_labels": {
+        "COVID": "17.08",
+        "NO_COVID": "82.92"
+    },
+    "processed_labels": {
+        "train": {
+            "0": {
+                "COVID": "17.08",
+                "NO_COVID": "82.92"
+            }
+        },
+        "valid": {
+            "0": {
+                "COVID": "17.09",
+                "NO_COVID": "82.91"
+            }
+        }
+    },
+    "feature_extractors": {
+        "haralick": {
+            "blur": true,
+            "distance": 1,
+            "function": "calculate_haralick"
+        },
+        "zernike_moments": {
+            "blur": true,
+            "radius": 180,
+            "degree": 8,
+            "cm": "image's centre of mass",
+            "function": "calculate_zernike"
+        }
+    },
+    "return_probs": null,
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                0.44464160849121714,
+                39.38510848627893,
+                0.9891555503088497,
+                2871.2491585971284,
+                0.699140450601803,
+                145.20164657980973,
+                11445.611525902284,
+                4.508882550229668,
+                5.750938370118384,
+                0.001995806388406126,
+                1.7354675747379762,
+                -0.5870650565038497,
+                0.8538471336263479,
+                0.3034029596094633,
+                0.0003030750248456451,
+                0.6251759657435507,
+                0.01730943960957927,
+                0.03013078279716393,
+                0.014190743497439158,
+                0.6808580557555625,
+                0.04068851171477128,
+                0.031235666483024314,
+                0.049860861346507766,
+                0.035650183540461025,
+                0.009984855822620958,
+                0.8513731886163091,
+                0.05105722024392867,
+                0.04756603846366484,
+                0.007218131437689808,
+                0.037328331701059134,
+                0.027927576223695644,
+                0.01569709114882113,
+                0.006977435023682934,
+                0.8969470262930677,
+                0.06953863863755222,
+                0.02876686214080267,
+                0.01734673964675854,
+                0.013770999599442687
+            ]
+        ],
+        "var": [
+            [
+                0.18559783381045078,
+                1237.9693969253378,
+                0.00038965290390539063,
+                4585462.661740018,
+                0.06525014891402778,
+                18053.699087135898,
+                73025070.25864846,
+                13.332081610488112,
+                22.223863561061837,
+                2.0592437629665284e-06,
+                1.4576253765243496,
+                0.023122199785332493,
+                0.05684121864820055,
+                0.0045228056413225606,
+                8.105407859941192e-07,
+                0.08095499025978962,
+                0.00038595765909994143,
+                0.0014191288985724742,
+                0.0003497351443274732,
+                0.4419774164933135,
+                0.0016656630465485631,
+                0.0013992558141231542,
+                0.0029585322310898437,
+                0.0018407596278466115,
+                0.00020069374116102155,
+                0.7009708480739096,
+                0.0026729155810930466,
+                0.002542939001115318,
+                9.649303892602455e-05,
+                0.001618264578296881,
+                0.0009664157045337432,
+                0.00041641603562679163,
+                9.559249946168195e-05,
+                1.011095496108301,
+                0.006014204507611759,
+                0.001009007629000982,
+                0.0005108023184915384,
+                0.0003513663956144166
+            ]
+        ],
+        "scale": [
+            [
+                0.43081067049279403,
+                35.184789283514796,
+                0.019739627754985417,
+                2141.369342673052,
+                0.25544108697315665,
+                134.3640542970325,
+                8545.470745292412,
+                3.651312313468695,
+                4.714219294969405,
+                0.0014350065376041075,
+                1.2073215712991918,
+                0.15205985592960586,
+                0.2384139648766417,
+                0.06725180771787893,
+                0.0009003003865344717,
+                0.2845259043739069,
+                0.019645805127302404,
+                0.03767132727383619,
+                0.01870120702862447,
+                0.6648138209253125,
+                0.04081253540946168,
+                0.03740662794376358,
+                0.054392391297771084,
+                0.04290407472311472,
+                0.014166641844877054,
+                0.8372400181990285,
+                0.05170024739876054,
+                0.05042756191920563,
+                0.009823087036467943,
+                0.04022765936885815,
+                0.031087227353589177,
+                0.020406274418099734,
+                0.00977714168157964,
+                1.0055324440853717,
+                0.0775513024236973,
+                0.031764880434230855,
+                0.022600936230420598,
+                0.01874476982025697
+            ]
+        ]
+    },
+    "networks": {
+        "NN1": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/run_03_weighted_loss_no_reg_data_aug_online/binary/train/0/models"
+            },
+            "hidden_layers": [
+                32
+            ],
+            "alpha": 0.01,
+            "batch_size": 256,
+            "epochs": 10000,
+            "betas": [
+                0.9,
+                0.999
+            ],
+            "lmbda": 0,
+            "lr": 0.001,
+            "use_single_neuron": true,
+            "use_weighted_loss": true,
+            "pos_weight": [
+                4.855237154150197
+            ],
+            "best_model": {
+                "epoch": 380,
+                "train": {
+                    "cross_entropy_loss": 0.8982735872268677,
+                    "balanced_accuracy": 0.7212821083398928,
+                    "mcc": 0.34139205516191495
+                },
+                "valid": {
+                    "cross_entropy_loss": 1.0463171005249023,
+                    "balanced_accuracy": 0.6634062423737699,
+                    "mcc": 0.2509202635860263
+                }
+            }
+        },
+        "NN2": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/run_03_weighted_loss_no_reg_data_aug_online/binary/train/0/models"
+            },
+            "hidden_layers": [
+                32
+            ],
+            "alpha": 0.01,
+            "batch_size": 256,
+            "epochs": 10000,
+            "betas": [
+                0.9,
+                0.999
+            ],
+            "lmbda": 0,
+            "lr": 0.001,
+            "use_single_neuron": false,
+            "use_weighted_loss": true,
+            "class_weights": [
+                0.1707872748374939,
+                0.8292127251625061
+            ],
+            "best_model": {
+                "epoch": 127,
+                "train": {
+                    "cross_entropy_loss": 0.5844678282737732,
+                    "balanced_accuracy": 0.6905973590145082,
+                    "mcc": 0.2902306405814908
+                },
+                "valid": {
+                    "cross_entropy_loss": 0.6408272981643677,
+                    "balanced_accuracy": 0.6440922501633313,
+                    "mcc": 0.21954187095735125
+                }
+            }
+        },
+        "NN3": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/run_03_weighted_loss_no_reg_data_aug_online/binary/train/0/models"
+            },
+            "hidden_layers": [
+                32,
+                16
+            ],
+            "alpha": 0.01,
+            "batch_size": 256,
+            "epochs": 10000,
+            "betas": [
+                0.9,
+                0.999
+            ],
+            "lmbda": 0,
+            "lr": 0.001,
+            "use_single_neuron": true,
+            "use_weighted_loss": true,
+            "pos_weight": [
+                4.855237154150197
+            ],
+            "best_model": {
+                "epoch": 75,
+                "train": {
+                    "cross_entropy_loss": 0.9631073474884033,
+                    "balanced_accuracy": 0.6900577369922585,
+                    "mcc": 0.28859393155702673
+                },
+                "valid": {
+                    "cross_entropy_loss": 1.0575720071792603,
+                    "balanced_accuracy": 0.654473772334253,
+                    "mcc": 0.23464565233981374
+                }
+            }
+        },
+        "NN4": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/run_03_weighted_loss_no_reg_data_aug_online/binary/train/0/models"
+            },
+            "hidden_layers": [
+                32,
+                16
+            ],
+            "alpha": 0.01,
+            "batch_size": 256,
+            "epochs": 10000,
+            "betas": [
+                0.9,
+                0.999
+            ],
+            "lmbda": 0,
+            "lr": 0.001,
+            "use_single_neuron": false,
+            "use_weighted_loss": true,
+            "class_weights": [
+                0.1707872748374939,
+                0.8292127251625061
+            ],
+            "best_model": {
+                "epoch": 46,
+                "train": {
+                    "cross_entropy_loss": 0.596603274345398,
+                    "balanced_accuracy": 0.673697757770698,
+                    "mcc": 0.26262660812340816
+                },
+                "valid": {
+                    "cross_entropy_loss": 0.6392422914505005,
+                    "balanced_accuracy": 0.6406521705824224,
+                    "mcc": 0.2127501413208019
+                }
+            }
+        },
+        "NN5": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/run_03_weighted_loss_no_reg_data_aug_online/binary/train/0/models"
+            },
+            "hidden_layers": [
+                64,
+                32,
+                16
+            ],
+            "alpha": 0.01,
+            "batch_size": 256,
+            "epochs": 10000,
+            "betas": [
+                0.9,
+                0.999
+            ],
+            "lmbda": 0,
+            "lr": 0.001,
+            "use_single_neuron": true,
+            "use_weighted_loss": true,
+            "pos_weight": [
+                4.855237154150197
+            ],
+            "best_model": {
+                "epoch": 21,
+                "train": {
+                    "cross_entropy_loss": 1.0090917348861694,
+                    "balanced_accuracy": 0.6715400489737278,
+                    "mcc": 0.25945730286777857
+                },
+                "valid": {
+                    "cross_entropy_loss": 1.0612777471542358,
+                    "balanced_accuracy": 0.6380929034884497,
+                    "mcc": 0.2088475620430216
+                }
+            }
+        },
+        "NN6": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/run_03_weighted_loss_no_reg_data_aug_online/binary/train/0/models"
+            },
+            "hidden_layers": [
+                64,
+                32,
+                16
+            ],
+            "alpha": 0.01,
+            "batch_size": 256,
+            "epochs": 10000,
+            "betas": [
+                0.9,
+                0.999
+            ],
+            "lmbda": 0,
+            "lr": 0.001,
+            "use_single_neuron": false,
+            "use_weighted_loss": true,
+            "class_weights": [
+                0.1707872748374939,
+                0.8292127251625061
+            ],
+            "best_model": {
+                "epoch": 20,
+                "train": {
+                    "cross_entropy_loss": 0.5965986251831055,
+                    "balanced_accuracy": 0.6812956790821126,
+                    "mcc": 0.2756904395811871
+                },
+                "valid": {
+                    "cross_entropy_loss": 0.6412622928619385,
+                    "balanced_accuracy": 0.6376323202234219,
+                    "mcc": 0.20931545187088196
+                }
+            }
+        }
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "type": "simple",
+            "function": "accuracy"
+        },
+        "balanced_accuracy": {
+            "type": "balanced",
+            "function": "accuracy"
+        },
+        "precision": {
+            "class_result": "COVID",
+            "function": "precision"
+        },
+        "sensitivity": {
+            "class_result": "COVID",
+            "function": "sensitivity"
+        },
+        "f1_score": {
+            "class_result": "COVID",
+            "function": "F1_score"
+        },
+        "mcc": {
+            "function": "mcc"
+        }
+    },
+    "plots": {
+        "CM": {
+            "function": "plot_CM"
+        },
+        "learning_curves": {
+            "function": "plot_LC"
+        },
+        "misidentified samples": {
+            "function": "plot_MS"
+        }
+    }
+}

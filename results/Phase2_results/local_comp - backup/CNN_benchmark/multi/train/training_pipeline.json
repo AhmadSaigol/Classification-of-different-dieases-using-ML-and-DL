@@ -1,0 +1,252 @@
+{
+    "device": "cpu",
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/local_comp/CNN_benchmark/multi/train",
+    "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train",
+    "batch_size": 32,
+    "num_epochs": 25,
+    "path_to_labels": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_multi.txt",
+    "original_labels": {
+        "COVID": "17.0821",
+        "Lung_Opacity": "28.4052",
+        "Normal": "48.1571",
+        "pneumonia": "6.3556"
+    },
+    "split_type": "simpleStratified",
+    "test_size": 0.3,
+    "classes": [
+        "Normal",
+        "COVID",
+        "pneumonia",
+        "Lung_Opacity"
+    ],
+    "data_preprocessing": {
+        "train": {
+            "normalize_0_1": {
+                "name": "normalize",
+                "mean": 0,
+                "std": 255
+            },
+            "resize": {
+                "name": "resize",
+                "output_shape": [
+                    250,
+                    250
+                ]
+            }
+        },
+        "valid": {
+            "normalize_0_1": {
+                "name": "normalize",
+                "mean": 0,
+                "std": 255
+            },
+            "resize": {
+                "name": "resize",
+                "output_shape": [
+                    250,
+                    250
+                ]
+            }
+        }
+    },
+    "input_shape": [
+        250,
+        250
+    ],
+    "model": {
+        "conv1": {
+            "name": "conv",
+            "number_of_kernels": 32,
+            "kernel_size": 7
+        },
+        "lrelu1": {
+            "name": "lrelu"
+        },
+        "maxpool1": {
+            "name": "max_pool",
+            "kernel_size": 2
+        },
+        "conv2": {
+            "name": "conv",
+            "number_of_kernels": 64,
+            "kernel_size": 5
+        },
+        "lrelu2": {
+            "name": "lrelu"
+        },
+        "maxpool2": {
+            "name": "max_pool",
+            "kernel_size": 2
+        },
+        "conv3": {
+            "name": "conv",
+            "number_of_kernels": 128,
+            "kernel_size": 3
+        },
+        "lrelu3": {
+            "name": "lrelu"
+        },
+        "maxpool3": {
+            "name": "max_pool",
+            "kernel_size": 3
+        },
+        "flatten4": {
+            "name": "flatten"
+        },
+        "linear5": {
+            "name": "linear",
+            "neurons": 256
+        },
+        "lrelu5": {
+            "name": "lrelu"
+        },
+        "linear6": {
+            "name": "linear",
+            "neurons": 128
+        },
+        "lrelu6": {
+            "name": "lrelu"
+        },
+        "output": {
+            "name": "linear",
+            "neurons": 4
+        }
+    },
+    "loss": {
+        "type": "cross_entropy",
+        "use_weighted_loss": true,
+        "use_single_neuron": false
+    },
+    "optimizer": {
+        "name": "adam"
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "name": "accuracy",
+            "type": "simple"
+        },
+        "balanced_accuracy": {
+            "name": "accuracy",
+            "type": "balanced"
+        },
+        "precision": {
+            "name": "precision",
+            "class_result": "COVID"
+        },
+        "sensitivity": {
+            "name": "sensitivity",
+            "class_result": "COVID"
+        },
+        "f1_score": {
+            "name": "F1_score",
+            "class_result": "COVID"
+        },
+        "mcc": {
+            "name": "mcc"
+        }
+    },
+    "plots": [
+        "CM",
+        "LC",
+        "MS"
+    ],
+    "model_parameters": {
+        "parameters": {
+            "seq_model.conv1.weight": {
+                "trainable": 1568,
+                "total": 1568
+            },
+            "seq_model.conv1.bias": {
+                "trainable": 32,
+                "total": 32
+            },
+            "seq_model.conv2.weight": {
+                "trainable": 51200,
+                "total": 51200
+            },
+            "seq_model.conv2.bias": {
+                "trainable": 64,
+                "total": 64
+            },
+            "seq_model.conv3.weight": {
+                "trainable": 73728,
+                "total": 73728
+            },
+            "seq_model.conv3.bias": {
+                "trainable": 128,
+                "total": 128
+            },
+            "seq_model.linear5.weight": {
+                "trainable": 25690112,
+                "total": 25690112
+            },
+            "seq_model.linear5.bias": {
+                "trainable": 256,
+                "total": 256
+            },
+            "seq_model.linear6.weight": {
+                "trainable": 32768,
+                "total": 32768
+            },
+            "seq_model.linear6.bias": {
+                "trainable": 128,
+                "total": 128
+            },
+            "seq_model.output.weight": {
+                "trainable": 512,
+                "total": 512
+            },
+            "seq_model.output.bias": {
+                "trainable": 4,
+                "total": 4
+            }
+        },
+        "total_trainable_parameters": 25850500,
+        "total_parameters": 25850500
+    },
+    "train_labels": {
+        "0": {
+            "0": "48.1563",
+            "1": "17.0872",
+            "2": "6.3539",
+            "3": "28.4027"
+        }
+    },
+    "valid_labels": {
+        "0": {
+            "0": "48.1591",
+            "1": "17.0703",
+            "2": "6.3595",
+            "3": "28.4111"
+        }
+    },
+    "results": {
+        "best_model": {
+            "epoch_number": [
+                3
+            ],
+            "train": {
+                "loss": [
+                    0.2927419295726713
+                ],
+                "balanced_accuracy": [
+                    0.8951694324172698
+                ],
+                "mcc": [
+                    0.8279684376338577
+                ]
+            },
+            "valid": {
+                "loss": [
+                    0.40333180284730136
+                ],
+                "balanced_accuracy": [
+                    0.8691158092650554
+                ],
+                "mcc": [
+                    0.7747276491243489
+                ]
+            }
+        }
+    }
+}

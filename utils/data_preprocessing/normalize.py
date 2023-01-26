@@ -47,7 +47,21 @@ def normalize(images, parameters):
 
             results.append(cv2.normalize(images[img], None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F))
 
-        results = np.array(results)           
+        results = np.array(results)
+
+       
+    elif method == "minmax_255":
+
+        results = []
+
+        for img in range(images.shape[0]):
+
+            results.append(cv2.normalize(images[img], None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F))
+
+        results = np.expand_dims(np.array(results).astype(np.uint8), axis=-1)
+        #print(results.shape)
+
+
     else:
         raise ValueError("Unknown Value encountered for the parameter'method' while normalizing the image.")
 
@@ -67,7 +81,7 @@ if __name__ == "__main__":
     pipeline={}
     pipeline["normalize_image"] = {}
     pipeline["normalize_image"]["function"] =0 #some function pointer
-    pipeline["normalize_image"]["method"] = "minmax"
+    pipeline["normalize_image"]["method"] = "minmax_255"
     #pipeline["resize_image"]["interpolation"] = "bilinear"
 
     print(image_c.shape)

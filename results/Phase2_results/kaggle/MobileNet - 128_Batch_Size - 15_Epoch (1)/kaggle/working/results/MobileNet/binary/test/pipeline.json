@@ -1,0 +1,812 @@
+{
+    "device": "cuda",
+    "path_to_results": "/kaggle/working/results/MobileNet/binary/test",
+    "path_to_images": "/kaggle/input/ismdatasetforclassificationofdieases/ism_dataset/raw_data/test",
+    "batch_size": 128,
+    "read_img_color": "rgb",
+    "num_epochs": 15,
+    "original_labels": {
+        "COVID": "17.0821",
+        "NO_COVID": "82.9179"
+    },
+    "split_type": "simpleStratified",
+    "test_size": 0.3,
+    "classes": [
+        "NO_COVID",
+        "COVID"
+    ],
+    "data_preprocessing": {
+        "train": {
+            "normalize_0_1": {
+                "name": "normalize",
+                "mean": 0,
+                "std": 255
+            },
+            "random_rotation": {
+                "name": "random_rotation",
+                "degrees": 90,
+                "expand": true
+            },
+            "random_crop": {
+                "name": "random_resized_crop",
+                "output_shape": 224
+            },
+            "horizontal_flip": {
+                "name": "random_horizontal_flip"
+            },
+            "vertical_flip": {
+                "name": "random_vertical_flip"
+            },
+            "normalize_model_values": {
+                "name": "normalize",
+                "mean": [
+                    0.485,
+                    0.456,
+                    0.406
+                ],
+                "std": [
+                    0.229,
+                    0.224,
+                    0.225
+                ]
+            }
+        },
+        "valid": {
+            "normalize_0_1": {
+                "name": "normalize",
+                "mean": 0,
+                "std": 255
+            },
+            "center_crop": {
+                "name": "center_crop",
+                "output_shape": [
+                    224,
+                    224
+                ]
+            },
+            "normalize_model_values": {
+                "name": "normalize",
+                "mean": [
+                    0.485,
+                    0.456,
+                    0.406
+                ],
+                "std": [
+                    0.229,
+                    0.224,
+                    0.225
+                ]
+            }
+        }
+    },
+    "input_shape": [
+        224,
+        224,
+        3
+    ],
+    "model": {
+        "mobile_net": {
+            "name": "mobile_net",
+            "num_output_neurons": 2
+        }
+    },
+    "use_pretrained_model": true,
+    "loss": {
+        "type": "cross_entropy",
+        "use_weighted_loss": true,
+        "use_single_neuron": false
+    },
+    "optimizer": {
+        "name": "adam"
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "name": "accuracy",
+            "type": "simple"
+        },
+        "balanced_accuracy": {
+            "name": "accuracy",
+            "type": "balanced"
+        },
+        "precision": {
+            "name": "precision",
+            "class_result": "COVID"
+        },
+        "sensitivity": {
+            "name": "sensitivity",
+            "class_result": "COVID"
+        },
+        "f1_score": {
+            "name": "F1_score",
+            "class_result": "COVID"
+        },
+        "mcc": {
+            "name": "mcc"
+        }
+    },
+    "plots": [
+        "CM",
+        "LC",
+        "MS"
+    ],
+    "model_parameters": {
+        "parameters": {
+            "seq_model.features.0.0.weight": {
+                "trainable": 864,
+                "total": 0
+            },
+            "seq_model.features.0.1.weight": {
+                "trainable": 32,
+                "total": 0
+            },
+            "seq_model.features.0.1.bias": {
+                "trainable": 32,
+                "total": 0
+            },
+            "seq_model.features.1.conv.0.0.weight": {
+                "trainable": 288,
+                "total": 0
+            },
+            "seq_model.features.1.conv.0.1.weight": {
+                "trainable": 32,
+                "total": 0
+            },
+            "seq_model.features.1.conv.0.1.bias": {
+                "trainable": 32,
+                "total": 0
+            },
+            "seq_model.features.1.conv.1.weight": {
+                "trainable": 512,
+                "total": 0
+            },
+            "seq_model.features.1.conv.2.weight": {
+                "trainable": 16,
+                "total": 0
+            },
+            "seq_model.features.1.conv.2.bias": {
+                "trainable": 16,
+                "total": 0
+            },
+            "seq_model.features.2.conv.0.0.weight": {
+                "trainable": 1536,
+                "total": 0
+            },
+            "seq_model.features.2.conv.0.1.weight": {
+                "trainable": 96,
+                "total": 0
+            },
+            "seq_model.features.2.conv.0.1.bias": {
+                "trainable": 96,
+                "total": 0
+            },
+            "seq_model.features.2.conv.1.0.weight": {
+                "trainable": 864,
+                "total": 0
+            },
+            "seq_model.features.2.conv.1.1.weight": {
+                "trainable": 96,
+                "total": 0
+            },
+            "seq_model.features.2.conv.1.1.bias": {
+                "trainable": 96,
+                "total": 0
+            },
+            "seq_model.features.2.conv.2.weight": {
+                "trainable": 2304,
+                "total": 0
+            },
+            "seq_model.features.2.conv.3.weight": {
+                "trainable": 24,
+                "total": 0
+            },
+            "seq_model.features.2.conv.3.bias": {
+                "trainable": 24,
+                "total": 0
+            },
+            "seq_model.features.3.conv.0.0.weight": {
+                "trainable": 3456,
+                "total": 0
+            },
+            "seq_model.features.3.conv.0.1.weight": {
+                "trainable": 144,
+                "total": 0
+            },
+            "seq_model.features.3.conv.0.1.bias": {
+                "trainable": 144,
+                "total": 0
+            },
+            "seq_model.features.3.conv.1.0.weight": {
+                "trainable": 1296,
+                "total": 0
+            },
+            "seq_model.features.3.conv.1.1.weight": {
+                "trainable": 144,
+                "total": 0
+            },
+            "seq_model.features.3.conv.1.1.bias": {
+                "trainable": 144,
+                "total": 0
+            },
+            "seq_model.features.3.conv.2.weight": {
+                "trainable": 3456,
+                "total": 0
+            },
+            "seq_model.features.3.conv.3.weight": {
+                "trainable": 24,
+                "total": 0
+            },
+            "seq_model.features.3.conv.3.bias": {
+                "trainable": 24,
+                "total": 0
+            },
+            "seq_model.features.4.conv.0.0.weight": {
+                "trainable": 3456,
+                "total": 0
+            },
+            "seq_model.features.4.conv.0.1.weight": {
+                "trainable": 144,
+                "total": 0
+            },
+            "seq_model.features.4.conv.0.1.bias": {
+                "trainable": 144,
+                "total": 0
+            },
+            "seq_model.features.4.conv.1.0.weight": {
+                "trainable": 1296,
+                "total": 0
+            },
+            "seq_model.features.4.conv.1.1.weight": {
+                "trainable": 144,
+                "total": 0
+            },
+            "seq_model.features.4.conv.1.1.bias": {
+                "trainable": 144,
+                "total": 0
+            },
+            "seq_model.features.4.conv.2.weight": {
+                "trainable": 4608,
+                "total": 0
+            },
+            "seq_model.features.4.conv.3.weight": {
+                "trainable": 32,
+                "total": 0
+            },
+            "seq_model.features.4.conv.3.bias": {
+                "trainable": 32,
+                "total": 0
+            },
+            "seq_model.features.5.conv.0.0.weight": {
+                "trainable": 6144,
+                "total": 0
+            },
+            "seq_model.features.5.conv.0.1.weight": {
+                "trainable": 192,
+                "total": 0
+            },
+            "seq_model.features.5.conv.0.1.bias": {
+                "trainable": 192,
+                "total": 0
+            },
+            "seq_model.features.5.conv.1.0.weight": {
+                "trainable": 1728,
+                "total": 0
+            },
+            "seq_model.features.5.conv.1.1.weight": {
+                "trainable": 192,
+                "total": 0
+            },
+            "seq_model.features.5.conv.1.1.bias": {
+                "trainable": 192,
+                "total": 0
+            },
+            "seq_model.features.5.conv.2.weight": {
+                "trainable": 6144,
+                "total": 0
+            },
+            "seq_model.features.5.conv.3.weight": {
+                "trainable": 32,
+                "total": 0
+            },
+            "seq_model.features.5.conv.3.bias": {
+                "trainable": 32,
+                "total": 0
+            },
+            "seq_model.features.6.conv.0.0.weight": {
+                "trainable": 6144,
+                "total": 0
+            },
+            "seq_model.features.6.conv.0.1.weight": {
+                "trainable": 192,
+                "total": 0
+            },
+            "seq_model.features.6.conv.0.1.bias": {
+                "trainable": 192,
+                "total": 0
+            },
+            "seq_model.features.6.conv.1.0.weight": {
+                "trainable": 1728,
+                "total": 0
+            },
+            "seq_model.features.6.conv.1.1.weight": {
+                "trainable": 192,
+                "total": 0
+            },
+            "seq_model.features.6.conv.1.1.bias": {
+                "trainable": 192,
+                "total": 0
+            },
+            "seq_model.features.6.conv.2.weight": {
+                "trainable": 6144,
+                "total": 0
+            },
+            "seq_model.features.6.conv.3.weight": {
+                "trainable": 32,
+                "total": 0
+            },
+            "seq_model.features.6.conv.3.bias": {
+                "trainable": 32,
+                "total": 0
+            },
+            "seq_model.features.7.conv.0.0.weight": {
+                "trainable": 6144,
+                "total": 0
+            },
+            "seq_model.features.7.conv.0.1.weight": {
+                "trainable": 192,
+                "total": 0
+            },
+            "seq_model.features.7.conv.0.1.bias": {
+                "trainable": 192,
+                "total": 0
+            },
+            "seq_model.features.7.conv.1.0.weight": {
+                "trainable": 1728,
+                "total": 0
+            },
+            "seq_model.features.7.conv.1.1.weight": {
+                "trainable": 192,
+                "total": 0
+            },
+            "seq_model.features.7.conv.1.1.bias": {
+                "trainable": 192,
+                "total": 0
+            },
+            "seq_model.features.7.conv.2.weight": {
+                "trainable": 12288,
+                "total": 0
+            },
+            "seq_model.features.7.conv.3.weight": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.features.7.conv.3.bias": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.features.8.conv.0.0.weight": {
+                "trainable": 24576,
+                "total": 0
+            },
+            "seq_model.features.8.conv.0.1.weight": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.8.conv.0.1.bias": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.8.conv.1.0.weight": {
+                "trainable": 3456,
+                "total": 0
+            },
+            "seq_model.features.8.conv.1.1.weight": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.8.conv.1.1.bias": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.8.conv.2.weight": {
+                "trainable": 24576,
+                "total": 0
+            },
+            "seq_model.features.8.conv.3.weight": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.features.8.conv.3.bias": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.features.9.conv.0.0.weight": {
+                "trainable": 24576,
+                "total": 0
+            },
+            "seq_model.features.9.conv.0.1.weight": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.9.conv.0.1.bias": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.9.conv.1.0.weight": {
+                "trainable": 3456,
+                "total": 0
+            },
+            "seq_model.features.9.conv.1.1.weight": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.9.conv.1.1.bias": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.9.conv.2.weight": {
+                "trainable": 24576,
+                "total": 0
+            },
+            "seq_model.features.9.conv.3.weight": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.features.9.conv.3.bias": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.features.10.conv.0.0.weight": {
+                "trainable": 24576,
+                "total": 0
+            },
+            "seq_model.features.10.conv.0.1.weight": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.10.conv.0.1.bias": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.10.conv.1.0.weight": {
+                "trainable": 3456,
+                "total": 0
+            },
+            "seq_model.features.10.conv.1.1.weight": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.10.conv.1.1.bias": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.10.conv.2.weight": {
+                "trainable": 24576,
+                "total": 0
+            },
+            "seq_model.features.10.conv.3.weight": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.features.10.conv.3.bias": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.features.11.conv.0.0.weight": {
+                "trainable": 24576,
+                "total": 0
+            },
+            "seq_model.features.11.conv.0.1.weight": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.11.conv.0.1.bias": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.11.conv.1.0.weight": {
+                "trainable": 3456,
+                "total": 0
+            },
+            "seq_model.features.11.conv.1.1.weight": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.11.conv.1.1.bias": {
+                "trainable": 384,
+                "total": 0
+            },
+            "seq_model.features.11.conv.2.weight": {
+                "trainable": 36864,
+                "total": 0
+            },
+            "seq_model.features.11.conv.3.weight": {
+                "trainable": 96,
+                "total": 0
+            },
+            "seq_model.features.11.conv.3.bias": {
+                "trainable": 96,
+                "total": 0
+            },
+            "seq_model.features.12.conv.0.0.weight": {
+                "trainable": 55296,
+                "total": 0
+            },
+            "seq_model.features.12.conv.0.1.weight": {
+                "trainable": 576,
+                "total": 0
+            },
+            "seq_model.features.12.conv.0.1.bias": {
+                "trainable": 576,
+                "total": 0
+            },
+            "seq_model.features.12.conv.1.0.weight": {
+                "trainable": 5184,
+                "total": 0
+            },
+            "seq_model.features.12.conv.1.1.weight": {
+                "trainable": 576,
+                "total": 0
+            },
+            "seq_model.features.12.conv.1.1.bias": {
+                "trainable": 576,
+                "total": 0
+            },
+            "seq_model.features.12.conv.2.weight": {
+                "trainable": 55296,
+                "total": 0
+            },
+            "seq_model.features.12.conv.3.weight": {
+                "trainable": 96,
+                "total": 0
+            },
+            "seq_model.features.12.conv.3.bias": {
+                "trainable": 96,
+                "total": 0
+            },
+            "seq_model.features.13.conv.0.0.weight": {
+                "trainable": 55296,
+                "total": 0
+            },
+            "seq_model.features.13.conv.0.1.weight": {
+                "trainable": 576,
+                "total": 0
+            },
+            "seq_model.features.13.conv.0.1.bias": {
+                "trainable": 576,
+                "total": 0
+            },
+            "seq_model.features.13.conv.1.0.weight": {
+                "trainable": 5184,
+                "total": 0
+            },
+            "seq_model.features.13.conv.1.1.weight": {
+                "trainable": 576,
+                "total": 0
+            },
+            "seq_model.features.13.conv.1.1.bias": {
+                "trainable": 576,
+                "total": 0
+            },
+            "seq_model.features.13.conv.2.weight": {
+                "trainable": 55296,
+                "total": 0
+            },
+            "seq_model.features.13.conv.3.weight": {
+                "trainable": 96,
+                "total": 0
+            },
+            "seq_model.features.13.conv.3.bias": {
+                "trainable": 96,
+                "total": 0
+            },
+            "seq_model.features.14.conv.0.0.weight": {
+                "trainable": 55296,
+                "total": 0
+            },
+            "seq_model.features.14.conv.0.1.weight": {
+                "trainable": 576,
+                "total": 0
+            },
+            "seq_model.features.14.conv.0.1.bias": {
+                "trainable": 576,
+                "total": 0
+            },
+            "seq_model.features.14.conv.1.0.weight": {
+                "trainable": 5184,
+                "total": 0
+            },
+            "seq_model.features.14.conv.1.1.weight": {
+                "trainable": 576,
+                "total": 0
+            },
+            "seq_model.features.14.conv.1.1.bias": {
+                "trainable": 576,
+                "total": 0
+            },
+            "seq_model.features.14.conv.2.weight": {
+                "trainable": 92160,
+                "total": 0
+            },
+            "seq_model.features.14.conv.3.weight": {
+                "trainable": 160,
+                "total": 0
+            },
+            "seq_model.features.14.conv.3.bias": {
+                "trainable": 160,
+                "total": 0
+            },
+            "seq_model.features.15.conv.0.0.weight": {
+                "trainable": 153600,
+                "total": 0
+            },
+            "seq_model.features.15.conv.0.1.weight": {
+                "trainable": 960,
+                "total": 0
+            },
+            "seq_model.features.15.conv.0.1.bias": {
+                "trainable": 960,
+                "total": 0
+            },
+            "seq_model.features.15.conv.1.0.weight": {
+                "trainable": 8640,
+                "total": 0
+            },
+            "seq_model.features.15.conv.1.1.weight": {
+                "trainable": 960,
+                "total": 0
+            },
+            "seq_model.features.15.conv.1.1.bias": {
+                "trainable": 960,
+                "total": 0
+            },
+            "seq_model.features.15.conv.2.weight": {
+                "trainable": 153600,
+                "total": 0
+            },
+            "seq_model.features.15.conv.3.weight": {
+                "trainable": 160,
+                "total": 0
+            },
+            "seq_model.features.15.conv.3.bias": {
+                "trainable": 160,
+                "total": 0
+            },
+            "seq_model.features.16.conv.0.0.weight": {
+                "trainable": 153600,
+                "total": 0
+            },
+            "seq_model.features.16.conv.0.1.weight": {
+                "trainable": 960,
+                "total": 0
+            },
+            "seq_model.features.16.conv.0.1.bias": {
+                "trainable": 960,
+                "total": 0
+            },
+            "seq_model.features.16.conv.1.0.weight": {
+                "trainable": 8640,
+                "total": 0
+            },
+            "seq_model.features.16.conv.1.1.weight": {
+                "trainable": 960,
+                "total": 0
+            },
+            "seq_model.features.16.conv.1.1.bias": {
+                "trainable": 960,
+                "total": 0
+            },
+            "seq_model.features.16.conv.2.weight": {
+                "trainable": 153600,
+                "total": 0
+            },
+            "seq_model.features.16.conv.3.weight": {
+                "trainable": 160,
+                "total": 0
+            },
+            "seq_model.features.16.conv.3.bias": {
+                "trainable": 160,
+                "total": 0
+            },
+            "seq_model.features.17.conv.0.0.weight": {
+                "trainable": 153600,
+                "total": 0
+            },
+            "seq_model.features.17.conv.0.1.weight": {
+                "trainable": 960,
+                "total": 0
+            },
+            "seq_model.features.17.conv.0.1.bias": {
+                "trainable": 960,
+                "total": 0
+            },
+            "seq_model.features.17.conv.1.0.weight": {
+                "trainable": 8640,
+                "total": 0
+            },
+            "seq_model.features.17.conv.1.1.weight": {
+                "trainable": 960,
+                "total": 0
+            },
+            "seq_model.features.17.conv.1.1.bias": {
+                "trainable": 960,
+                "total": 0
+            },
+            "seq_model.features.17.conv.2.weight": {
+                "trainable": 307200,
+                "total": 0
+            },
+            "seq_model.features.17.conv.3.weight": {
+                "trainable": 320,
+                "total": 0
+            },
+            "seq_model.features.17.conv.3.bias": {
+                "trainable": 320,
+                "total": 0
+            },
+            "seq_model.features.18.0.weight": {
+                "trainable": 409600,
+                "total": 0
+            },
+            "seq_model.features.18.1.weight": {
+                "trainable": 1280,
+                "total": 0
+            },
+            "seq_model.features.18.1.bias": {
+                "trainable": 1280,
+                "total": 0
+            },
+            "seq_model.classifier.1.weight": {
+                "trainable": 2560,
+                "total": 2560
+            },
+            "seq_model.classifier.1.bias": {
+                "trainable": 2,
+                "total": 2
+            }
+        },
+        "total_trainable_parameters": 2562,
+        "total_parameters": 2226434
+    },
+    "train_labels": {
+        "0": {
+            "0": "82.9213",
+            "1": "17.0787"
+        }
+    },
+    "valid_labels": {
+        "0": {
+            "0": "82.9100",
+            "1": "17.0900"
+        }
+    },
+    "results": {
+        "best_model": {
+            "epoch_number": [
+                12
+            ],
+            "train": {
+                "loss": [
+                    0.45871851667755514
+                ],
+                "balanced_accuracy": [
+                    0.7888020683863979
+                ],
+                "mcc": [
+                    0.4719743581136044
+                ]
+            },
+            "valid": {
+                "loss": [
+                    0.3865317165687296
+                ],
+                "balanced_accuracy": [
+                    0.8283427230891328
+                ],
+                "mcc": [
+                    0.5379016060757696
+                ]
+            }
+        }
+    },
+    "path_to_models": "/kaggle/working/results/MobileNet/binary/train"
+}

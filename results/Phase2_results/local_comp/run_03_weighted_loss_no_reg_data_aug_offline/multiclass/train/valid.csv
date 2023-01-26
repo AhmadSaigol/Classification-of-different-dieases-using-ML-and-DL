@@ -1,0 +1,19 @@
+,Classifier,Fold No,Metric,Score
+0,NN1,0,simple_accuracy,0.8012072
+1,NN1,0,balanced_accuracy,0.79843813
+2,NN1,0,precision,0.8019469
+3,NN1,0,sensitivity,0.8012072
+4,NN1,0,f1_score,0.80152786
+5,NN1,0,mcc,0.69714314
+6,NN2,0,simple_accuracy,0.8057998
+7,NN2,0,balanced_accuracy,0.811981
+8,NN2,0,precision,0.8083643
+9,NN2,0,sensitivity,0.8057998
+10,NN2,0,f1_score,0.80666274
+11,NN2,0,mcc,0.70625114
+12,NN3,0,simple_accuracy,0.8131479
+13,NN3,0,balanced_accuracy,0.81215054
+14,NN3,0,precision,0.81343335
+15,NN3,0,sensitivity,0.8131479
+16,NN3,0,f1_score,0.8132429
+17,NN3,0,mcc,0.7149905

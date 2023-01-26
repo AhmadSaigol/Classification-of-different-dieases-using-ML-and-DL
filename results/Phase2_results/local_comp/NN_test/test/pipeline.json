@@ -1,0 +1,159 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/test",
+        "path_to_labels": null,
+        "split_type": null,
+        "classes": [
+            "Normal",
+            "COVID",
+            "pneumonia",
+            "Lung_Opacity"
+        ]
+    },
+    "data_preprocessing": {
+        "normalize_image": {
+            "method": "minmax",
+            "function": "normalize"
+        },
+        "map_to_RGB": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        },
+        "resize_image": {
+            "output_size": [
+                50,
+                50
+            ],
+            "interpolation": "area",
+            "function": "resize"
+        }
+    },
+    "batch_size": 54,
+    "save_to_pkl": true,
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/NN_test/test",
+    "feature_extractors": {
+        "contrast": {
+            "method": "michelson",
+            "function": "calculate_contrast"
+        },
+        "histogram": {
+            "bins": 10,
+            "range": [
+                0,
+                256
+            ],
+            "density": false,
+            "function": "calculate_histogram"
+        }
+    },
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                0.9766546821214008,
+                2500.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        ],
+        "var": [
+            [
+                0.0019956279887780285,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        ],
+        "scale": [
+            [
+                0.04467245223600366,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ]
+        ]
+    },
+    "networks": {
+        "NN1": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/NN_test/train/0/models"
+            },
+            "hidder_layers": [
+                5
+            ],
+            "alpha": 0.2,
+            "batch_size": 2,
+            "epochs": 10,
+            "betas": [
+                0.9,
+                0.999
+            ],
+            "lmbda": 0.1,
+            "lr": 0.1,
+            "best_model": {
+                "epoch": 10,
+                "train": {
+                    "cross_entropy_loss": -247482.859375,
+                    "balanced_accuracy": 0.25,
+                    "mcc": 0.0
+                },
+                "valid": {
+                    "cross_entropy_loss": -267082.1875,
+                    "balanced_accuracy": 0.25,
+                    "mcc": 0.0
+                }
+            }
+        },
+        "NN2": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/NN_test/train/0/models"
+            },
+            "hidder_layers": [
+                5
+            ],
+            "alpha": 0.2,
+            "batch_size": 2,
+            "epochs": 10,
+            "betas": [
+                0.9,
+                0.999
+            ],
+            "lmbda": 0.1,
+            "lr": 0.1,
+            "best_model": {
+                "epoch": 6,
+                "train": {
+                    "cross_entropy_loss": 1.1989028453826904,
+                    "balanced_accuracy": 0.25,
+                    "mcc": 0.0
+                },
+                "valid": {
+                    "cross_entropy_loss": 1.2031694650650024,
+                    "balanced_accuracy": 0.25,
+                    "mcc": 0.0
+                }
+            }
+        }
+    }
+}

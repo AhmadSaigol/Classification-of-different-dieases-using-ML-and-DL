@@ -1,0 +1,286 @@
+{
+    "device": "cpu",
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/local_comp/CNN_with_data_augmentation/multi/train",
+    "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train",
+    "batch_size": 32,
+    "read_img_color": "gray",
+    "num_epochs": 25,
+    "path_to_labels": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_multi.txt",
+    "original_labels": {
+        "COVID": "17.0821",
+        "Lung_Opacity": "28.4052",
+        "Normal": "48.1571",
+        "pneumonia": "6.3556"
+    },
+    "split_type": "simpleStratified",
+    "test_size": 0.3,
+    "classes": [
+        "Normal",
+        "COVID",
+        "pneumonia",
+        "Lung_Opacity"
+    ],
+    "data_preprocessing": {
+        "train": {
+            "normalize_0_1": {
+                "name": "normalize",
+                "mean": 0,
+                "std": 255
+            },
+            "resize": {
+                "name": "resize",
+                "output_shape": 256
+            },
+            "color_jitter": {
+                "name": "color_jitter",
+                "brightness": 0.5,
+                "contrast": 0.5
+            },
+            "random_rotation": {
+                "name": "random_rotation",
+                "degrees": 90,
+                "expand": true
+            },
+            "random_affine": {
+                "name": "random_affine",
+                "translate": [
+                    0.1,
+                    0.3
+                ],
+                "scale": [
+                    0.1,
+                    0.3
+                ]
+            },
+            "random_crop": {
+                "name": "random_resized_crop",
+                "output_shape": 224
+            },
+            "horizontal_flip": {
+                "name": "random_horizontal_flip"
+            },
+            "vertical_flip": {
+                "name": "random_vertical_flip"
+            }
+        },
+        "valid": {
+            "normalize_0_1": {
+                "name": "normalize",
+                "mean": 0,
+                "std": 255
+            },
+            "resize": {
+                "name": "resize",
+                "output_shape": 256
+            },
+            "center_crop": {
+                "name": "center_crop",
+                "output_shape": [
+                    224,
+                    224
+                ]
+            }
+        }
+    },
+    "input_shape": [
+        224,
+        224
+    ],
+    "model": {
+        "conv1": {
+            "name": "conv",
+            "number_of_kernels": 32,
+            "kernel_size": 7
+        },
+        "lrelu1": {
+            "name": "lrelu"
+        },
+        "maxpool1": {
+            "name": "max_pool",
+            "kernel_size": 2
+        },
+        "conv2": {
+            "name": "conv",
+            "number_of_kernels": 64,
+            "kernel_size": 5
+        },
+        "lrelu2": {
+            "name": "lrelu"
+        },
+        "maxpool2": {
+            "name": "max_pool",
+            "kernel_size": 3
+        },
+        "conv3": {
+            "name": "conv",
+            "number_of_kernels": 128,
+            "kernel_size": 3
+        },
+        "lrelu3": {
+            "name": "lrelu"
+        },
+        "maxpool3": {
+            "name": "max_pool",
+            "kernel_size": 2
+        },
+        "flatten4": {
+            "name": "flatten"
+        },
+        "linear5": {
+            "name": "linear",
+            "neurons": 256
+        },
+        "lrelu5": {
+            "name": "lrelu"
+        },
+        "linear6": {
+            "name": "linear",
+            "neurons": 128
+        },
+        "lrelu6": {
+            "name": "lrelu"
+        },
+        "output": {
+            "name": "linear",
+            "neurons": 4
+        }
+    },
+    "use_pretrained_model": false,
+    "loss": {
+        "type": "cross_entropy",
+        "use_weighted_loss": true,
+        "use_single_neuron": false
+    },
+    "optimizer": {
+        "name": "adam"
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "name": "accuracy",
+            "type": "simple"
+        },
+        "balanced_accuracy": {
+            "name": "accuracy",
+            "type": "balanced"
+        },
+        "precision": {
+            "name": "precision",
+            "class_result": "COVID"
+        },
+        "sensitivity": {
+            "name": "sensitivity",
+            "class_result": "COVID"
+        },
+        "f1_score": {
+            "name": "F1_score",
+            "class_result": "COVID"
+        },
+        "mcc": {
+            "name": "mcc"
+        }
+    },
+    "plots": [
+        "CM",
+        "LC",
+        "MS"
+    ],
+    "model_parameters": {
+        "parameters": {
+            "seq_model.conv1.weight": {
+                "trainable": 1568,
+                "total": 1568
+            },
+            "seq_model.conv1.bias": {
+                "trainable": 32,
+                "total": 32
+            },
+            "seq_model.conv2.weight": {
+                "trainable": 51200,
+                "total": 51200
+            },
+            "seq_model.conv2.bias": {
+                "trainable": 64,
+                "total": 64
+            },
+            "seq_model.conv3.weight": {
+                "trainable": 73728,
+                "total": 73728
+            },
+            "seq_model.conv3.bias": {
+                "trainable": 128,
+                "total": 128
+            },
+            "seq_model.linear5.weight": {
+                "trainable": 20480000,
+                "total": 20480000
+            },
+            "seq_model.linear5.bias": {
+                "trainable": 256,
+                "total": 256
+            },
+            "seq_model.linear6.weight": {
+                "trainable": 32768,
+                "total": 32768
+            },
+            "seq_model.linear6.bias": {
+                "trainable": 128,
+                "total": 128
+            },
+            "seq_model.output.weight": {
+                "trainable": 512,
+                "total": 512
+            },
+            "seq_model.output.bias": {
+                "trainable": 4,
+                "total": 4
+            }
+        },
+        "total_trainable_parameters": 20640388,
+        "total_parameters": 20640388
+    },
+    "train_labels": {
+        "0": {
+            "0": "48.1563",
+            "1": "17.0872",
+            "2": "6.3539",
+            "3": "28.4027"
+        }
+    },
+    "valid_labels": {
+        "0": {
+            "0": "48.1591",
+            "1": "17.0703",
+            "2": "6.3595",
+            "3": "28.4111"
+        }
+    },
+    "results": {
+        "best_model": {
+            "epoch_number": [
+                10
+            ],
+            "train": {
+                "loss": [
+                    1.2727560899537502
+                ],
+                "balanced_accuracy": [
+                    0.2638858206854061
+                ],
+                "mcc": [
+                    0.006546787109636957
+                ]
+            },
+            "valid": {
+                "loss": [
+                    1.2790072463961843
+                ],
+                "balanced_accuracy": [
+                    0.258925641530485
+                ],
+                "mcc": [
+                    0.0
+                ]
+            }
+        }
+    }
+}

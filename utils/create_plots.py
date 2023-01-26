@@ -22,7 +22,7 @@ def create_plots(y_true, y_pred, path_to_results, path_to_images, plots, classif
                 plots["plots_2"]["parameter_2"] = value
         classifiers: numpay array with numes of classifiers
         name_of_file:
-        training_metric_scores: (default=None) list of numpy array with each having shape of (folds, metrics, epochs).Each item in list should represent results of a network.
+        training_metric_scores: (default=None) list of numpy array with each having shape of (folds, metrics, 2, epochs).Each item in list should represent results of a network.
 
     Returns:
         output_config:

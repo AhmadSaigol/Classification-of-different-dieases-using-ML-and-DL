@@ -295,8 +295,9 @@ def load_images(path_to_images, image_ids, data_preprocessing):
             fnt_pointer = data_preprocessing[preprocessing]["function"]
             if verbose:
                 print(f"Applying Data Preprocessing: {preprocessing}")
-
-            img, fnt_config = fnt_pointer(img, data_preprocessing[preprocessing])            
+           
+            img, fnt_config = fnt_pointer(img, data_preprocessing[preprocessing])
+            #print(img.shape)            
             
             fnt_config["function"] = fnt_pointer
 

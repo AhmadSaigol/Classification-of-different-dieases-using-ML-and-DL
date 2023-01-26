@@ -239,9 +239,13 @@ def mlp(X, y, parameters, classes, name_of_file, save_model_path=None, path_to_m
             iter=0
             for X_train_batch, y_train_batch in train_dataloader:
                 
+                #print("y_true: ", y_train_batch.shape)
+
                 # get prediction on training data
                 y_pred_batch = model(X_train_batch)
  
+                #print("y_pred: ", y_pred_batch.shape)
+                
                 # calculate loss
                 loss = loss_fnt(y_pred_batch, y_train_batch)
                 
@@ -458,12 +462,12 @@ if __name__ == "__main__":
     X_valid = X[5:]
     X = X[0:5]
 
-    y = np.array(["aa", "b", "ac", "c", "da","b",
+    y = np.array(["aa", "b", "ac", "a", "da","b",
                     "cc","b", "dc", "a"]).reshape(-1,2)
     
     y_valid = np.array(["op", "a", "de", "b", "da","b"]).reshape(-1,2)            
 
-    classes =np.array(["b", "a", "c"])
+    classes =np.array(["b", "a"])
 
 
     network = {}
@@ -478,7 +482,7 @@ if __name__ == "__main__":
 
     
                 
-    save_model_path = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/code_test"
+    save_model_path = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results"
     
     valid_data = [X_valid, y_valid]
 

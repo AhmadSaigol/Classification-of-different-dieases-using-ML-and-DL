@@ -60,7 +60,7 @@ images_folder = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Me
 #-------------------------------- Results directory----------------------------
 results_folder = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results"
 
-run_name = "zernike"
+run_name = "hz_histo"
 
 run_path = os.path.join(results_folder, run_name)
 if not os.path.exists(run_path):
@@ -78,7 +78,7 @@ print("---------------------------- Binary Classification ----------------------
 print("Generating txt file for binary classification")
 path_to_multi_labels = os.path.join(images_folder, "train_multi.txt")
 path_to_binary_labels = os.path.join(images_folder, "train_binary.txt")
-change_txt_for_binary(path_to_multi_labels, path_to_binary_labels)
+#change_txt_for_binary(path_to_multi_labels, path_to_binary_labels)
 
 # result dir
 binary_path = os.path.join(run_path, "binary")
@@ -140,10 +140,10 @@ pipeline["data_preprocessing"]["map_to_grayscale"]["conversion"] ="BGR2GRAY"
 #pipeline["data_preprocessing"]["canny_edges"]["L2gradient"] = True
 
 # resize_image
-#pipeline["data_preprocessing"]["resize_image"] = {}
-#pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-#pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
-#pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
+pipeline["data_preprocessing"]["resize_image"] = {}
+pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
+pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
+pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
 
 
 # ---------------------------------set up feature extractor methods and parameters------------------------------------
@@ -175,24 +175,24 @@ pipeline["feature_extractors"] ={}
 #pipeline["feature_extractors"]["count_nonzeros"]["function"] = count_nonzeros
 
 # histogram
-#pipeline["feature_extractors"]["histogram"] = {}
-#pipeline["feature_extractors"]["histogram"]["function"] = calculate_histogram
-#pipeline["feature_extractors"]["histogram"]["bins"] = 10
+pipeline["feature_extractors"]["histogram"] = {}
+pipeline["feature_extractors"]["histogram"]["function"] = calculate_histogram
+pipeline["feature_extractors"]["histogram"]["bins"] = 256
 #pipeline["feature_extractors"]["histogram"]["range"] = (0,256)
 #pipeline["feature_extractors"]["histogram"]["density"] = False
 
 # haralick
-#pipeline["feature_extractors"]["haralick"] = {}
-#pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
-#pipeline["feature_extractors"]["haralick"]["blur"] = True
-#pipeline["feature_extractors"]["haralick"]["distance"] = 1
+pipeline["feature_extractors"]["haralick"] = {}
+pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
+pipeline["feature_extractors"]["haralick"]["blur"] = True
+pipeline["feature_extractors"]["haralick"]["distance"] = 1
 
 # zernike
 pipeline["feature_extractors"]["zernike_moments"] = {}
 pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
 pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
 pipeline["feature_extractors"]["zernike_moments"]["radius"] = 180
-#pipeline["feature_extractors"]["zernike_moments"]["degree"] = 8
+pipeline["feature_extractors"]["zernike_moments"]["degree"] = 8
 #pipeline["feature_extractors"]["zernike_moments"]["cm"] = (100, 100)
 
 #lbp
@@ -216,7 +216,7 @@ pipeline["normalize_features"]["norm_type"] = "StandardScaler"
 # ---------------- Classifiers ---------------------------
 pipeline["classifiers"] ={}
 
-# SVM
+# SVM changed iter
 pipeline["classifiers"]["svm"] = {}
 pipeline["classifiers"]["svm"]["function"] = svm 
 pipeline["classifiers"]["svm"]["trainAuto"] = True
@@ -240,14 +240,14 @@ pipeline["classifiers"]["RFTree"] = {}
 pipeline["classifiers"]["RFTree"]["function"] =rftree
 pipeline["classifiers"]["RFTree"]["ActiveVarCount"] =0 
 pipeline["classifiers"]["RFTree"]['MaxDepth'] = 20 
-pipeline["classifiers"]["RFTree"]['num_iters'] =  10000
+pipeline["classifiers"]["RFTree"]['num_iters'] =  1000
 
 # random forest tree
-pipeline["classifiers"]["Boosting"] = {}
-pipeline["classifiers"]["Boosting"]["function"] = boosting
-pipeline["classifiers"]["Boosting"]["boost_type"] = "REAL"
-pipeline["classifiers"]["Boosting"]['num_weak_classifiers'] =  100
-pipeline["classifiers"]["Boosting"]['max_depth'] = 20 
+#pipeline["classifiers"]["Boosting"] = {}
+#pipeline["classifiers"]["Boosting"]["function"] = boosting
+#pipeline["classifiers"]["Boosting"]["boost_type"] = "REAL"
+#pipeline["classifiers"]["Boosting"]['num_weak_classifiers'] =  100
+#pipeline["classifiers"]["Boosting"]['max_depth'] = 20 
 
 
 # ensemble learning
@@ -298,17 +298,17 @@ pipeline["plots"]["CM"]["function"] = plot_CM
 FE_batch_training (pipeline)
 
 #-------prediction---------
-path_to_json = os.path.join(binary_path, "train", "training_pipeline.json")
+#path_to_json = os.path.join(binary_path, "train", "training_pipeline.json")
 
 # test images
-print("Generating predictions on test data")
-test_images_path = os.path.join(images_folder, "test")
-test_save_path = os.path.join(binary_path, "test")
+#print("Generating predictions on test data")
+#test_images_path = os.path.join(images_folder, "test")
+#test_save_path = os.path.join(binary_path, "test")
 
-FE_batch_prediction(
-     path_to_images=test_images_path,
-     path_to_json=path_to_json,
-     save_path=test_save_path)
+#FE_batch_prediction(
+  #   path_to_images=test_images_path,
+   #  path_to_json=path_to_json,
+  #   save_path=test_save_path)
 
 
 # noisy test images
@@ -384,10 +384,10 @@ pipeline["data_preprocessing"]["map_to_grayscale"]["conversion"] ="BGR2GRAY"
 #pipeline["data_preprocessing"]["canny_edges"]["L2gradient"] = True
 
 # resize_image
-#pipeline["data_preprocessing"]["resize_image"] = {}
-#pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
-#pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
-#pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
+pipeline["data_preprocessing"]["resize_image"] = {}
+pipeline["data_preprocessing"]["resize_image"]["function"] = resize 
+pipeline["data_preprocessing"]["resize_image"]["output_size"] = (250, 250) #(width, height)
+pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
 
 
 # ---------------------------------set up feature extractor methods and parameters------------------------------------
@@ -410,7 +410,7 @@ pipeline["feature_extractors"] ={}
 #pipeline["feature_extractors"]["kurtosis"]["bias"] = True
 
 # RMS
-# pipeline["feature_extractors"]["RMS"] = {}
+#pipeline["feature_extractors"]["RMS"] = {}
 #pipeline["feature_extractors"]["RMS"]["function"] = calculate_contrast
 #pipeline["feature_extractors"]["RMS"]["method"] = "rms"
 
@@ -419,24 +419,24 @@ pipeline["feature_extractors"] ={}
 #pipeline["feature_extractors"]["count_nonzeros"]["function"] = count_nonzeros
 
 # histogram
-#pipeline["feature_extractors"]["histogram"] = {}
-#pipeline["feature_extractors"]["histogram"]["function"] = calculate_histogram
-#pipeline["feature_extractors"]["histogram"]["bins"] = 10
-#pipeline["feature_extractors"]["histogram"]["range"] = (0,256)
+pipeline["feature_extractors"]["histogram"] = {}
+pipeline["feature_extractors"]["histogram"]["function"] = calculate_histogram
+pipeline["feature_extractors"]["histogram"]["bins"] = 256
+pipeline["feature_extractors"]["histogram"]["range"] = (0,256)
 #pipeline["feature_extractors"]["histogram"]["density"] = False
 
 # haralick
-#pipeline["feature_extractors"]["haralick"] = {}
-#pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
-#pipeline["feature_extractors"]["haralick"]["blur"] = True
-# pipeline["feature_extractors"]["haralick"]["distance"] = 1
+pipeline["feature_extractors"]["haralick"] = {}
+pipeline["feature_extractors"]["haralick"]["function"] = calculate_haralick
+pipeline["feature_extractors"]["haralick"]["blur"] = True
+pipeline["feature_extractors"]["haralick"]["distance"] = 1
 
 # zernike
 pipeline["feature_extractors"]["zernike_moments"] = {}
 pipeline["feature_extractors"]["zernike_moments"]["function"] = calculate_zernike
 pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
 pipeline["feature_extractors"]["zernike_moments"]["radius"] = 180
-#pipeline["feature_extractors"]["zernike_moments"]["degree"] = 8
+pipeline["feature_extractors"]["zernike_moments"]["degree"] = 8
 #pipeline["feature_extractors"]["zernike_moments"]["cm"] = (100, 100)
 
 #lbp
@@ -486,14 +486,14 @@ pipeline["classifiers"]["RFTree"] = {}
 pipeline["classifiers"]["RFTree"]["function"] =rftree
 pipeline["classifiers"]["RFTree"]["ActiveVarCount"] =0 
 pipeline["classifiers"]["RFTree"]['MaxDepth'] = 20 
-pipeline["classifiers"]["RFTree"]['num_iters'] =  10000
+pipeline["classifiers"]["RFTree"]['num_iters'] =  1000
 
 # boosting
-pipeline["classifiers"]["Boosting"] = {}
-pipeline["classifiers"]["Boosting"]["function"] = boosting
-pipeline["classifiers"]["Boosting"]["boost_type"] = "REAL"
-pipeline["classifiers"]["Boosting"]['num_weak_classifiers'] =  200
-pipeline["classifiers"]["Boosting"]['max_depth'] = 10 
+#pipeline["classifiers"]["Boosting"] = {}
+#pipeline["classifiers"]["Boosting"]["function"] = boosting
+#pipeline["classifiers"]["Boosting"]["boost_type"] = "REAL"
+#pipeline["classifiers"]["Boosting"]['num_weak_classifiers'] =  200
+#pipeline["classifiers"]["Boosting"]['max_depth'] = 10 
 
 # ensemble learning
 #pipeline["classifiers"]["ensemble"] = {}
@@ -546,14 +546,14 @@ FE_batch_training (pipeline)
 path_to_json = os.path.join(multi_path, "train", "training_pipeline.json")
 
 # test images
-print("Generating predicitons on test data.")
-test_images_path = os.path.join(images_folder, "test")
-test_save_path = os.path.join(multi_path, "test")
+#print("Generating predicitons on test data.")
+#test_images_path = os.path.join(images_folder, "test")
+#test_save_path = os.path.join(multi_path, "test")
 
-FE_batch_prediction(
-     path_to_images=test_images_path,
-     path_to_json=path_to_json,
-     save_path=test_save_path)
+#FE_batch_prediction(
+ #    path_to_images=test_images_path,
+ #    path_to_json=path_to_json,
+  #   save_path=test_save_path)
 
 # noisy test images
 #print("Generating predicitons on noisy test data.")

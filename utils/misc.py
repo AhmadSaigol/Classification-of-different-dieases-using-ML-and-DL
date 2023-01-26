@@ -256,7 +256,7 @@ if __name__ == "__main__":
     generate_txt_file(y_pred, path, classifiers, name)
     """
 
-    path_to_txt = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train.txt"
-    save_path = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train_binary.txt"
+    path_to_txt = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/aug_dataset-21-01/data_augmented_combined.txt"
+    save_path = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/aug_dataset-21-01/data_augmented_combined_binary.txt"
 
     change_txt_for_binary(path_to_txt, save_path)

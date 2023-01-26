@@ -1,0 +1,241 @@
+{
+    "device": "cuda",
+    "path_to_results": "/kaggle/working/results/test/multi/train",
+    "path_to_images": "/kaggle/input/ismdatasetforclassificationofdieases/ism_dataset/raw_data/test",
+    "batch_size": 2000,
+    "num_epochs": 10,
+    "original_labels": {
+        "COVID": "17.08",
+        "Lung_Opacity": "28.41",
+        "Normal": "48.16",
+        "pneumonia": "6.36"
+    },
+    "num_folds": 5,
+    "classes": [
+        "Normal",
+        "COVID",
+        "pneumonia",
+        "Lung_Opacity"
+    ],
+    "data_preprocessing": {
+        "train": {
+            "t1": {
+                "name": "normalize",
+                "mean": 0,
+                "std": 255
+            },
+            "t2": {
+                "name": "resize",
+                "output_shape": [
+                    250,
+                    250
+                ]
+            }
+        },
+        "valid": {
+            "t1": {
+                "name": "normalize",
+                "mean": 0,
+                "std": 255
+            },
+            "t2": {
+                "name": "resize",
+                "output_shape": [
+                    250,
+                    250
+                ]
+            }
+        }
+    },
+    "input_shape": [
+        250,
+        250
+    ],
+    "model": {
+        "flatten": {
+            "name": "flatten"
+        },
+        "linear1": {
+            "name": "linear",
+            "neurons": 10
+        },
+        "relu1": {
+            "name": "relu"
+        },
+        "linear2": {
+            "name": "linear",
+            "neurons": 8,
+            "bias": false
+        },
+        "lrelu2": {
+            "name": "lrelu",
+            "alpha": 1
+        },
+        "linear3": {
+            "name": "linear",
+            "neurons": 4
+        },
+        "relu3": {
+            "name": "relu"
+        }
+    },
+    "loss": {
+        "type": "cross_entropy",
+        "use_weighted_loss": true,
+        "use_single_neuron": false
+    },
+    "optimizer": {
+        "name": "adam"
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "name": "accuracy",
+            "type": "simple"
+        },
+        "balanced_accuracy": {
+            "name": "accuracy",
+            "type": "balanced"
+        },
+        "precision": {
+            "name": "precision",
+            "class_result": "COVID"
+        },
+        "sensitivity": {
+            "name": "sensitivity",
+            "class_result": "COVID"
+        },
+        "f1_score": {
+            "name": "F1_score",
+            "class_result": "COVID"
+        },
+        "mcc": {
+            "name": "mcc"
+        }
+    },
+    "plots": [
+        "CM",
+        "LC",
+        "MS"
+    ],
+    "train_labels": {
+        "0": {
+            "0": "48.24",
+            "1": "17.04",
+            "2": "6.36",
+            "3": "28.36"
+        },
+        "1": {
+            "0": "48.04",
+            "1": "17.04",
+            "2": "6.45",
+            "3": "28.47"
+        },
+        "2": {
+            "0": "48.22",
+            "1": "16.92",
+            "2": "6.25",
+            "3": "28.62"
+        },
+        "3": {
+            "0": "48.04",
+            "1": "17.25",
+            "2": "6.40",
+            "3": "28.31"
+        },
+        "4": {
+            "0": "48.25",
+            "1": "17.17",
+            "2": "6.31",
+            "3": "28.27"
+        }
+    },
+    "valid_labels": {
+        "0": {
+            "0": "47.84",
+            "1": "17.25",
+            "2": "6.32",
+            "3": "28.59"
+        },
+        "1": {
+            "0": "48.64",
+            "1": "17.25",
+            "2": "5.97",
+            "3": "28.15"
+        },
+        "2": {
+            "0": "47.90",
+            "1": "17.75",
+            "2": "6.79",
+            "3": "27.55"
+        },
+        "3": {
+            "0": "48.61",
+            "1": "16.42",
+            "2": "6.17",
+            "3": "28.80"
+        },
+        "4": {
+            "0": "47.78",
+            "1": "16.75",
+            "2": "6.53",
+            "3": "28.94"
+        }
+    },
+    "results": {
+        "best_model": {
+            "epoch_number": [
+                9,
+                0,
+                0,
+                8,
+                0
+            ],
+            "train": {
+                "loss": [
+                    0.7894409705180074,
+                    1.3968254163007516,
+                    1.4242445090362044,
+                    0.8275348181845659,
+                    1.39532480152556
+                ],
+                "balanced_accuracy": [
+                    0.25,
+                    0.24985301425073586,
+                    0.240249400699192,
+                    0.30746105334840246,
+                    0.25
+                ],
+                "mcc": [
+                    0.0,
+                    -0.005635439113510444,
+                    -0.029322086161774785,
+                    0.23246684876123896,
+                    0.0
+                ]
+            },
+            "valid": {
+                "loss": [
+                    0.9485123286357098,
+                    1.3862928646383945,
+                    1.3862953883828457,
+                    0.9866362736201187,
+                    1.386294429779616
+                ],
+                "balanced_accuracy": [
+                    0.29533372711163614,
+                    0.29533372711163614,
+                    0.29533372711163614,
+                    0.33970215542553645,
+                    0.29533372711163614
+                ],
+                "mcc": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.11002893336867435,
+                    0.0
+                ]
+            }
+        }
+    }
+}
