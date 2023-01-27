@@ -1,0 +1,451 @@
+{
+    "device": "cpu",
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/documents/presentation/phase2/ResNet18/online aug/ResNet_online_21-01/multi/train",
+    "path_to_images": "/kaggle/input/ismdatasetforclassificationofdieases/ism_dataset/raw_data/train",
+    "batch_size": 32,
+    "read_img_color": "rgb",
+    "num_epochs": 50,
+    "path_to_labels": "/kaggle/input/ismdatasetforclassificationofdieases/ism_dataset/raw_data/train_multi.txt",
+    "original_labels": {
+        "COVID": "17.0821",
+        "Lung_Opacity": "28.4052",
+        "Normal": "48.1571",
+        "pneumonia": "6.3556"
+    },
+    "split_type": "simpleStratified",
+    "test_size": 0.3,
+    "classes": [
+        "Normal",
+        "COVID",
+        "pneumonia",
+        "Lung_Opacity"
+    ],
+    "data_preprocessing": {
+        "train": {
+            "normalize_0_1": {
+                "name": "normalize",
+                "mean": 0,
+                "std": 255
+            },
+            "random_apply_rotation": {
+                "name": "random_apply_rotation",
+                "degrees": 15,
+                "expand": true
+            },
+            "random_apply_affine": {
+                "name": "random_apply_affine",
+                "degrees": [
+                    -15,
+                    15
+                ],
+                "scale": [
+                    0.1,
+                    0.3
+                ],
+                "translate": [
+                    0.1,
+                    0.3
+                ]
+            },
+            "random_crop": {
+                "name": "random_resized_crop",
+                "output_shape": 224
+            },
+            "horizontal_flip": {
+                "name": "random_horizontal_flip"
+            },
+            "vertical_flip": {
+                "name": "random_vertical_flip"
+            },
+            "normalize_model_values": {
+                "name": "normalize",
+                "mean": [
+                    0.485,
+                    0.456,
+                    0.406
+                ],
+                "std": [
+                    0.229,
+                    0.224,
+                    0.225
+                ]
+            }
+        },
+        "valid": {
+            "normalize_0_1": {
+                "name": "normalize",
+                "mean": 0,
+                "std": 255
+            },
+            "center_crop": {
+                "name": "center_crop",
+                "output_shape": [
+                    224,
+                    224
+                ]
+            },
+            "normalize_model_values": {
+                "name": "normalize",
+                "mean": [
+                    0.485,
+                    0.456,
+                    0.406
+                ],
+                "std": [
+                    0.229,
+                    0.224,
+                    0.225
+                ]
+            }
+        }
+    },
+    "input_shape": [
+        224,
+        224,
+        3
+    ],
+    "model": {
+        "resnet18": {
+            "name": "resnet18",
+            "num_output_neurons": 4
+        }
+    },
+    "use_pretrained_model": true,
+    "loss": {
+        "type": "cross_entropy",
+        "use_weighted_loss": true,
+        "use_single_neuron": false
+    },
+    "optimizer": {
+        "name": "adam"
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "name": "accuracy",
+            "type": "simple"
+        },
+        "balanced_accuracy": {
+            "name": "accuracy",
+            "type": "balanced"
+        },
+        "precision": {
+            "name": "precision",
+            "class_result": "COVID"
+        },
+        "sensitivity": {
+            "name": "sensitivity",
+            "class_result": "COVID"
+        },
+        "f1_score": {
+            "name": "F1_score",
+            "class_result": "COVID"
+        },
+        "mcc": {
+            "name": "mcc"
+        }
+    },
+    "plots": [
+        "CM",
+        "LC",
+        "MS"
+    ],
+    "model_parameters": {
+        "parameters": {
+            "seq_model.conv1.weight": {
+                "trainable": 9408,
+                "total": 0
+            },
+            "seq_model.bn1.weight": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.bn1.bias": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.layer1.0.conv1.weight": {
+                "trainable": 36864,
+                "total": 0
+            },
+            "seq_model.layer1.0.bn1.weight": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.layer1.0.bn1.bias": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.layer1.0.conv2.weight": {
+                "trainable": 36864,
+                "total": 0
+            },
+            "seq_model.layer1.0.bn2.weight": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.layer1.0.bn2.bias": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.layer1.1.conv1.weight": {
+                "trainable": 36864,
+                "total": 0
+            },
+            "seq_model.layer1.1.bn1.weight": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.layer1.1.bn1.bias": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.layer1.1.conv2.weight": {
+                "trainable": 36864,
+                "total": 0
+            },
+            "seq_model.layer1.1.bn2.weight": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.layer1.1.bn2.bias": {
+                "trainable": 64,
+                "total": 0
+            },
+            "seq_model.layer2.0.conv1.weight": {
+                "trainable": 73728,
+                "total": 0
+            },
+            "seq_model.layer2.0.bn1.weight": {
+                "trainable": 128,
+                "total": 0
+            },
+            "seq_model.layer2.0.bn1.bias": {
+                "trainable": 128,
+                "total": 0
+            },
+            "seq_model.layer2.0.conv2.weight": {
+                "trainable": 147456,
+                "total": 0
+            },
+            "seq_model.layer2.0.bn2.weight": {
+                "trainable": 128,
+                "total": 0
+            },
+            "seq_model.layer2.0.bn2.bias": {
+                "trainable": 128,
+                "total": 0
+            },
+            "seq_model.layer2.0.downsample.0.weight": {
+                "trainable": 8192,
+                "total": 0
+            },
+            "seq_model.layer2.0.downsample.1.weight": {
+                "trainable": 128,
+                "total": 0
+            },
+            "seq_model.layer2.0.downsample.1.bias": {
+                "trainable": 128,
+                "total": 0
+            },
+            "seq_model.layer2.1.conv1.weight": {
+                "trainable": 147456,
+                "total": 0
+            },
+            "seq_model.layer2.1.bn1.weight": {
+                "trainable": 128,
+                "total": 0
+            },
+            "seq_model.layer2.1.bn1.bias": {
+                "trainable": 128,
+                "total": 0
+            },
+            "seq_model.layer2.1.conv2.weight": {
+                "trainable": 147456,
+                "total": 0
+            },
+            "seq_model.layer2.1.bn2.weight": {
+                "trainable": 128,
+                "total": 0
+            },
+            "seq_model.layer2.1.bn2.bias": {
+                "trainable": 128,
+                "total": 0
+            },
+            "seq_model.layer3.0.conv1.weight": {
+                "trainable": 294912,
+                "total": 0
+            },
+            "seq_model.layer3.0.bn1.weight": {
+                "trainable": 256,
+                "total": 0
+            },
+            "seq_model.layer3.0.bn1.bias": {
+                "trainable": 256,
+                "total": 0
+            },
+            "seq_model.layer3.0.conv2.weight": {
+                "trainable": 589824,
+                "total": 0
+            },
+            "seq_model.layer3.0.bn2.weight": {
+                "trainable": 256,
+                "total": 0
+            },
+            "seq_model.layer3.0.bn2.bias": {
+                "trainable": 256,
+                "total": 0
+            },
+            "seq_model.layer3.0.downsample.0.weight": {
+                "trainable": 32768,
+                "total": 0
+            },
+            "seq_model.layer3.0.downsample.1.weight": {
+                "trainable": 256,
+                "total": 0
+            },
+            "seq_model.layer3.0.downsample.1.bias": {
+                "trainable": 256,
+                "total": 0
+            },
+            "seq_model.layer3.1.conv1.weight": {
+                "trainable": 589824,
+                "total": 0
+            },
+            "seq_model.layer3.1.bn1.weight": {
+                "trainable": 256,
+                "total": 0
+            },
+            "seq_model.layer3.1.bn1.bias": {
+                "trainable": 256,
+                "total": 0
+            },
+            "seq_model.layer3.1.conv2.weight": {
+                "trainable": 589824,
+                "total": 0
+            },
+            "seq_model.layer3.1.bn2.weight": {
+                "trainable": 256,
+                "total": 0
+            },
+            "seq_model.layer3.1.bn2.bias": {
+                "trainable": 256,
+                "total": 0
+            },
+            "seq_model.layer4.0.conv1.weight": {
+                "trainable": 1179648,
+                "total": 0
+            },
+            "seq_model.layer4.0.bn1.weight": {
+                "trainable": 512,
+                "total": 0
+            },
+            "seq_model.layer4.0.bn1.bias": {
+                "trainable": 512,
+                "total": 0
+            },
+            "seq_model.layer4.0.conv2.weight": {
+                "trainable": 2359296,
+                "total": 0
+            },
+            "seq_model.layer4.0.bn2.weight": {
+                "trainable": 512,
+                "total": 0
+            },
+            "seq_model.layer4.0.bn2.bias": {
+                "trainable": 512,
+                "total": 0
+            },
+            "seq_model.layer4.0.downsample.0.weight": {
+                "trainable": 131072,
+                "total": 0
+            },
+            "seq_model.layer4.0.downsample.1.weight": {
+                "trainable": 512,
+                "total": 0
+            },
+            "seq_model.layer4.0.downsample.1.bias": {
+                "trainable": 512,
+                "total": 0
+            },
+            "seq_model.layer4.1.conv1.weight": {
+                "trainable": 2359296,
+                "total": 0
+            },
+            "seq_model.layer4.1.bn1.weight": {
+                "trainable": 512,
+                "total": 0
+            },
+            "seq_model.layer4.1.bn1.bias": {
+                "trainable": 512,
+                "total": 0
+            },
+            "seq_model.layer4.1.conv2.weight": {
+                "trainable": 2359296,
+                "total": 0
+            },
+            "seq_model.layer4.1.bn2.weight": {
+                "trainable": 512,
+                "total": 0
+            },
+            "seq_model.layer4.1.bn2.bias": {
+                "trainable": 512,
+                "total": 0
+            },
+            "seq_model.fc.weight": {
+                "trainable": 2048,
+                "total": 2048
+            },
+            "seq_model.fc.bias": {
+                "trainable": 4,
+                "total": 4
+            }
+        },
+        "total_trainable_parameters": 2052,
+        "total_parameters": 11178564
+    },
+    "train_labels": {
+        "0": {
+            "0": "48.1563",
+            "1": "17.0872",
+            "2": "6.3539",
+            "3": "28.4027"
+        }
+    },
+    "valid_labels": {
+        "0": {
+            "0": "48.1591",
+            "1": "17.0703",
+            "2": "6.3595",
+            "3": "28.4111"
+        }
+    },
+    "results": {
+        "best_model": {
+            "epoch_number": [
+                43
+            ],
+            "train": {
+                "loss": [
+                    0.907393131273405
+                ],
+                "balanced_accuracy": [
+                    0.5793028727905516
+                ],
+                "mcc": [
+                    0.4453917638163707
+                ]
+            },
+            "valid": {
+                "loss": [
+                    0.6393024085731717
+                ],
+                "balanced_accuracy": [
+                    0.7596386062071345
+                ],
+                "mcc": [
+                    0.6409924992519226
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,212 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train",
+        "path_to_labels": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_multi.txt",
+        "split_type": "simpleStratified",
+        "classes": [
+            "Normal",
+            "COVID",
+            "pneumonia",
+            "Lung_Opacity"
+        ]
+    },
+    "data_preprocessing": {
+        "map_to_grayscale": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        }
+    },
+    "batch_size": 500,
+    "save_to_pkl": true,
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/zernike/multiclass/train",
+    "original_labels": {
+        "COVID": "17.08",
+        "Lung_Opacity": "28.41",
+        "Normal": "48.16",
+        "pneumonia": "6.36"
+    },
+    "processed_labels": {
+        "train": {
+            "0": {
+                "COVID": "17.09",
+                "Lung_Opacity": "28.40",
+                "Normal": "48.16",
+                "pneumonia": "6.35"
+            }
+        },
+        "valid": {
+            "0": {
+                "COVID": "17.07",
+                "Lung_Opacity": "28.41",
+                "Normal": "48.16",
+                "pneumonia": "6.36"
+            }
+        }
+    },
+    "feature_extractors": {
+        "zernike_moments": {
+            "blur": true,
+            "radius": 180,
+            "degree": 8,
+            "cm": "image's centre of mass",
+            "function": "calculate_zernike"
+        }
+    },
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                0.31830988618374656,
+                0.0066257242394520575,
+                0.20856315812634799,
+                0.03526174856696268,
+                0.08125003357691449,
+                0.030776391163998686,
+                0.10664062378966171,
+                0.044893469606929595,
+                0.07903587711674868,
+                0.04507661268641372,
+                0.027597731500457304,
+                0.026444180089200395,
+                0.03543694100298608,
+                0.0389319399905211,
+                0.02759161222205238,
+                0.031897602076704556,
+                0.046181326638056824,
+                0.027064959085869634,
+                0.05472024424920309,
+                0.02745839994878246,
+                0.08959301450471595,
+                0.036022769213486766,
+                0.05272582932101657,
+                0.019124010166616908,
+                0.04262450605191309
+            ]
+        ],
+        "var": [
+            [
+                1.6094479345334274e-27,
+                1.9885966237848823e-05,
+                0.0037145708679543203,
+                0.000768791807919159,
+                0.0016239311070971206,
+                0.0003770280345284091,
+                0.001978328928040788,
+                0.001105229917622983,
+                0.0005241292272894314,
+                0.0006053892081158916,
+                0.0004365256074725122,
+                0.00024925753409584135,
+                0.0008641136327264229,
+                0.0006701600256358253,
+                0.0003857852039252181,
+                0.0004378074536103619,
+                0.0004655435155469718,
+                0.0002370854403778885,
+                0.0005864674006046148,
+                0.00026214772242488544,
+                0.0014114079419777676,
+                0.0004746817005190192,
+                0.0004992229622309484,
+                0.00016454794953391872,
+                0.00022210998977321912
+            ]
+        ],
+        "scale": [
+            [
+                1.0,
+                0.004459368367588488,
+                0.06094727941388623,
+                0.027727095194397103,
+                0.040298028575813986,
+                0.019417209751362557,
+                0.044478409684259035,
+                0.03324499838506513,
+                0.022893868770686866,
+                0.024604658260497982,
+                0.02089319524324875,
+                0.01578789200925321,
+                0.02939580978177711,
+                0.0258874491913712,
+                0.019641415527533092,
+                0.020923848919602767,
+                0.021576457437377707,
+                0.015397579042755016,
+                0.024217089020041504,
+                0.016190976574156527,
+                0.03756870961289152,
+                0.02178719120306744,
+                0.022343297926468875,
+                0.012827624469632665,
+                0.014903354983802108
+            ]
+        ]
+    },
+    "classifiers": {
+        "svm": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/zernike/multiclass/train/0/models"
+            },
+            "svm_type": "C_SVC",
+            "kernel": "RBF",
+            "Gamma": 0.03375,
+            "Degree": 0.0,
+            "P": 0.0,
+            "Nu": 0.0,
+            "Coef0": 0.0,
+            "C": 12.5,
+            "max_nums_iter": 10000,
+            "epsilon": 2.220446049250313e-16,
+            "function": "svm"
+        },
+        "RFTree": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/zernike/multiclass/train/0/models"
+            },
+            "ActiveVarCount": 0,
+            "MaxDepth": 20,
+            "max_nums_iter": 10000,
+            "epsilon": 1e-06,
+            "function": "rftree"
+        },
+        "Boosting": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/zernike/multiclass/train/0/models"
+            },
+            "boost_type": "REAL",
+            "num_weak_classifiers": 200,
+            "max_depth": 10,
+            "function": "boosting"
+        }
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "type": "simple",
+            "function": "accuracy"
+        },
+        "balanced_accuracy": {
+            "type": "balanced",
+            "function": "accuracy"
+        },
+        "precision": {
+            "average": "weighted",
+            "function": "precision"
+        },
+        "sensitivity": {
+            "average": "weighted",
+            "function": "sensitivity"
+        },
+        "f1_score": {
+            "average": "weighted",
+            "function": "F1_score"
+        },
+        "mcc": {
+            "function": "mcc"
+        }
+    },
+    "plots": {
+        "CM": {
+            "function": "plot_CM"
+        }
+    }
+}

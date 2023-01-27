@@ -1,7 +1,7 @@
 {
     "device": "cpu",
     "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/documents/presentation/phase2/ResNet50/offlien aug/ResNet50_offline_21-01/binary/noisy_data-21-01",
-    "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/aug_dataset-21-01/combined",
+    "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/noisy_dataset-21-01/final",
     "batch_size": 32,
     "read_img_color": "rgb",
     "num_epochs": 50,

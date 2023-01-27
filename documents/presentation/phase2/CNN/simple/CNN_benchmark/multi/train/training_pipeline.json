@@ -1,6 +1,6 @@
 {
     "device": "cpu",
-    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/Phase2_results/local_comp/CNN_benchmark/multi/train",
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/documents/presentation/phase2/CNN/simple/CNN_benchmark/multi/train",
     "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train",
     "batch_size": 32,
     "num_epochs": 25,
@@ -248,5 +248,6 @@
                 ]
             }
         }
-    }
+    },
+    "read_img_color": "gray"
 }

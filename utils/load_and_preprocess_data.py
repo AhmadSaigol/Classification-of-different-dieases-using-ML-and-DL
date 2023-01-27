@@ -284,8 +284,8 @@ def load_images(path_to_images, image_ids, data_preprocessing):
         if index == 0:
             temp_shape = img.shape
         
-        if img.shape != temp_shape:
-            print(f"Warning: Different shape encountered. Image ID: {img_id} shape: {img.shape}")
+        #if img.shape != temp_shape:
+           # print(f"Warning: Different shape encountered. Image ID: {img_id} shape: {img.shape}")
 
         img = np.expand_dims(img, axis=0)  
 

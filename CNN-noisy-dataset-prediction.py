@@ -25,6 +25,7 @@ import pandas as pd
 
 import time
 import datetime
+from utils.misc import change_txt_for_binary
 
 
 def label_encoder(y, classes, to_numbers):
@@ -88,7 +89,7 @@ class ImageDataset(Dataset):
         
         # read image 
         image = read_image(img_path, self.color).float()
-        
+
         if self.img_labels.shape[-1]==2:
             label = self.img_labels[index, 1].astype(int)
         else:
@@ -96,7 +97,7 @@ class ImageDataset(Dataset):
             
         if self.transform:
             image = self.transform(image)
-            
+
         return image, label
 
 class Model(nn.Module):
@@ -1012,23 +1013,780 @@ def CNN_prediction(path_to_images, path_to_json, save_path):
     print("\nGenerated Predictions Successfully")
 
 
-if __name__ == "__main__":
+def precision(y_true, y_pred, parameters):
+    """
+    Calculates precision
+    
+    Parameters:
+        y_true: numpy array of shape (num_images,)
+        y_pred: numpy array of shape (num_images,)
+        parameters: dictionary with the following keys:
+            class_result: for binary classes, name of class for which metric will be calculated
+            average: for mulitlcass, how to calculate metrics for each class: 'micro', 'macro', 'weighted' 
+    
+    Returns:
+        score: float
+        config:
 
-    path_to_json = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/documents/presentation/phase2/ResNet50/offlien aug/ResNet50_offline_21-01/binary/train/training_pipeline.json"
-    save_path = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/documents/presentation/phase2/ResNet50/offlien aug/ResNet50_offline_21-01/binary/noisy_data-21-01"
-    path_to_noisy_data = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/aug_dataset-21-01/combined"
+    Additional Notes:
+        precision = TP/ TP+FP
+
+        average:
+            'micro': Calculate metrics globally by counting the total true positives, false negatives and false positives
+            'macro': Calculate metrics for each label, and find their unweighted mean
+            'weighted': Calculate metrics for each label, and find their average weighted by support (the number of true instances for each label)
+
+    """
+    config = {}
+
+    if len(np.unique(y_true)) <= 2 and len(np.unique(y_pred)) <= 2:
+
+        if "class_result" in parameters.keys():
+            pos_label = parameters["class_result"]
+        else:
+           ytl = np.unique(y_true)
+           ypl = np.unique(y_pred)
+           labels = np.unique(np.concatenate((ytl, ypl))) 
+           pos_label = labels[0]
+        
+        config["class_result"] = pos_label
+
+        score = precision_score(y_true=y_true, y_pred=y_pred, pos_label=pos_label)
+    
+    else:
+        
+        if "average" in parameters.keys():
+            average = parameters["average"]
+        else:
+            average = "weighted"
+
+        config["average"] = average
+
+        score = precision_score(y_true=y_true, y_pred=y_pred, average=average)
+
+    return score, config
+def F1_score(y_true, y_pred, parameters):
+    """
+    Calculates f1 score
+    
+    Parameters:
+        y_true: numpy array of shape (num_images,)
+        y_pred: numpy array of shape (num_images,)
+        parameters: dictionary with the following keys:
+            class_result: for binary classes, name of class for which metric will be calculated
+            average: for mulitlcass, how to calculate metrics for each class: 'micro', 'macro', 'weighted' 
+    
+    Returns:
+        score: float
+        config:
+
+    Additional Notes:
+        f1_score = 2 * (Precision * Recall)/ (Precision + Recall)
+
+        average:
+            'micro': Calculate metrics globally by counting the total true positives, false negatives and false positives
+            'macro': Calculate metrics for each label, and find their unweighted mean
+            'weighted': Calculate metrics for each label, and find their average weighted by support (the number of true instances for each label)
+
+    """
+
+    config = {}
+
+    if len(np.unique(y_true)) <= 2 and len(np.unique(y_pred)) <= 2:
+
+        if "class_result" in parameters.keys():
+            pos_label = parameters["class_result"]
+        else:
+           ytl = np.unique(y_true)
+           ypl = np.unique(y_pred)
+           labels = np.unique(np.concatenate((ytl, ypl))) 
+           pos_label = labels[0]
+        
+        config["class_result"] = pos_label
+
+        score = f1_score(y_true=y_true, y_pred=y_pred, pos_label=pos_label)
+    
+    else:
+        
+        if "average" in parameters.keys():
+            average = parameters["average"]
+        else:
+            average = "weighted"
+
+        config["average"] = average
+
+        score = f1_score(y_true=y_true, y_pred=y_pred, average=average)
+
+    return score, config
+def sensitivity(y_true, y_pred, parameters):
+    """
+    Calculates sensitivity (recall)
+    
+    Parameters:
+        y_true: numpy array of shape (num_images,)
+        y_pred: numpy array of shape (num_images,)
+        parameters: dictionary with the following keys:
+            class_result: for binary classes, name of class for which metric will be calculated
+            average: for mulitlcass, how to calculate metrics for each class: 'micro', 'macro', 'weighted' 
+    
+    Returns:
+        score: float
+        config:
+
+    Additional Notes:
+        recall = TP/ TP+FN
+
+        average:
+            'micro': Calculate metrics globally by counting the total true positives, false negatives and false positives
+            'macro': Calculate metrics for each label, and find their unweighted mean
+            'weighted': Calculate metrics for each label, and find their average weighted by support (the number of true instances for each label)
+
+    """
+
+    config = {}
+
+    if len(np.unique(y_true)) <= 2 and len(np.unique(y_pred)) <= 2:
+
+        if "class_result" in parameters.keys():
+            pos_label = parameters["class_result"]
+        else:
+           ytl = np.unique(y_true)
+           ypl = np.unique(y_pred)
+           labels = np.unique(np.concatenate((ytl, ypl))) 
+           pos_label = labels[0]
+        
+        config["class_result"] = pos_label
+
+        score = recall_score(y_true=y_true, y_pred=y_pred, pos_label=pos_label)
+    
+    else:
+        
+        if "average" in parameters.keys():
+            average = parameters["average"]
+        else:
+            average = "weighted"
+
+        config["average"] = average
+
+        score = recall_score(y_true=y_true, y_pred=y_pred, average=average)
+
+    return score, config
+def mcc(y_true, y_pred, parameters):
+    """
+    Calculates mcc
+    
+    Parameters:
+        y_true: numpy array of shape (num_images,)
+        y_pred: numpy array of shape (num_images,)
+        parameters: dictionary with the following keys:
+            
+    Returns:
+        score: float
+        config:
+
+    Additional Notes:
+        Binary:
+        
+            +1 -> prefect, 0-> random, -1 -> inverse 
+
+            mcc = (tp*tn) - (fp*fn) / sqrt( (tp+fp)*(tp+fn)*(tn+fp)*(tn+fn)  )
+
+        Multiclass:
+            
+            +1 -> perfect, between -1 and 0 -> min
+
+            for more info, see
+                "https://scikit-learn.org/stable/modules/model_evaluation.html#matthews-corrcoef"
+    """
+
+    config = {}
+
+    score = matthews_corrcoef(y_true=y_true, y_pred=y_pred)
+
+    return score, config
+def accuracy(y_true, y_pred, parameters):
+    """
+    Calculates accuracy
+    
+    Parameters:
+        y_true: numpy array of shape (num_images,)
+        y_pred: numpy array of shape (num_images,)
+        parameters: dictionary with the following keys:
+            type: "simple" (default) or "balanced"
+    
+    Returns:
+        score: float
+        config:
+
+    Additional Notes:
+
+        Simple Accuracy: fraction of labels that are equal.
+        Balanced Accuracy: 
+            Binary class: equal to the arithmetic mean of sensitivity (true positive rate) 
+                            and specificity (true negative rate)
+                             = 1/2 ( (TP/TP+FN) + (TN/TN+FP))
+
+            Multiclass: the macro-average of recall scores per class
+                        recall for each class and then take the mean
+                        recall = TP /(TP+FN)
+
+            if the classifier predicts same label for all examples, the score will be equal to 1/num_classes (for binary: 0.5)
+            for more info, see
+                "https://scikit-learn.org/stable/modules/model_evaluation.html#balanced-accuracy-score"
+    """
+
+    config={}
+    if "type" in parameters.keys():
+        accu_type = parameters["type"]
+    else:
+        accu_type = "simple"
+
+    config["type"] = accu_type
+    
+    if accu_type == "simple":
+        score = accuracy_score(y_true=y_true, y_pred=y_pred) 
+    elif accu_type == "balanced":
+        score = balanced_accuracy_score(y_true=y_true, y_pred=y_pred)
+    else:
+        raise ValueError("Unknown Value encountered for parameter 'type' while calculating accuracy")#
+
+    
+    return score, config
+def evaluate_metrics(y_true, y_pred, metrics, y_pred_probs=None):
+    """
+    Applies each metric and generates evaluation score
+
+    Parameters:
+        y_true: numpy array of shape (folds, num_images, 2)
+        y_pred: numpy array of shape (folds, num_images, 2)
+        metrics: dictionary with following structure:
+            metrics["metrics_1"]["name"] = name of metric
+            metrics["metrics_1"]["parameter_1"] = value
+            metrics["metrics_1"]["parameter_2"] = value
+
+            metrics["metrics_2"]["name"] = name of metric
+            metrics["metrics_2"]["parameter_1"] = value
+            metrics["metrics_2"]["parameter_2"] = value
+            
+    
+    currently, supports "accuracy", "mcc", "precision", "sensitivity", "F1_score"
+  
+
+    Returns:
+        scores:numpy array of shape (folds, metrics)
+        output_config:
+       
+    Additional Notes:
+
+    """
+    # check whether correct shapes of y_* are provided or not
+
+    if len(y_true.shape) !=3:
+        raise ValueError("Shape of y_true is not correct.")
+
+    if len(y_pred.shape) == 3:
+        num_folds = y_pred.shape[0]
+        met_keys = list(metrics.keys())
+        num_metrics = len(met_keys)
+    else:
+        raise ValueError("Shape of y_pred is not correct.")
+
+    config={}
+
+    list_of_metrics = []
+
+    scores = np.full((num_folds, num_metrics), 1000, dtype=np.float32)
+    
+    flag = True
+
+
+    for fold_no in range(num_folds):
+
+        for metric_no in range(num_metrics):
+
+            print(f"Processing: Fold No: {fold_no} Metric: {met_keys[metric_no]}")
+
+            metric_name = metrics[met_keys[metric_no]]["name"]
+            
+            if metric_name == "accuracy":
+                fnt_pointer = accuracy
+            elif metric_name == "mcc":
+                fnt_pointer = mcc
+            elif metric_name == "precision":
+                fnt_pointer = precision
+            elif metric_name =="sensitivity":
+                fnt_pointer = sensitivity
+            elif metric_name =="F1_score":
+                fnt_pointer = F1_score
+            else:
+                raise ValueError("Unknown metric found")
+
+            
+            metric_score, fnt_config = fnt_pointer(y_true=y_true[fold_no, :, 1], 
+                                                    y_pred=y_pred[fold_no, :, 1], 
+                                                    parameters=metrics[met_keys[metric_no]])
+
+
+            scores[fold_no, metric_no] = metric_score
+
+            # setup output config
+            if flag:
+                fnt_config["name"] = metric_name
+                config[met_keys[metric_no]] = {} 
+                config[met_keys[metric_no]] = fnt_config
+
+                list_of_metrics.append(met_keys[metric_no])
+
+        flag=False
+    
+    return scores, config, list_of_metrics
+
+def plot_MS(y_true, y_pred, path_to_results, path_to_images):
+    """
+    Plots and save missclassified samples
+    
+    y_true: numpy array of shape (num_of_images,2)
+    y_pred: numpy array of shape (num_of_images,2)
+    path_to_results: path where plot will be saved
+    path_to_images: folder containing images
+
+
+    Only works with (num_samples)^2 = whole number
+
+    """
+    
+    num_samples_to_plot = 4
+
+    classes = np.unique(y_true[:,1])
+
+    if np.sqrt(num_samples_to_plot) %1 !=0:
+        raise ValueError("Currently, this function only supports those number of samples whose sqaure is a whole number")
+
+    
+    
+    cm = create_dict(classes)
+
+    for true_label in classes:
+        
+        # get all images for a class in y_true
+        pos = y_true[np.where(y_true[:,1] == true_label)]
+        
+        pred_classes = classes.tolist()
+      
+        for sample in pos:
+            
+            # find given image in y_pred
+            img_id = y_pred[np.where(y_pred[:,0] == sample[0])]
+            
+            # store img_ids in their respective col
+            for pred_label in pred_classes:
+                if img_id[0,1] == pred_label:
+                    cm[true_label][pred_label].append(img_id[0,0])
+
+            # check whether there are requried number of samples in each col
+            for l in cm[true_label].keys():
+                
+                if l in pred_classes and len(cm[true_label][l]) == num_samples_to_plot:
+                    pred_classes.remove(l)
+                
+            if not len(pred_classes):
+                break
+    
+    plot_CM_images(cm, num_samples_to_plot, path_to_images, path_to_results)
+def plot_CM_images(cm, num_samples, path_to_images, path_to_results):
+    """
+    Plots and saves images
+    
+    """
+    num_classes = len(cm.keys())
+    
+    num_imgs_axis = int(np.sqrt(num_samples)) 
+    
+    num_rows= num_imgs_axis * num_classes
+    num_cols = num_imgs_axis * num_classes
+
+    fig, axes = plt.subplots(num_rows, num_cols, figsize=(10,10))
+    
+    fig.suptitle("Confusion Matrix of misclassified images")
+    plt.subplots_adjust(wspace=0, hspace=0)
+
+    fig.text(0.5, 0.04, 'Predicted Labels', ha='center', va='center')
+    fig.text(0.06, 0.5, 'True Labels', ha='center', va='center', rotation='vertical')
+
+    for i, true_label in enumerate(cm.keys()):
+        
+        pred_labels = cm[true_label]
+        
+        if i==0:
+            row_i = i
+        
+
+        for j, pred_label in enumerate(pred_labels.keys()):
+
+            img_ids = pred_labels[pred_label]
+
+            empty_img_ids = num_samples - len(img_ids)
+
+            if j==0:
+                col_j = j
+            
+            row = 0
+            col = 0
+
+            for id in img_ids:
+
+                img = mpimg.imread(os.path.join(path_to_images, id))
+                img_shape = img.shape
+                
+                axes[row_i+row, col_j+col].imshow(img, cmap='gray', vmin=0, vmax=255, aspect='auto')
+                axes[row_i+row, col_j+col].set_xticks([])
+                axes[row_i+row, col_j+col].set_yticks([])
+
+                if row_i + row == num_rows-1:
+                    axes[row_i+row, col_j+col].set_xlabel(pred_label)
+
+            
+                if col_j + col == 0:
+                    axes[row_i+row, col_j+col].set_ylabel(true_label)
+
+
+
+
+                if col ==num_imgs_axis-1:
+                    col =0
+                    row +=1
+                else:
+                    col +=1
+
+            if len(img_ids) ==0:
+                img_shape = (299,299)        
+            
+            if empty_img_ids > 0:
+                temp = np.full(img_shape, 255)
+
+                for _ in range(empty_img_ids):
+                    
+                    axes[row_i+row, col_j+col].imshow(temp, cmap='gray', vmin=0, vmax=255, aspect='auto')
+                    axes[row_i+row, col_j+col].set_xticks([])
+                    axes[row_i+row, col_j+col].set_yticks([])
+
+                    if row_i + row == num_rows-1:
+                        axes[row_i+row, col_j+col].set_xlabel(pred_label)
+
+                
+                    if col_j + col == 0:
+                        axes[row_i+row, col_j+col].set_ylabel(true_label)
+                        
+                    
+                    if col ==num_imgs_axis-1:
+                        col =0
+                        row+=1
+                    else:
+                        col +=1
+                   
+            if empty_img_ids<0:
+                raise ValueError("There are more image ids in the dict than number of samples to be plotted")
+            
+            col_j = col_j + num_imgs_axis
+        
+        row_i += num_imgs_axis
+    
+    plt.savefig(path_to_results + "_MS")
+    plt.close()  
+def create_dict(classes):
+
+    """
+    Setups a dictionary for storing image ids in confusion matrix
+    
+    """
+
+    output_dict = dict()
+    for i in classes:
+        output_dict[i] = {}
+        for j in classes:
+            output_dict[i][j]= []
+
+    return output_dict 
+
+def plot_CM(y_true, y_pred, path_to_results, path_to_images):
+    """
+    Plots and save Confusion Matrix
+    
+    y_true: numpy array of shape (num_of_images,2)
+    y_pred: numpy array of shape (num_of_images,2)
+    path_to_results: path where plot will be saved
+
+    """
+
+    ConfusionMatrixDisplay.from_predictions(y_pred=y_pred[:,1], y_true =y_true[:,1])
+
+    plt.savefig(path_to_results + "_CM")
+    plt.close()
+
+def create_plots(y_true, y_pred, path_to_results, path_to_images, plots, name_of_file, training_metric_scores=None, y_pred_probs = None):
+    """
+    Generates differenet plots
+    Parameters:
+        y_true: numpy array of shape (folds, num_images, 2)
+        y_pred: numoy array of shape (folds, num_images, 2)
+        path_to_results: path to the folder where the results will be stored
+        plots: dictionary with following structure:
+                plots["plots_1"]["name"] = name of plot
+                plots["plots_1"]["parameter_1"] = value
+                plots["plots_1"]["parameter_2"] = value
+
+                plots["plots_2"]["name"] = name of plot
+                plots["plots_2"]["parameter_1"] = value
+                plots["plots_2"]["parameter_2"] = value
+        
+        name_of_file:
+        training_metric_scores: (default=None) list of numpy array with each having shape of (folds, metrics, 2, epochs).Each item in list should represent results of a network.
+
+    Returns:
+        output_config:
+
+    Additional Notes:
+    currently supports CM, LC and MS
+
+
+    """
+
+    # check whether correct shapes of y_* are provided or not
+
+    if len(y_true.shape) !=3:
+        raise ValueError("Shape of y_true is not correct.")
+
+    if len(y_pred.shape) == 3:
+        num_folds = y_pred.shape[0]
+    else:
+        raise ValueError("Shape of y_pred is not correct.")
+
+    # determine whether to plot learning curves or not
+    if training_metric_scores is not None:
+        lc = True
+    else:
+        lc = False
+   
+
+
+    for fold_no in range(num_folds):
+
+        # create directory for fold
+        path_to_fold = os.path.join(path_to_results, str(fold_no))
+        if not os.path.exists(path_to_fold):
+            os.mkdir(path_to_fold)
+
+        # create directory for plots
+        path_to_plots = os.path.join(path_to_fold, "plots")
+        if not os.path.exists(path_to_plots):
+            os.mkdir(path_to_plots)
+
+        for pl in plots:
+
+            # if dict has key "learning_curves" but no metric score is provided,
+            if pl == "LC" and not lc:
+                print("Warning: key'learning_curves' provided in dict 'plots' but metric score not found. Skipping ploting learning curves" )
+                continue 
+
+
+            print(f"Creating Plot: {pl} Fold No: {fold_no}")
+            
+            plot_name = pl
+            if plot_name == "CM":
+                fnt_pointer = plot_CM
+            elif plot_name == "MS":
+                fnt_pointer = plot_MS
+            elif plot_name == "LC":
+                fnt_pointer = plot_LC
+            else:
+                raise ValueError("Unknown plot found")
+                
+            path_to_figs = path_to_plots+f"/{name_of_file}"
+
+            if plot_name == "LC":
+                fnt_pointer(metric_score= training_metric_scores[fold_no], path_to_results=path_to_figs, path_to_images=path_to_images)
+            else:
+                fnt_pointer(y_true=y_true[fold_no], y_pred=y_pred[fold_no], path_to_results=path_to_figs, path_to_images=path_to_images)
+
+
+    return plots
+
+def save_results(results, metrics, path_to_results, name_of_file):
+    """
+    Save results to csv file
+
+    Parameters:
+        results: numpy array of shape (num_folds, metrics)
+        metrics: numpy array of name of the metrics
+        path_to_results: path to the folder where the results will be stored
+        name_of_file: file name
+       
+    """
+    df = pd.DataFrame([], columns=["Fold No", "Metric", "Score"])
+    num_folds = results.shape[0]
+    num_metrics = results.shape[1]
+
+    for fold_no in range(num_folds):
+        for metric_no in range(num_metrics):
+            temp = pd.DataFrame([[fold_no, metrics[metric_no], results[fold_no, metric_no]]], columns=["Fold No", "Metric", "Score"])
+            df = pd.concat([df, temp])
+
+    df.reset_index(inplace=True, drop=True ) 
+       
+    df.to_csv(path_to_results + "/" + name_of_file +".csv")
+
+if __name__ == "__main__":
+    
+    # noisy dataset
+    path_to_noisy_data = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/noisy_dataset-21-01/final"
+    path_to_noisy_data_labels_multi = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/noisy_dataset-21-01/data_augmented.txt"
+    path_to_noisy_data_labels_binary = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/noisy_dataset-21-01/data_augmented_binary.txt"
+
+    #change_txt_for_binary(path_to_noisy_data_labels_multi, path_to_noisy_data_labels_binary)
+
+
+    y_noisy_binary = np.loadtxt(path_to_noisy_data_labels_binary, dtype=str, delimiter=" ")
+    y_noisy_binary = np.expand_dims(y_noisy_binary, axis=0)
+
+    y_noisy_multi = np.loadtxt(path_to_noisy_data_labels_multi, dtype=str, delimiter=" ")
+    y_noisy_multi = np.expand_dims(y_noisy_multi, axis=0)
+
+    # results
+    path_to_results = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/documents/presentation"
+
+    phase = "phase2"
+    model_name = "ResNet50"
+    type_aug= "simple"#"simple"#"online aug" #"offlien aug"
+    folder_name ="ResNet50_simple_21-01"
+
+    json_name = "train/training_pipeline.json"
+
+
+    # binary
+    print("Processing Binary Classification")
+
+    path_to_json = os.path.join(path_to_results,phase, model_name, type_aug, folder_name, "binary", json_name)
+    save_path = os.path.join(path_to_results, phase,  model_name, type_aug, folder_name, "binary", "noisy_data-21-01")
 
     # change json
+    print("Processing json . . .")
+    pb = load_from_json(path_to_json)
+    pb["device"] = "cpu"
+    pb["path_to_results"] = os.path.join(path_to_results,phase, model_name, type_aug, folder_name, "binary", "train")
+    pb["batch_size"] = 32
+    pb['read_img_color'] = "rgb"
+    save_to_json(pb, path_to_json[:path_to_json.rindex(".json")])
 
+    print("Generating predictions . . . ")
     start = time.time()
     CNN_prediction(path_to_noisy_data, path_to_json, save_path)
     end = time.time()
     print("Time taken to generate predictions on test data : ", datetime.timedelta(seconds=end-start))
 
-    #read y
-
-    #read y_pred, y_pred_prob
-
+    y_pred_binary = np.loadtxt(os.path.join(save_path, "0", "labels.txt"), dtype=str, delimiter=" ")
+    y_pred_binary = np.expand_dims(y_pred_binary, axis=0)
+     
     # setup for metrics
+    metrics = pb["metrics"]
+    print("\nEvaluating Metrics on data . . . ")
+    eval_score, _, metrics_list = evaluate_metrics(
+        y_true=y_noisy_binary, 
+        y_pred=y_pred_binary, 
+        metrics=metrics,
+        y_pred_probs = None
+        )
+    print("\nResults")
+
+
+    for met_no, met in enumerate(metrics_list):
+        print(f"Metric: {met}  Score: {np.around(eval_score[0, met_no], 4)} ")
+
+    print(f"Evaluated Metrics on data successfully. Shape:{eval_score.shape}")
 
     # setup plots
+    plots = pb["plots"]
+    print("\nCreating Plots for data . . .")
+    _ = create_plots(
+        y_true=y_noisy_binary, 
+        y_pred=y_pred_binary, 
+        plots= plots, 
+        path_to_results=save_path,
+        path_to_images=path_to_noisy_data,
+        name_of_file = "noisy_dataset",
+        )
+    print("Created Plots for the data")
+
+    print("\nSaving  results ")
+    save_results(
+        results=eval_score,
+        metrics=metrics_list,
+        path_to_results=save_path,
+        name_of_file="noisy_dataset"
+    )
+
+    
+    
+    # multi
+    print("Processing Multi Classification")
+
+    path_to_json = os.path.join(path_to_results,phase, model_name, type_aug, folder_name, "multi", json_name)
+    save_path = os.path.join(path_to_results, phase,  model_name, type_aug, folder_name, "multi", "noisy_data-21-01")
+
+    # change json
+    print("Processing json . . .")
+    pb = load_from_json(path_to_json)
+    pb["device"] = "cpu"
+    pb["path_to_results"] = os.path.join(path_to_results,phase, model_name, type_aug, folder_name, "multi", "train")
+    pb["batch_size"] = 32
+    pb['read_img_color'] = "rgb"
+    save_to_json(pb, path_to_json[:path_to_json.rindex(".json")])
+
+    print("Generating predictions . . . ")
+    start = time.time()
+    CNN_prediction(path_to_noisy_data, path_to_json, save_path)
+    end = time.time()
+    print("Time taken to generate predictions on test data : ", datetime.timedelta(seconds=end-start))
+
+    y_pred_multi = np.loadtxt(os.path.join(save_path,"0", "labels.txt"), dtype=str, delimiter=" ")
+    y_pred_multi = np.expand_dims(y_pred_multi, axis=0)
+     
+    # setup for metrics
+    metrics = pb["metrics"]
+    print("\nEvaluating Metrics on data . . . ")
+    eval_score_multi, _, metrics_list = evaluate_metrics(
+        y_true=y_noisy_multi, 
+        y_pred=y_pred_multi, 
+        metrics=metrics,
+        y_pred_probs = None
+        )
+    print("\nResults")
+
+
+    for met_no, met in enumerate(metrics_list):
+        print(f"Metric: {met}  Score: {np.around(eval_score_multi[0, met_no], 4)} ")
+
+    print(f"Evaluated Metrics on data successfully. Shape:{eval_score_multi.shape}")
+
+    # setup plots
+    plots = pb["plots"]
+    print("\nCreating Plots for data . . .")
+    _ = create_plots(
+        y_true=y_noisy_multi, 
+        y_pred=y_pred_multi, 
+        plots= plots, 
+        path_to_results=save_path,
+        path_to_images=path_to_noisy_data,
+        name_of_file = "noisy_dataset",
+        )
+    print("Created Plots for the data")
+
+    print("\nSaving  results ")
+    save_results(
+        results=eval_score_multi,
+        metrics=metrics_list,
+        path_to_results=save_path,
+        name_of_file="noisy_dataset"
+    )
+
+    print("Processing Completed")
+

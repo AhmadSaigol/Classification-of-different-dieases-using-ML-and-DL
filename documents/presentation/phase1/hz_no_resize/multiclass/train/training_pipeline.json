@@ -1,0 +1,237 @@
+{
+    "data": {
+        "path_to_images": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train",
+        "path_to_labels": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_multi.txt",
+        "split_type": "simpleStratified",
+        "classes": [
+            "Normal",
+            "COVID",
+            "pneumonia",
+            "Lung_Opacity"
+        ]
+    },
+    "data_preprocessing": {
+        "map_to_grayscale": {
+            "conversion": "BGR2GRAY",
+            "function": "change_colorspace"
+        }
+    },
+    "batch_size": 500,
+    "save_to_pkl": true,
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/hz_no_resize/multiclass/train",
+    "original_labels": {
+        "COVID": "17.08",
+        "Lung_Opacity": "28.41",
+        "Normal": "48.16",
+        "pneumonia": "6.36"
+    },
+    "processed_labels": {
+        "train": {
+            "0": {
+                "COVID": "17.09",
+                "Lung_Opacity": "28.40",
+                "Normal": "48.16",
+                "pneumonia": "6.35"
+            }
+        },
+        "valid": {
+            "0": {
+                "COVID": "17.07",
+                "Lung_Opacity": "28.41",
+                "Normal": "48.16",
+                "pneumonia": "6.36"
+            }
+        }
+    },
+    "feature_extractors": {
+        "haralick": {
+            "blur": true,
+            "distance": 10,
+            "function": "calculate_haralick"
+        },
+        "zernike_moments": {
+            "blur": true,
+            "radius": 140,
+            "degree": 8,
+            "cm": "image's centre of mass",
+            "function": "calculate_zernike"
+        }
+    },
+    "normalize_features": {
+        "norm_type": "StandardScaler",
+        "mean": [
+            [
+                0.0027821284841619237,
+                848.0778681688639,
+                0.8701374005128604,
+                3366.721324140242,
+                0.11422511806570469,
+                261.8781264701438,
+                12618.807428392141,
+                8.386957710969105,
+                13.154649618354238,
+                0.00013376144933754133,
+                5.532932025413196,
+                -0.22147965960925262,
+                0.9736974838281324,
+                0.3183098861837482,
+                0.04831993403209409,
+                0.04171049929252106,
+                0.04111930729099744,
+                0.045631617230785376,
+                0.028704826851255798,
+                0.024365026937375984,
+                0.033617768133737215,
+                0.023588415744883594,
+                0.026482554204709758,
+                0.018396822700592144,
+                0.03447081057721806,
+                0.05813595229424481,
+                0.03061091829690086,
+                0.03321996931476739,
+                0.013313265585003323,
+                0.017592060177413885,
+                0.02569395142666164,
+                0.018232249640294976,
+                0.02029439880329202,
+                0.020990399812495536,
+                0.024773056833279336,
+                0.018268420666294888,
+                0.01695483741424336,
+                0.011114058260776811
+            ]
+        ],
+        "var": [
+            [
+                0.0002529680085989521,
+                172921.8557061479,
+                0.002569365536873238,
+                1547083.6426390822,
+                0.001986440447350388,
+                2211.0589000910472,
+                22366835.687040646,
+                0.12820438715409782,
+                0.4993172468889408,
+                6.778926489922479e-09,
+                0.15788020049619483,
+                0.0016964242600257047,
+                0.00030193835590660846,
+                9.896018147326626e-28,
+                0.0005283212410088086,
+                0.001777502796855715,
+                0.00094648417811723,
+                0.0006672777336709888,
+                0.00043627043230709284,
+                0.00044057929435512905,
+                0.0005654228753502633,
+                0.00027934057110275823,
+                0.00021824822931140508,
+                0.00013133768778292095,
+                0.0004160418630011082,
+                0.0008331530005089928,
+                0.00033788644477331233,
+                0.0002794072414940895,
+                8.598917373729513e-05,
+                0.00013957492271759515,
+                0.0002016889689753604,
+                0.00015737892291544641,
+                0.0001607793251217837,
+                0.0003343309004311529,
+                0.0002764573888879179,
+                0.00015668202023328087,
+                0.00012752392384917413,
+                6.466077376233458e-05
+            ]
+        ],
+        "scale": [
+            [
+                0.015904968047718678,
+                415.838737620905,
+                0.05068890940702155,
+                1243.818171051976,
+                0.04456950131368297,
+                47.02189809111333,
+                4729.358908672574,
+                0.35805640219677376,
+                0.7066238369096678,
+                8.233423643857079e-05,
+                0.39734141553102015,
+                0.04118767121391673,
+                0.017376373496981713,
+                1.0,
+                0.02298523963348672,
+                0.042160441136872784,
+                0.030764982985810832,
+                0.0258317195260205,
+                0.020887087693287756,
+                0.020989980808831844,
+                0.023778622234062748,
+                0.01671348470854472,
+                0.014773226773843455,
+                0.011460265606997115,
+                0.02039710427980178,
+                0.0288643898343442,
+                0.018381687756387124,
+                0.016715479098550826,
+                0.009273034764158665,
+                0.011814183116813246,
+                0.014201724155022882,
+                0.012545075644070322,
+                0.012679878750279266,
+                0.01828471767436273,
+                0.016627007815235965,
+                0.012517268880761524,
+                0.011292649106793947,
+                0.008041192309747019
+            ]
+        ]
+    },
+    "classifiers": {
+        "svm": {
+            "path_to_models": {
+                "00": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/hz_no_resize/multiclass/train/0/models"
+            },
+            "svm_type": "C_SVC",
+            "kernel": "RBF",
+            "Gamma": 0.03375,
+            "Degree": 0.0,
+            "P": 0.0,
+            "Nu": 0.0,
+            "Coef0": 0.0,
+            "C": 2.5,
+            "max_nums_iter": 10000,
+            "epsilon": 2.220446049250313e-16,
+            "function": "svm"
+        }
+    },
+    "metrics": {
+        "simple_accuracy": {
+            "type": "simple",
+            "function": "accuracy"
+        },
+        "balanced_accuracy": {
+            "type": "balanced",
+            "function": "accuracy"
+        },
+        "precision": {
+            "average": "weighted",
+            "function": "precision"
+        },
+        "sensitivity": {
+            "average": "weighted",
+            "function": "sensitivity"
+        },
+        "f1_score": {
+            "average": "weighted",
+            "function": "F1_score"
+        },
+        "mcc": {
+            "function": "mcc"
+        }
+    },
+    "plots": {
+        "CM": {
+            "function": "plot_CM"
+        }
+    }
+}

@@ -1,0 +1,7 @@
+,Fold No,Metric,Score
+0,0,simple_accuracy,0.60840815
+1,0,balanced_accuracy,0.47403353
+2,0,precision,0.1482602
+3,0,sensitivity,0.26923078
+4,0,f1_score,0.19121951
+5,0,mcc,-0.042286646

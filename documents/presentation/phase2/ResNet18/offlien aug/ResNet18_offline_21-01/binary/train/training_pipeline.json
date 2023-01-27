@@ -1,8 +1,8 @@
 {
-    "device": "cuda",
-    "path_to_results": "/kaggle/working/results/ResNet18_offline_21-01/binary/train",
+    "device": "cpu",
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/documents/presentation/phase2/ResNet18/offlien aug/ResNet18_offline_21-01/binary/train",
     "path_to_images": "/kaggle/input/ismdatasetforclassificationofdieases/raw_data_augmented-21-01/raw_data_augmented-21-01/train",
-    "batch_size": 256,
+    "batch_size": 32,
     "read_img_color": "rgb",
     "num_epochs": 50,
     "path_to_labels": "/kaggle/input/ismdatasetforclassificationofdieases/raw_data_augmented-21-01/raw_data_augmented-21-01/train_binary.txt",

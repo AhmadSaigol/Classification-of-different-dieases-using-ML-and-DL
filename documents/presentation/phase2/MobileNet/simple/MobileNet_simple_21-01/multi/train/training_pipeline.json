@@ -1,8 +1,8 @@
 {
-    "device": "cuda",
-    "path_to_results": "/kaggle/working/results/MobileNet_offline_21-01/multi/train",
+    "device": "cpu",
+    "path_to_results": "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/documents/presentation/phase2/MobileNet/simple/MobileNet_simple_21-01/multi/train",
     "path_to_images": "/kaggle/input/ismdatasetforclassificationofdieases/ism_dataset/raw_data/train",
-    "batch_size": 128,
+    "batch_size": 32,
     "read_img_color": "rgb",
     "num_epochs": 50,
     "path_to_labels": "/kaggle/input/ismdatasetforclassificationofdieases/ism_dataset/raw_data/train_multi.txt",
