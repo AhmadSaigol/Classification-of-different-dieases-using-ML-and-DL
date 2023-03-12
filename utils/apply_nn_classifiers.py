@@ -1,5 +1,5 @@
 """
-Applies nn classifiers and generate predictions
+Applies Neural network classifiers and generates predictions
 
 """
 import os
@@ -7,11 +7,12 @@ import numpy as np
 
 def apply_nn_classifiers(X,y, networks, classes, path_to_results=None, valid_data=None, return_probs=None):
     """
-    Applies each NN classifier to the input and generates prediction
+    Applies each Neural Netowrk classifier to the input and generates prediction
 
     Parameters:
         X: numpy array of shape (folds, num_images, num_features)
-        classes: numpy array of names of classes
+        y: labels of the data. numpy array of shape (folds, num_of_images, 2) or (folds,num_images, 1)
+        
         networks: dictionary with following structure:
             networks["NN1"]["parameter_1"] = value
             networks["NN1"]["parameter_2"] = value
@@ -19,27 +20,33 @@ def apply_nn_classifiers(X,y, networks, classes, path_to_results=None, valid_dat
             networks["NN2"]["parameter_1"] = value
             networks["NN2"]["parameter_2"] = value
 
-        y: labels of the data. numpy array of shape (folds, num_of_images, 2) or (folds,num_images, 1)
+        classes: numpy array of names of classes
         path_to_results: where the models will be saved ( if not provided, the code will work in testing phase)
-        vald_data: [X_valid, y_valid] , required in training phase, will be used for evaluating models
+        valid_data: list [X_valid, y_valid] where X_valid and y_valid must have the same shape as X,y. T
+                    This parameter is required when calling this function in training phase as it will be used for evaluating the models
+        return_probs: By setting it to true, the function will, in addition to labels, will also return probabilities associated with them.
 
     Returns:
         When training:
             y_preds_train: (networks, folds, num_images, 2)
             y_preds_valid: (networks, folds, num_images, 2)
+            y_preds_train_probs = (networks, folds, num_images, 2)
+            y_preds_valid_probs = (networks, folds, num_images, 2)
             eval_metric_scores: list of numpy arrays with each having shape of(folds, metrics, 2, epochs). Each item in list represents results of a network.
-            output_config: 
+            output_config: original passed dict plus default values, path whether model will be saved
             list_of_networks:since data is incoming in dictionary format, so for easy mapping of which index represents to which classifier
+       
         When testing:
-            y_preds: (networks, folds, num_images, 2)    
-            output_config:
+            y_preds: (networks, folds, num_images, 2)  
+            y_preds_probs: (networks, folds, num_images, 2)
+            output_config:original passed dict plus default values
             list_of_networks: since data is incoming in dictionary format, so for easy mapping of which index represents to which classifier
 
         
     Additional Notes:
 
-        currently the parameters in the output dictionary will be only of first fold for each classifier
-
+        - Currently the parameters in the output dictionary will be only of first fold for each classifier
+        - Currently, the feature 'probabilities associated with labels' is NOT implemented yet. Thus, the output will not contain anything.
 
     """
     from classifiers.MLP import mlp

@@ -10,7 +10,7 @@ from process_labels import label_encoder
 
 def rftree(X, parameters, classes, y, save_model_path=None, path_to_model=None):
     """
-        random forest tree
+        Random Forest Tree
 
         Parameters:
             X: numpy array of shape (num_images, num_features)

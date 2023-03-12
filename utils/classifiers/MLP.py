@@ -1,7 +1,7 @@
 """
 Generates and trains a neural network
 
-Note: works with apply_nn_classifiers only
+Note: works with apply_nn_classifiers.py only
 """
 import torch
 import torch.nn as nn
@@ -50,7 +50,7 @@ def mlp(X, y, parameters, classes, name_of_file, save_model_path=None, path_to_m
                 y_pred_valid: numpy array of shape(num_images, 2)
                 eval_metric_scores: numpy array of shape (3, 2, epochs):
                     axis=0 -> metrics (CEloss, balanced_accuracy and mcc) 
-                    axis=1 -> training and validation resuls
+                    axis=1 -> training and validation results
                 config: dictionary with parameters of the function (including default parameters)
             
             When testing:
@@ -61,15 +61,16 @@ def mlp(X, y, parameters, classes, name_of_file, save_model_path=None, path_to_m
             if save_model_path is provided, then program will train the model and generate predicitons (training phase)
             if path_to_model is provided, then program will load the model and generate the prediction (testing phase)
             
-            example of hidden layers: [2,3] -> first hidden layer has 2 neurons and second hidden layer has 3 neurons. Does not include input and output layer
+            When specifying the structure of the network, please note that:
+            hidden layers are given by dict parameter 'hidden layers'(e.g. [2,3]) -> first hidden layer has 2 neurons and second hidden layer has 3 neurons. Does not include input and output layer
             Number of neurons in input layer is determined by last axis of X
-            Number of neurons in output layer is determined by number of classes
+            Number of neurons in output layer is determined by number of classes or dict parameter 'use_single_neuron'
 
-            it makes use of LeakyReLU as activation function and softmax as activation of output layer
+            it makes use of LeakyReLU as activation function and softmax as activation of output layer (or sigmoid when there is single neuron in the output layer) 
             
-            saves the best model based on validation loss criteria
+            It saves the best model based on validation loss criteria
 
-            When using weighted loss function, the weights for each class is as follows:
+            When using weighted loss function, the weights for each class is calculated as follows:
                 Multiclass: 1 - (number of samples of class in training data/total number of samples)
                 Binary: 
                     when using single neuron in output layer: number of samples in negative class(class at index 0 in 'classes')/ number of samples in positive class
@@ -79,6 +80,7 @@ def mlp(X, y, parameters, classes, name_of_file, save_model_path=None, path_to_m
                 https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html
                 https://naadispeaks.wordpress.com/2021/07/31/handling-imbalanced-classes-with-weighted-loss-in-pytorch/
     """
+
     #device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     
     # set to 0 -> no info on console, 1 -> basic info, 2 -> detailed info.
@@ -165,6 +167,7 @@ def mlp(X, y, parameters, classes, name_of_file, save_model_path=None, path_to_m
         save_model_path = os.path.join(save_model_path, name_of_file+'.pt')
         
         eval_metrics_scores = np.zeros((3, 2, epochs))
+        
         num_input_neurons = X.shape[-1]
         
         
@@ -210,6 +213,7 @@ def mlp(X, y, parameters, classes, name_of_file, save_model_path=None, path_to_m
                 
         #validation_data = Data(valid_data[0], y_valid)
 
+        # convert data to tensors
         X_train = torch.from_numpy(X).type(torch.float32)
         y_train = torch.from_numpy(y_train)
         X_valid = torch.from_numpy(valid_data[0]).type(torch.float32)

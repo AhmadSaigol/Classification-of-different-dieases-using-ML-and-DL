@@ -1,5 +1,5 @@
 """
-Applies each classifier and generate predictions
+Applies each specified classifier and generates predictions
 
 """
 import os
@@ -29,7 +29,7 @@ def apply_classifiers(X, classifiers, classes, y, path_to_results=None):
 
     Returns:
         predictions: (classifer, folds, num_images, 2)
-        output_config:
+        output_config: original passed dict plus default values, path whether model will be saved (training phase)
         list_of_classifiers: since data is incoming in dictionary format, so for easy mapping of which index represents to which classifier
 
     Additional Notes:
@@ -54,7 +54,8 @@ def apply_classifiers(X, classifiers, classes, y, path_to_results=None):
     
     
     if train:
-         
+
+        # Set up result directory 
         if not os.path.exists(path_to_results):
             os.mkdir(path_to_results)
             print(f"Created directory {path_to_results}")
@@ -73,6 +74,7 @@ def apply_classifiers(X, classifiers, classes, y, path_to_results=None):
         if train:
             output_config[classifier]["path_to_models"] = {}
         
+        # get classififer pointer function
         fnt_pointer = classifiers[classifier]["function"]
 
         for fold_no in range(num_folds):
@@ -89,6 +91,7 @@ def apply_classifiers(X, classifiers, classes, y, path_to_results=None):
 
             if train:
                 print("In Training Phase ")
+
                 # create directory for fold
                 path_to_fold = os.path.join(path_to_results, str(fold_no))
                 if not os.path.exists(path_to_fold):
@@ -100,15 +103,19 @@ def apply_classifiers(X, classifiers, classes, y, path_to_results=None):
                     os.mkdir(save_model_path)
 
                 output_config[classifier]["path_to_models"][fn] = save_model_path
-            
+
+                # apply the classifier
                 prediction, fnt_config = fnt_pointer(X=X[fold_no], parameters=classifiers[classifier], 
                                                     classes=classes, y=y[fold_no], save_model_path=save_model_path)
 
             
             else:
                 print("In Testing Phase ")
+
+                # get saved model path
                 path_to_model = classifiers[classifier]["path_to_models"][fn]
                 
+                # apply classifier
                 prediction, fnt_config = fnt_pointer(X=X[fold_no], parameters=classifiers[classifier], 
                                                     classes=classes, y=y[fold_no], path_to_model=path_to_model)
             

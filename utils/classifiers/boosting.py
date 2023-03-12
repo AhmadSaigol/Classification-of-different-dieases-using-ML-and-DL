@@ -38,7 +38,7 @@ def boosting(X, parameters, classes, y, save_model_path=None, path_to_model=None
     
     """
 
-    #changing datatype of array since svm works on float32
+    #changing datatype of array
     X=X.astype(np.float32)
 
     # determine phase
@@ -51,7 +51,7 @@ def boosting(X, parameters, classes, y, save_model_path=None, path_to_model=None
 
 
     if train:
-
+        
         #setup model
         model = cv2.ml.Boost_create()
         
@@ -60,7 +60,7 @@ def boosting(X, parameters, classes, y, save_model_path=None, path_to_model=None
         #encode labels 
         labels = label_encoder(y=y[:,1], classes=classes, to_numbers=True)
 
-        # set boost type
+        # get boost type
         if "boost_type" in clf_keys:
             if parameters["boost_type"] == "REAL":
                 model.setBoostType(cv2.ml.Boost_REAL )
@@ -71,12 +71,13 @@ def boosting(X, parameters, classes, y, save_model_path=None, path_to_model=None
         else:
             model.setBoostType(cv2.ml.Boost_REAL )
 
-
+        #get number of weak classifiers
         if "num_weak_classifiers" in clf_keys:
             model.setWeakCount(parameters["num_weak_classifiers"])
         else:
             model.setWeakCount(100)
-           
+
+        # get number of max depth of decision trees   
         if "max_depth" in clf_keys:
             model.setMaxDepth (parameters["max_depth"])
         else:
@@ -85,7 +86,7 @@ def boosting(X, parameters, classes, y, save_model_path=None, path_to_model=None
         # can get weights for each class
         # model.setPriors([])
 
-         # train boosting
+         # train the model
         print("Training Boosting")
         model.train(X, cv2.ml.ROW_SAMPLE, labels)
 
@@ -94,6 +95,7 @@ def boosting(X, parameters, classes, y, save_model_path=None, path_to_model=None
         model.save(os.path.join(save_model_path, "boosting.dat"))
     
     else:
+        
         print(f"Loading Boosting from {path_to_model}")
         model = cv2.ml.Boost_load(os.path.join(path_to_model, "boosting.dat"))
 
@@ -140,9 +142,9 @@ if __name__ == "__main__":
 
     classes =np.array(["a", "b", "c"])
     
-    save_model_path= "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/experiments/boosting"
+    save_model_path= "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/final_test"
     
-    # SVM
+    # boosting
     clf={}
     clf["boosting"] = {}
     clf["boosting"]["function"] = boosting #some function pointer
@@ -155,8 +157,7 @@ if __name__ == "__main__":
     print(testData)
     print(testData.shape)
     
-    y_pred, config = boosting (testData, clf["boosting"], classes, y=y_test ,save_model_path=None, path_to_model=save_model_path)
+    y_pred, config = boosting (trainingData, clf["boosting"], classes, y=y ,save_model_path=save_model_path, path_to_model=None)
     
     print(y_pred)
     print(config)
-
