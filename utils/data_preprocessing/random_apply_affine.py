@@ -6,22 +6,25 @@ import torch
 
 def random_apply_affine(images, parameters):
     """
-    Randomly applies affine transformation
+    Applies affine transformation to the image with given probability
 
     Parameters: 
         images: numpy array of shape(num_images, height, width, channel)
         parameters: dictionary with keys:
-                    degrees: (min, max)
-                    scale: (min, max)
-                    translate: (min, max)
-                     p = 0.5
-                    
+                        degrees: range of degrees to seleect from. (min, max)
+                        scale: scaling factor. (min, max)
+                        translate: range of translation in absolute fractions (min, max)
+                        p: probability (default= 0.5)
+                        
 
     Returns:
-        (same as input)
         results: numpy array of shape (num_images, height, width, channel)
         config: dictionary with parameters of the function (including default parameters)
     
+    Additional Notes:
+        for more info, see
+            https://pytorch.org/vision/main/generated/torchvision.transforms.RandomApply.html
+            https://pytorch.org/vision/main/generated/torchvision.transforms.RandomAffine.html#torchvision.transforms.RandomAffine
   
     """
     # set up output config
@@ -50,26 +53,26 @@ def random_apply_affine(images, parameters):
     else:
         raise ValueError("scale must be provided while random affine")
 
-     # get output size
+     # get probability
     if "p" in para_keys:
         p = parameters["p"]
-
     else:
         p = 0.5
-        
     config["p"] = p
-                
-        
+                        
     rf =transforms.RandomApply([transforms.RandomAffine(degrees=degrees, scale=scale, translate=translate)], p=p)
     tensor = transforms.ToTensor()
 
-
-    # apply resizing
     results = []
     for img in range(num_images):
-
+        
+        # convert to tensor
         result = tensor(images[img])
+
+        # apply affine transformation 
         result = rf(result)
+      
+        # pytorch moves the channel on first axis while in our case channel is the last axis so     
         result = torch.permute(result, (1,2,0))
         
         results.append(result.numpy())
@@ -93,9 +96,6 @@ if __name__ == "__main__":
     pipeline["random_affine"]["scale"] = (0.1, 0.3)
     pipeline["random_affine"]["translate"] = (0.1, 0.3)
     pipeline["random_affine"]["p"] = 1
-
-    
-    #pipeline["resize_image"]["interpolation"] = "bilinear"
 
     print(image_c.shape)
     cv2.imshow("original", image_c[0])

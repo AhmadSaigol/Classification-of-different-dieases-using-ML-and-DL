@@ -23,7 +23,7 @@ def load_and_preprocess_data(data_config, path_to_results=None):
                     path_to_images: path to the folder containing .png files (or .npy)
                     path_to_labels: path to the labels associated with the images. This could be a .txt file with each row containing
                                     file name(ends with.png) and its label (not required when reading images from .npy)
-                    split_type: how to split the data : "simple", "kfold", "kfoldStratified"
+                    split_type: how to split the data : "simple", "simpleStratified" "kfold", "kfoldStratified"
                     save_to_pkl: whether to save results in npy format or not
 
                 data_config["data_preprocessing"]: dictionary with following structure:
@@ -37,14 +37,14 @@ def load_and_preprocess_data(data_config, path_to_results=None):
                     preprocessing["name_of_processing_2"]["parameter2"] = value
                     
         
-        
         Returns:
-            data: numpy array containing all images of shape (folds, num_of_images, height, width, num_of_channels)
+            data: numpy array of shape (folds, num_of_images, height, width, num_of_channels)
             labels: numpy array with image ids (axis=0) and/or image labels(axis=1) of shape (fold, num_of_images, 1) or (fold, num_of_images, 2)
-            output_config:
+            output_config: dictionary with parameters of the function (including default parameters)
 
         Additional Notes:
-           Images are initially read in BGR format  with shape (1, Height, width, color_channels) in uint8 format 
+           Images are initially read in BGR format  with shape (1, Height, width, color_channels) in uint8 format.
+           Furthermore, this function load all images in the memory. For large dataset, it can make python kernel crash. 
                 
         """ 
 
@@ -175,7 +175,7 @@ def load_and_preprocess_data(data_config, path_to_results=None):
             valid_labels = {}
             for fold_no in range(y_train.shape[0]):
                 
-                # ratio in y_train
+                # ratio of labels in y_train
                 train_labels[str(fold_no)] = {}
                 unique_labels, counts =np.unique(y_train[fold_no, :,1], return_counts=True)
                 
@@ -185,7 +185,7 @@ def load_and_preprocess_data(data_config, path_to_results=None):
                     train_labels[str(fold_no)][ul] = format(c*100/y_train.shape[1], '.2f')
                     print(f"Label: {ul}, %age: {format(c*100/y_train.shape[1], '.2f')}")
                 
-                # ratio in y_valid
+                # ratio of ylabels in y_valid
                 valid_labels[str(fold_no)] = {}
                 unique_labels, counts =np.unique(y_valid[fold_no, :,1], return_counts=True)
                 
@@ -212,6 +212,7 @@ def load_and_preprocess_data(data_config, path_to_results=None):
             return X_train, y_train, X_valid, y_valid, output_config
         
         else:
+
             y = img_ids_labels
             X, config = load_images(path_to_images=path_to_images,
                                         image_ids=y[:,0],
@@ -263,10 +264,22 @@ def load_images(path_to_images, image_ids, data_preprocessing):
     """
     Loads images and applies preprocesssing
 
-    Returns images (num_images, H, W, channels)
-    
-    and data preprocessing config
+    Parameters:
+        path_to_images: path to the folder containing .png files
+        image_ids:  numpy array with image ids of shape(num_of_images,)
+        data_preprocessing: dictionary with following structure:
+                    preprocessing["name_of_processing_1"]["function"] = pointer to the function
+                    preprocessing["name_of_processing_1"]["parameter1"] = value
+                    preprocessing["name_of_processing_1"]["parameter2"] = value
+                    .
+                    .
+                    preprocessing["name_of_processing_2"]["function"] = pointer to the function
+                    preprocessing["name_of_processing_2"]["parameter1"] = value
+                    preprocessing["name_of_processing_2"]["parameter2"] = value
 
+    Returns:
+        images:numpy array of shape (num_images, H, W, channels)
+        config: dictionary with parameters of the function (including default parameters)
     """
     verbose=False
     # for storing preprocessing default values

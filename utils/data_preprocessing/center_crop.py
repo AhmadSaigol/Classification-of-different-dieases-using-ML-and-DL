@@ -11,14 +11,17 @@ def center_crop(images, parameters):
     Parameters: 
         images: numpy array of shape(num_images, height, width, channel)
         parameters: dictionary with keys:
-                    output_shape: 
+                    output_size: size of the crop (int or tuple of int)
                     
 
     Returns:
-        (same as input)
         results: numpy array of shape (num_images, height, width, channel)
         config: dictionary with parameters of the function (including default parameters)
     
+    Additional Notes:
+
+        for more info, see 
+        https://pytorch.org/vision/main/generated/torchvision.transforms.CenterCrop.html
    
     """
     # set up output config
@@ -36,16 +39,20 @@ def center_crop(images, parameters):
     else:
         raise ValueError("'output_size' must be provided in the parameters when center cropping the image.")
 
+    
     cc = transforms.CenterCrop(dsize)
     tensor = transforms.ToTensor()
 
-
-    # apply resizing
     results = []
     for img in range(num_images):
-
+        
+        # convert to tensor
         result = tensor(images[img])
+
+        # generate center crops
         result = cc(result)
+
+        # pytorch moves the channel on first axis while in our case channel is the last axis so
         result = torch.permute(result, (1,2,0))
         
         results.append(result.numpy())
@@ -66,8 +73,7 @@ if __name__ == "__main__":
     pipeline["cc"] = {}
     pipeline["cc"]["function"] =0 #some function pointer
     pipeline["cc"]["output_size"] = (250,250)
-    #pipeline["resize_image"]["interpolation"] = "bilinear"
-
+   
     print(image_c.shape)
     cv2.imshow("original", image_c[0])
     cv2.waitKey(0)    

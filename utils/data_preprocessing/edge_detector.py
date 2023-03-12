@@ -5,27 +5,28 @@ from matplotlib import pyplot as plt
 
 def canny_edge_detector(images, parameters):
     """
-    Detectes edges using canny edge detection algo
+    Detectes edges using canny edge detection algorithm
 
     Parameters:
         images: numpy array of shape(num_images, height, width, channel)
         parameters: dictionary containing following keys:
-            blur: whether to blur the image before finding edges or not (defaul=False)
+            blur: whether to blur the image before finding edges or not (default=False)
             threshold1: for hystersis procedure (defualt:50)
             threshold2: for hystersis procedure (default:100)
             apertureSize: for Sobel operator (default=3)
-            L2gradient: whether to use L2 norm or L1 norm to calculate gradient magnitude (default= False)
+            L2gradient: whether to use L2 norm (True) or L1 norm to calculate gradient magnitude (default= False)
 
      
      Returns:
-        (same as input)
         results: numpy array of shape (num_images, height, width, channel)
         config: dictionary with parameters of the function (including default parameters)
 
 
-    Note: 
-        For more conversions, see
-       https://docs.opencv.org/4.x/dd/d1a/group__imgproc__feature.html#ga2a671611e104c093843d7b7fc46d24af   
+    Additional Notes: 
+        The function works only with gray images
+
+        For more info, see
+            https://docs.opencv.org/4.x/dd/d1a/group__imgproc__feature.html#ga2a671611e104c093843d7b7fc46d24af   
     
     """
 
@@ -83,11 +84,13 @@ def canny_edge_detector(images, parameters):
 
     for img in range(num_images):
         
+        # blur image if required
         if blur:
             proc_img = cv2.bilateralFilter(np.squeeze(images[img], axis=-1) , d=5, sigmaColor=75, sigmaSpace=75)
         else:
             proc_img = np.squeeze(images[img], axis=-1)
-        
+
+        # find edges    
         temp = cv2.Canny(proc_img, threshold1=th1, threshold2=th2, apertureSize=apertureSize, L2gradient=L2gradient)
         
         results.append(np.expand_dims(temp, axis=-1))

@@ -6,19 +6,20 @@ import torch
 
 def random_auto_contrast(images, parameters):
     """
-    Randomly changes auto contrast
+    Autocontrast the pixels of the given image randomly with a given probability
 
     Parameters: 
         images: numpy array of shape(num_images, height, width, channel)
         parameters: dictionary with keys:
-                     p = 0.5
-                    
-
+                        p: probability (default= 0.5)
+                       
     Returns:
-        (same as input)
         results: numpy array of shape (num_images, height, width, channel)
         config: dictionary with parameters of the function (including default parameters)
     
+    Additional Notes:
+        for more info, see
+            https://pytorch.org/vision/main/generated/torchvision.transforms.RandomAutocontrast.html
   
     """
     # set up output config
@@ -28,26 +29,26 @@ def random_auto_contrast(images, parameters):
     
     num_images, _, _, _ = images.shape
 
-     # get output size
+     # get probability
     if "p" in para_keys:
         p = parameters["p"]
-
     else:
         p = 0.5
-        
     config["p"] = p
-                
-        
+                 
     rf =transforms.RandomAutocontrast(p=p)
     tensor = transforms.ToTensor()
-
-
-    # apply resizing
+    
     results = []
     for img in range(num_images):
-
+        
+        # convert to tensor
         result = tensor(images[img])
+        
+        # apply auto contrast transformation
         result = rf(result)
+
+        # pytorch moves the channel on first axis while in our case channel is the last axis so     
         result = torch.permute(result, (1,2,0))
         
         results.append(result.numpy())
@@ -68,9 +69,6 @@ if __name__ == "__main__":
     pipeline["random_contrast"] = {}
     pipeline["random_contrast"]["function"] =0 #some function pointer
     pipeline["random_contrast"]["p"] = 1
-
-    
-    #pipeline["resize_image"]["interpolation"] = "bilinear"
 
     print(image_c.shape)
     cv2.imshow("original", image_c[0])

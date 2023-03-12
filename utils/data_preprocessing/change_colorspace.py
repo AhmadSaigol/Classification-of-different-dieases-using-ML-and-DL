@@ -16,7 +16,6 @@ def change_colorspace(images, parameters):
                                         "BGR2HLS", "RGB2HLS", "HLS2BGR", "HLS2RGB"]
 
      Returns:
-        (same as input)
         results: numpy array of shape (num_images, height, width, channel)
         config: dictionary with parameters of the function (including default parameters)
 

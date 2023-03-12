@@ -6,19 +6,21 @@ import torch
 
 def random_vertical_flip(images, parameters):
     """
-    Randomly flips an image vertically
+    Randomly flips an image vertically with given probability
 
     Parameters: 
         images: numpy array of shape(num_images, height, width, channel)
         parameters: dictionary with keys:
-                    p: probabilty of rotating (default = 0.5)
+                    p: probabilty (default = 0.5)
                     
 
     Returns:
-        (same as input)
         results: numpy array of shape (num_images, height, width, channel)
         config: dictionary with parameters of the function (including default parameters)
-    
+
+    Additional Notes:
+        for more info, see
+            https://pytorch.org/vision/main/generated/torchvision.transforms.RandomVerticalFlip.html 
    
     """
     # set up output config
@@ -28,26 +30,27 @@ def random_vertical_flip(images, parameters):
     
     num_images, _, _, _ = images.shape
 
-
-    # get output size
+    # get probability
     if "p" in para_keys:
         p = parameters["p"]
-
     else:
         p = 0.5
-        
     config["p"] = p
     
     rvf = transforms.RandomVerticalFlip(p)
     tensor = transforms.ToTensor()
 
 
-    # apply resizing
     results = []
     for img in range(num_images):
-
+        
+        # convert to tensor
         result = tensor(images[img])
+        
+        # apply transformation
         result = rvf(result)
+
+        # pytorch moves the channel on first axis while in our case channel is the last axis so     
         result = torch.permute(result, (1,2,0))
         
         results.append(result.numpy())
@@ -68,8 +71,7 @@ if __name__ == "__main__":
     pipeline["random_vertical_flip"] = {}
     pipeline["random_vertical_flip"]["function"] =0 #some function pointer
     pipeline["random_vertical_flip"]["p"] = 1
-    #pipeline["resize_image"]["interpolation"] = "bilinear"
-
+   
     print(image_c.shape)
     cv2.imshow("original", image_c[0])
     cv2.waitKey(0)    

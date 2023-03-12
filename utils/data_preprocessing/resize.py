@@ -8,20 +8,19 @@ def resize(images, parameters):
     Parameters: 
         images: numpy array of shape(num_images, height, width, channel)
         parameters: dictionary with keys:
-                    output_size: tuple of ints (width, height)
-                    interpolation: interpolation method (default="area")
+                        output_size: tuple of ints (width, height)
+                        interpolation: interpolation method (default="area")
 
     Returns:
-        (same as input)
         results: numpy array of shape (num_images, height, width, channel)
         config: dictionary with parameters of the function (including default parameters)
     
-    Note:
+    Additional Notes:
         According to the opencv docu, it is best to use "area" as interpolation method for shrinking the image
         and for enlarging the image, use "bicubic" (slow) or "bilinear" (faster)
 
-        For additional interpolation methods, see
-        https://docs.opencv.org/3.4/da/d54/group__imgproc__transform.html#ga5bb5a1fea74ea38e1a5445ca803ff121
+        For more info, see
+            https://docs.opencv.org/3.4/da/d54/group__imgproc__transform.html#ga5bb5a1fea74ea38e1a5445ca803ff121
 
     """
     # set up output config
@@ -59,6 +58,8 @@ def resize(images, parameters):
     for img in range(images.shape[0]):
 
         temp = cv2.resize(images[img], dsize=dsize, interpolation=interpolation_methods[index])
+        
+        # add dim when image is grayscale for consistency
         if images[img].shape[-1] == 1:
             temp = np.expand_dims(temp, axis=-1)
 

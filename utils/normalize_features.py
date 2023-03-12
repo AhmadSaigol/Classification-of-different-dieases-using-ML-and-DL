@@ -1,27 +1,22 @@
-"""
-normalize the features
-
-"""
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, MaxAbsScaler 
 import numpy as np
 
 def normalize_features(features, parameters):
     """
-    nomalizes the features 
+    nomalizes the feature vector
 
     Parameters:
         features: numpy array of shape(folds, num_images, num_features)
         parameters: dictionary containing the keys:
-            norm_type: how to normalize the features currently it supports
-                        ["StandardScaler", "MinMaxScaler", "MaxAbsScaler"]
+                        norm_type: methodology to use for normmalization. currently it supports
+                                    "StandardScaler", "MinMaxScaler" and "MaxAbsScaler"
            
-    
     Returns:
         norm_features: numpy array of shape (folds, num_images, num_features)
         config: dictionary with parameters of the function (including default parameters)
     
 
-    Note:
+    Additional Notes:
         For method "StandardScaler",
                 formula: z = (x - mean) / std
                 following keys will be returned in the 'config'
