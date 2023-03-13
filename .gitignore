@@ -4,3 +4,5 @@ data/
 models/
 *.pt
 *.gz
+*.tar
+__pycache__/
