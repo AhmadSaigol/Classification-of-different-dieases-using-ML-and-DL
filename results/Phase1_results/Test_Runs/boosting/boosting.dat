@@ -1,0 +1,534 @@
+%YAML:1.0
+---
+opencv_ml_boost:
+   format: 3
+   is_classifier: 1
+   var_all: 3
+   var_count: 2
+   ord_var_count: 2
+   cat_var_count: 1
+   training_params:
+      boosting_type: RealAdaboost
+      use_surrogates: 0
+      max_categories: 10
+      regression_accuracy: 9.9999997764825821e-03
+      max_depth: 5
+      min_sample_count: 10
+      cross_validation_folds: 0
+      weight_trimming_rate: 9.4999999999999996e-01
+   global_var_idx: 1
+   var_idx: [ 0, 1 ]
+   var_type: [ 0, 0, 1 ]
+   cat_ofs: [ 0, 0, 0, 0 ]
+   class_labels: [ 0, 1, 2 ]
+   missing_subst: [ 0., 0., 0. ]
+   ntrees: 100
+   trees:
+      -
+         nodes:
+            -
+               depth: 0
+               value: 8.0471895621705036e-01
+               splits:
+                  - { var:0, quality:6.6666668653488159e-01, le:7. }
+            -
+               depth: 1
+               value: 5.7564577324623896e+00
+            -
+               depth: 1
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.
+      -
+         nodes:
+            -
+               depth: 0
+               value: 0.

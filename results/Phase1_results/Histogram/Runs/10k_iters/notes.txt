@@ -1,0 +1,1 @@
+For Random Forest Tree, the max depth defaults to 5.

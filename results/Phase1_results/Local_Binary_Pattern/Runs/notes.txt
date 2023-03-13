@@ -1,0 +1,5 @@
+For Random Forest Tree, the max depth defaults to 5.
+
+spliting ratio -> 70-30.
+
+10k iterations.
