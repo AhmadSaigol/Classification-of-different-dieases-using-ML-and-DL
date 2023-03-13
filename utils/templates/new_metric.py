@@ -19,7 +19,7 @@ def new_metric(y_true, y_pred, parameters):
       
     Additional Notes:
 
-        add here if there are any additional notes of your feature extractor
+        add here if there are any additional notes of your metric
 
     """
 

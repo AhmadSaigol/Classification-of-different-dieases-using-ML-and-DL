@@ -9,19 +9,21 @@ import os
 import matplotlib.image as mpimg
 
 
-def plot_MS(y_true, y_pred, path_to_results, path_to_images):
+def plot_MS(y_true, y_pred, path_to_results, path_to_images=None):
     """
     Plots and save missclassified samples
     
-    y_true: numpy array of shape (num_of_images,2)
-    y_pred: numpy array of shape (num_of_images,2)
-    path_to_results: path where plot will be saved
-    path_to_images: folder containing images
+    Parameters:
+        y_true: numpy array of shape (num_of_images,2)
+        y_pred: numpy array of shape (num_of_images,2)
+        path_to_results: path where plot will be saved
+        path_to_images: folder containing images
 
-
-    Only works with (num_samples)^2 = whole number
+    Additional Notes:
+        Only works with (num_samples)^2 = whole number
 
     """
+    # number of images to plot for each entry in confusion matrix
     num_samples_to_plot = 4
 
     classes = np.unique(y_true[:,1])
@@ -29,7 +31,6 @@ def plot_MS(y_true, y_pred, path_to_results, path_to_images):
     if np.sqrt(num_samples_to_plot) %1 !=0:
         raise ValueError("Currently, this function only supports those number of samples whose sqaure is a whole number")
 
-    
     
     cm = create_dict(classes)
 
@@ -65,8 +66,14 @@ def plot_MS(y_true, y_pred, path_to_results, path_to_images):
 
 def plot_CM_images(cm, num_samples, path_to_images, path_to_results):
     """
-    Plots and saves images
-    
+    Plots and saves Confusion matrix of images 
+
+    Parameters:
+        cm: dict obtained from the function 'create_dict()'
+        num_samples: number of images to plot for each entry in confusion matrix
+        path_to_images: path to the folder containing images
+        path_to_results: path where figure will be saved
+
     """
     num_classes = len(cm.keys())
     
@@ -105,9 +112,11 @@ def plot_CM_images(cm, num_samples, path_to_images, path_to_results):
 
             for id in img_ids:
 
+                # load image
                 img = mpimg.imread(os.path.join(path_to_images, id))
                 img_shape = img.shape
                 
+                #plot image
                 axes[row_i+row, col_j+col].imshow(img, cmap='gray', vmin=0, vmax=255, aspect='auto')
                 axes[row_i+row, col_j+col].set_xticks([])
                 axes[row_i+row, col_j+col].set_yticks([])
@@ -115,12 +124,8 @@ def plot_CM_images(cm, num_samples, path_to_images, path_to_results):
                 if row_i + row == num_rows-1:
                     axes[row_i+row, col_j+col].set_xlabel(pred_label)
 
-            
                 if col_j + col == 0:
                     axes[row_i+row, col_j+col].set_ylabel(true_label)
-
-
-
 
                 if col ==num_imgs_axis-1:
                     col =0
@@ -168,9 +173,11 @@ def plot_CM_images(cm, num_samples, path_to_images, path_to_results):
 def create_dict(classes):
     """
     Setups a dictionary for storing image ids in confusion matrix
+
+    Parameters:
+        classes: numpy array of names of classes
     
     """
-
     output_dict = dict()
     for i in classes:
         output_dict[i] = {}

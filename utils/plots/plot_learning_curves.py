@@ -6,14 +6,14 @@ Plots learning curves for cross entropy loss, balanced accuracy and mcc score fo
 from matplotlib import pyplot as plt
 import numpy as np
 
-def plot_LC(metric_score, path_to_results, path_to_images):
-
+def plot_LC(metric_score, path_to_results, path_to_images=None):
     """
     Plots and saves learning curves
     
-    metric_score: numpy array of shape (metrics, 2, epochs)
-    path_to_results: path where plot will be saved
-    
+    Parameters:
+        metric_score: numpy array of shape (metrics, 2, epochs)
+        path_to_results: path where plot will be saved
+        
     """
     num_metrics = metric_score.shape[0]
     metrics = ["CELoss", "Bal_Accu", "MCC"]

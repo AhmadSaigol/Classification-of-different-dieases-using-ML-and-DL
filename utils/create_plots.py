@@ -7,7 +7,8 @@ import numpy as np
 
 def create_plots(y_true, y_pred, path_to_results, path_to_images, plots, classifiers, name_of_file, training_metric_scores=None, y_pred_probs = None):
     """
-    Generates differenet plots
+    Generates different plots
+    
     Parameters:
         y_true: numpy array of shape (folds, num_images, 2)
         y_pred: numoy array of shape (classifiers, folds, num_images, 2)
@@ -25,7 +26,7 @@ def create_plots(y_true, y_pred, path_to_results, path_to_images, plots, classif
         training_metric_scores: (default=None) list of numpy array with each having shape of (folds, metrics, 2, epochs).Each item in list should represent results of a network.
 
     Returns:
-        output_config:
+        output_config: dictionary with parameters of the function (including default parameters)
 
     Additional Notes:
 
