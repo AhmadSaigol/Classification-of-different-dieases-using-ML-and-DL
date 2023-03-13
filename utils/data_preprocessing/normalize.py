@@ -9,7 +9,7 @@ def normalize(images, parameters):
     Parameters: 
         images: numpy array of shape(num_images, height, width, channel)
         parameters: dictionary with keys:
-                    method: "simple" or "minmax" o "minmax_255"
+                    method: "simple", "minmax" or "minmax_255"
                     
     Returns:
         results: numpy array of shape (num_images, height, width, channel)
