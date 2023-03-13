@@ -1,9 +1,13 @@
 """
-Trains the model on complete dataset
+Trains different classifiers using the features obtained from different feature extractors on the complete dataset (no splitting is performed).
+Applies data preprocessing and feature extractors on batch of images.
+Also, generates prediction on test and noisy dataset.
+
+Performs both binary and multiclass classification
 
 """
 
-# import libraries
+# ------------------------------import libraries----------------------------
 import numpy as np
 import os
 from copy import deepcopy
@@ -53,14 +57,14 @@ from FE_batch_prediction import FE_batch_prediction
 
 def FE_batch_train_complete_dataset(pipeline):
     """
-    Trains models and generates results
+    Trains models using complete dataset and generates results
 
     Parameters:
         pipeline: dict
     
     """
 
-    #  generate features
+    #  load images and generate features
     features, y, features_config = generate_feature_vector_using_batches(pipeline)
     output_config = features_config
 
@@ -73,7 +77,7 @@ def FE_batch_train_complete_dataset(pipeline):
     print(f"Normalized Features for the data successfully. Shape: {features_norm.shape}")
 
 
-    # get prediction
+    # train model
 
     print("\nGenerating labels for the data . . . ")
     y_pred, classifiers_config, classifers_list = apply_classifiers(
@@ -161,12 +165,12 @@ if __name__ == "__main__":
     #--------------------------------- raw data image dir------------------------------
 
     images_folder = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data"
-
+    
     #-------------------------------- Results directory----------------------------
     results_folder = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results"
-
+    
     run_name = "haralick_zernike_complete_dataset"
-
+    
     run_path = os.path.join(results_folder, run_name)
     if not os.path.exists(run_path):
         os.mkdir(run_path)
@@ -184,7 +188,7 @@ if __name__ == "__main__":
     print("Generating txt file for binary classification")
     path_to_multi_labels = os.path.join(images_folder, "train_multi.txt")
     path_to_binary_labels = os.path.join(images_folder, "train_binary.txt")
-    change_txt_for_binary(path_to_multi_labels, path_to_binary_labels)
+    #change_txt_for_binary(path_to_multi_labels, path_to_binary_labels)
     
     # result dir
     binary_path = os.path.join(run_path, "binary")
@@ -314,7 +318,7 @@ if __name__ == "__main__":
     # SVM
     pipeline["classifiers"]["svm"] = {}
     pipeline["classifiers"]["svm"]["function"] = svm 
-    pipeline["classifiers"]["svm"]["trainAuto"] = True
+    pipeline["classifiers"]["svm"]["trainAuto"] = False
     pipeline["classifiers"]["svm"]['svm_type'] =  'C_SVC' 
     pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
 
@@ -539,7 +543,7 @@ if __name__ == "__main__":
     # SVM
     pipeline["classifiers"]["svm"] = {}
     pipeline["classifiers"]["svm"]["function"] = svm 
-    pipeline["classifiers"]["svm"]["trainAuto"] = True
+    pipeline["classifiers"]["svm"]["trainAuto"] = False
     pipeline["classifiers"]["svm"]['svm_type'] =  'C_SVC' 
     pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
 
