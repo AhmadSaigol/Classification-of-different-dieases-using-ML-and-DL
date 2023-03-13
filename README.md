@@ -15,6 +15,14 @@ Objectives of the classifiers:
 
 The objectives will be achieved using two different techniques:
 <ul>
-<li> using feature extractors and machine learning models. </li>
-<li> using neural networks. </li>
+<li> using feature extractors and machine learning models.(Phase1) </li>
+<li> using neural networks.(Phase2) </li>
+</ul>
+
+
+
+The main code associated with two phases are as follows:
+<ul>
+<li> Phase1: FE_* (with and without batch) </li>
+<li> Phase2: NN_* and CNN* </li>
 </ul>
