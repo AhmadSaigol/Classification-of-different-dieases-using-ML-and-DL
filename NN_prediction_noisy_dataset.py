@@ -1,6 +1,7 @@
 
 """
-Performs binary and multiclass classificaiton at the same time
+Generates prediction on noisy dataset using trained neural networks.
+Performs for both binary and multiclass classification
 
 """
 

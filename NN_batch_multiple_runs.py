@@ -1,6 +1,9 @@
-
 """
-Performs binary and multiclass classificaiton at the same time
+Trains different neural networks using the features obtained from different feature extractors.
+Applies data preprocessing and feature extractors on batch of images.
+Also generates prediction on test and noisy dataset
+
+Performs both binary and multiclass classification
 
 """
 from NN_batch_training import NN_batch_training
@@ -86,7 +89,6 @@ print("---------------------------- Binary Classification ----------------------
 # transform label txt file
 print("Generating txt file for binary classification")
 path_to_multi_labels = os.path.join(images_folder, "train_multi.txt")
-
 path_to_binary_labels = os.path.join(images_folder, "train_binary.txt")
 #change_txt_for_binary(path_to_multi_labels, path_to_binary_labels)
 
@@ -274,7 +276,7 @@ pipeline["networks"]["NN1"]["hidden_layers"] = [32]
 pipeline["networks"]["NN1"]["batch_size"] = 256
 pipeline["networks"]["NN1"]["lmbda"] = 0
 pipeline["networks"]["NN1"]["lr"] = 0.001
-pipeline["networks"]["NN1"]["epochs"] = 10000
+pipeline["networks"]["NN1"]["epochs"] = 10
 pipeline["networks"]["NN1"]["use_single_neuron"] = True
 pipeline["networks"]["NN1"]["use_weighted_loss"] = True
 
@@ -286,7 +288,7 @@ pipeline["networks"]["NN2"]["hidden_layers"] = [32]
 pipeline["networks"]["NN2"]["batch_size"] = 256
 pipeline["networks"]["NN2"]["lmbda"] = 0
 pipeline["networks"]["NN2"]["lr"] = 0.001
-pipeline["networks"]["NN2"]["epochs"] = 10000
+pipeline["networks"]["NN2"]["epochs"] = 10
 pipeline["networks"]["NN2"]["use_weighted_loss"] = True
 
 # NN3
@@ -296,7 +298,7 @@ pipeline["networks"]["NN3"]["hidden_layers"] = [32, 16]
 pipeline["networks"]["NN3"]["batch_size"] = 256
 pipeline["networks"]["NN3"]["lmbda"] = 0
 pipeline["networks"]["NN3"]["lr"] = 0.001
-pipeline["networks"]["NN3"]["epochs"] = 10000
+pipeline["networks"]["NN3"]["epochs"] = 10
 pipeline["networks"]["NN3"]["use_single_neuron"] = True
 pipeline["networks"]["NN3"]["use_weighted_loss"] = True
 
@@ -307,7 +309,7 @@ pipeline["networks"]["NN4"]["hidden_layers"] = [32, 16]
 pipeline["networks"]["NN4"]["batch_size"] = 256
 pipeline["networks"]["NN4"]["lmbda"] = 0
 pipeline["networks"]["NN4"]["lr"] = 0.001
-pipeline["networks"]["NN4"]["epochs"] = 10000
+pipeline["networks"]["NN4"]["epochs"] = 10
 pipeline["networks"]["NN4"]["use_weighted_loss"] = True
 
 # NN5
@@ -317,7 +319,7 @@ pipeline["networks"]["NN5"]["hidden_layers"] = [64, 32, 16]
 pipeline["networks"]["NN5"]["batch_size"] = 256
 pipeline["networks"]["NN5"]["lmbda"] = 0
 pipeline["networks"]["NN5"]["lr"] =0.001
-pipeline["networks"]["NN5"]["epochs"] = 10000
+pipeline["networks"]["NN5"]["epochs"] = 10
 pipeline["networks"]["NN5"]["use_single_neuron"] = True
 pipeline["networks"]["NN5"]["use_weighted_loss"] = True
 
@@ -328,13 +330,8 @@ pipeline["networks"]["NN6"]["hidden_layers"] = [64, 32, 16]
 pipeline["networks"]["NN6"]["batch_size"] = 256
 pipeline["networks"]["NN6"]["lmbda"] = 0
 pipeline["networks"]["NN6"]["lr"] = 0.001
-pipeline["networks"]["NN6"]["epochs"] = 10000
+pipeline["networks"]["NN6"]["epochs"] = 10
 pipeline["networks"]["NN6"]["use_weighted_loss"] = True
-
-# ensemble learning
-#pipeline["classifiers"]["ensemble"] = {}
-#pipeline["classifiers"]["ensemble"]["function"] =["svm", "decision_tree"] #name of functions to be used for ensemblers
-#pipeline["classifiers"]["decision_tree"]["some_parameter"] =0 #value of parameter
 
 
 #--------------------Evaluation Metrics---------------------------
@@ -389,29 +386,29 @@ pipeline["plots"]["misidentified samples"]["function"] = plot_MS
 NN_batch_training (pipeline)
 
 #-------prediction---------
-#path_to_json = os.path.join(binary_path, "train", "training_pipeline.json")
+path_to_json = os.path.join(binary_path, "train", "training_pipeline.json")
 
 # test images
-#print("Generating predictions on test data")
-#test_images_path = os.path.join(images_folder, "test")
-#test_save_path = os.path.join(binary_path, "test")
+print("Generating predictions on test data")
+test_images_path = os.path.join(images_folder, "test")
+test_save_path = os.path.join(binary_path, "test")
 
-#NN_batch_prediction(
-#     path_to_images=test_images_path,
- #    path_to_json=path_to_json,
-  #   save_path=test_save_path)
+NN_batch_prediction(
+     path_to_images=test_images_path,
+     path_to_json=path_to_json,
+     save_path=test_save_path)
 
 
 # noisy test images
-#print("Generating predictions on noisy test data")
-#noisy_test_images_path = os.path.join(images_folder, "noisy_test")
-#noisy_test_save_path = os.path.join(binary_path, "noisy_test")
+print("Generating predictions on noisy test data")
+noisy_test_images_path = os.path.join(images_folder, "noisy_test")
+noisy_test_save_path = os.path.join(binary_path, "noisy_test")
 
-#NN_batch_prediction(
-  #   path_to_images=noisy_test_images_path,
-   #  path_to_json=path_to_json,
-    # save_path=noisy_test_save_path,
-    # batch_size=1)
+NN_batch_prediction(
+     path_to_images=noisy_test_images_path,
+     path_to_json=path_to_json,
+     save_path=noisy_test_save_path,
+     batch_size=1)
 
 
 #------------------------------- Multiclass Classification --------------------------
@@ -600,7 +597,7 @@ pipeline["networks"]["NN1"]["hidden_layers"] = [32]
 pipeline["networks"]["NN1"]["batch_size"] = 256
 pipeline["networks"]["NN1"]["lmbda"] = 0
 pipeline["networks"]["NN1"]["lr"] = 0.001
-pipeline["networks"]["NN1"]["epochs"] = 10000
+pipeline["networks"]["NN1"]["epochs"] = 10
 pipeline["networks"]["NN1"]["use_weighted_loss"] = True
 
 
@@ -611,7 +608,7 @@ pipeline["networks"]["NN2"]["hidden_layers"] = [32, 16]
 pipeline["networks"]["NN2"]["batch_size"] = 256
 pipeline["networks"]["NN2"]["lmbda"] = 0
 pipeline["networks"]["NN2"]["lr"] = 0.001
-pipeline["networks"]["NN2"]["epochs"] = 10000
+pipeline["networks"]["NN2"]["epochs"] = 10
 pipeline["networks"]["NN2"]["use_weighted_loss"] = True
 
 # NN3
@@ -621,13 +618,8 @@ pipeline["networks"]["NN3"]["hidden_layers"] = [64,32,16]
 pipeline["networks"]["NN3"]["batch_size"] = 256
 pipeline["networks"]["NN3"]["lmbda"] = 0
 pipeline["networks"]["NN3"]["lr"] = 0.001
-pipeline["networks"]["NN3"]["epochs"] = 10000
+pipeline["networks"]["NN3"]["epochs"] = 10
 pipeline["networks"]["NN3"]["use_weighted_loss"] = True
-
-# ensemble learning
-#pipeline["classifiers"]["ensemble"] = {}
-#pipeline["classifiers"]["ensemble"]["function"] =["svm", "decision_tree"] #name of functions to be used for ensemblers
-#pipeline["classifiers"]["decision_tree"]["some_parameter"] =0 #value of parameter
 
 
 #--------------------Evaluation Metrics---------------------------
@@ -682,28 +674,28 @@ pipeline["plots"]["misidentified samples"]["function"] = plot_MS
 NN_batch_training (pipeline)
 
 #-------prediction---------
-#path_to_json = os.path.join(multi_path, "train", "training_pipeline.json")
+path_to_json = os.path.join(multi_path, "train", "training_pipeline.json")
 
 # test images
-#print("Generating predicitons on test data.")
-#test_images_path = os.path.join(images_folder, "test")
-#test_save_path = os.path.join(multi_path, "test")
+print("Generating predicitons on test data.")
+test_images_path = os.path.join(images_folder, "test")
+test_save_path = os.path.join(multi_path, "test")
 
-#NN_batch_prediction(
-#     path_to_images=test_images_path,
- #    path_to_json=path_to_json,
-  #   save_path=test_save_path)
+NN_batch_prediction(
+     path_to_images=test_images_path,
+     path_to_json=path_to_json,
+     save_path=test_save_path)
 
 # noisy test images
-#print("Generating predicitons on noisy test data.")
-#noisy_test_images_path = os.path.join(images_folder, "noisy_test")
-#noisy_test_save_path = os.path.join(multi_path, "noisy_test")
+print("Generating predicitons on noisy test data.")
+noisy_test_images_path = os.path.join(images_folder, "noisy_test")
+noisy_test_save_path = os.path.join(multi_path, "noisy_test")
 
-#NN_batch_prediction(
- #   path_to_images=noisy_test_images_path,
-  #   path_to_json=path_to_json,
-   #  save_path=noisy_test_save_path,
-    # batch_size=1)
+NN_batch_prediction(
+    path_to_images=noisy_test_images_path,
+     path_to_json=path_to_json,
+     save_path=noisy_test_save_path,
+     batch_size=1)
 
 
 print("Processing Completed")

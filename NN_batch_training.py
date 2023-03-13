@@ -1,4 +1,11 @@
-# import libraries
+"""
+Trains different neural networks using the features obtained from different feature extractors.
+Applies data preprocessing and feature extractors on batch of images.
+Also, generates prediction on test and noisy dataset.
+
+"""
+
+# ----------------import libraries-------------------------
 import numpy as np
 import os
 from copy import deepcopy
@@ -51,7 +58,7 @@ from utils.misc import add_function_names, generate_txt_file, save_results, chan
 def NN_batch_training(pipeline):
 
     """
-    Trains models and generates results
+    Trains neural network models and generates results
 
     Parameters:
         pipeline: dict
@@ -60,11 +67,11 @@ def NN_batch_training(pipeline):
     classes = pipeline["data"]["classes"]
     path_to_results = pipeline["path_to_results"]
 
-    # generate features
+    # load images and generate features
     features_train, y_train, features_valid, y_valid, features_config = generate_feature_vector_using_batches(pipeline)
     output_config = features_config
 
-    # normalize vectors
+    # normalize feature vectors
     print("\nNormalizing Features for training data . . . ")
     features_norm_train, features_norm_train_config = normalize_features(
         features=features_train, 
@@ -88,7 +95,7 @@ def NN_batch_training(pipeline):
     output_config["return_probs"] = return_probs
 
 
-    # get prediction
+    # train model
     print("\nGenerating Labels . . .")
     y_train_pred, y_valid_pred, y_train_pred_probs, y_valid_pred_probs, metric_scores, networks_config, networks = apply_nn_classifiers(
                                                                         X=features_norm_train, 

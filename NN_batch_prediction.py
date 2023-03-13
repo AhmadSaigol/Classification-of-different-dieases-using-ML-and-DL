@@ -1,7 +1,8 @@
 """
-Generates prediction using batches
-
+Generates prediction on the given dataset
+Uses batch of images to extract features at a time.
 """
+
 # import libraries
 import os
 
@@ -10,6 +11,15 @@ from utils.data_preprocessing.change_colorspace import change_colorspace
 from utils.data_preprocessing.resize import resize
 from utils.data_preprocessing.normalize import normalize
 from utils.data_preprocessing.edge_detector import canny_edge_detector
+
+from utils.data_preprocessing.random_apply_rotation import random_apply_rotation
+from utils.data_preprocessing.random_vertical_flip import random_vertical_flip
+from utils.data_preprocessing.random_resized_crop import random_resized_crop
+from utils.data_preprocessing.random_horizontal_flip import random_horizontal_flip
+from utils.data_preprocessing.random_apply_affine import random_apply_affine
+from utils.data_preprocessing.random_auto_contrast import random_auto_contrast
+from utils.data_preprocessing.random_adjust_sharpness import random_adjust_sharpness
+
 
 
 from utils.generate_feature_vector import generate_feature_vector
@@ -45,12 +55,14 @@ def NN_batch_prediction(path_to_images, path_to_json, save_path, batch_size=None
         path_to_images: path to the folder containing images on which prediction will be generated
         path_to_json: path to the training pipeline json
         save_path: path to the folder where the results will be stored
-        batch_size: since images are of different shape in noisy data, so cannot concatenate them. can set different batch size for prediction from trianing
+        batch_size: since images are of different shape in noisy data, so it may not be possible to load them in memory. 
+                    Thus, this parameter allows setting different batch size for prediction from the one used during training.
 
     """
     if not os.path.isdir(path_to_images):
         raise ValueError("'path_to_images' must be a directory")
 
+    # set up result directory
     if not os.path.exists(save_path):
         os.mkdir(save_path)
         print(f"Created directory {save_path}")
@@ -70,19 +82,29 @@ def NN_batch_prediction(path_to_images, path_to_json, save_path, batch_size=None
 
     del pipeline["data"]["split_type"]
 
+    # when testing online_aug is not required, so forcing the probabilities of these transformations to be zero
+    data_preprocessing_keys = pipeline["data_preprocessing"].keys()
+
+    for preprocessing in data_preprocessing_keys:
+        fnt_name = pipeline["data_preprocessing"][preprocessing]["function"]
+        if "random" in fnt_name:
+            pipeline["data_preprocessing"][preprocessing]["p"] = 0
+
     # replace function names with their pointers    
     data_preprocessing = [normalize, change_colorspace, resize, canny_edge_detector]
+    online_aug = [random_apply_rotation,random_vertical_flip,random_resized_crop,random_horizontal_flip,random_apply_affine,random_auto_contrast,random_adjust_sharpness]
     feature_extractors= [calculate_contrast, calculate_kurtosis, calculate_skew, calculate_histogram, calculate_haralick, 
                         calculate_zernike,  count_nonzeros, calculate_lbp, feature_GLCM]
     norm_features = [normalize_features]
     classifiers = [svm, rftree, boosting]
 
+
     replace_function_names(
         pipeline, 
-        functions = data_preprocessing + feature_extractors + norm_features + classifiers)
+        functions = data_preprocessing + feature_extractors + norm_features + classifiers + online_aug)
 
 
-    # load images
+    # load images and generate features
     print("\nGenerating Features . . . ")
     features, y, features_config = generate_feature_vector_using_batches(pipeline)
 
