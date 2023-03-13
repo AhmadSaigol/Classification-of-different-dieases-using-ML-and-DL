@@ -13,12 +13,12 @@ def F1_score(y_true, y_pred, parameters):
         y_true: numpy array of shape (num_images,)
         y_pred: numpy array of shape (num_images,)
         parameters: dictionary with the following keys:
-            class_result: for binary classes, name of class for which metric will be calculated
-            average: for mulitlcass, how to calculate metrics for each class: 'micro', 'macro', 'weighted' 
+            class_result: in case of binary classification, name of class for which metric will be calculated
+            average: in case of mulitlcass classification, how to calculate metrics for each class: 'micro', 'macro', 'weighted' 
     
     Returns:
         score: float
-        config:
+        config: dictionary with parameters of the function (including default parameters)
 
     Additional Notes:
         f1_score = 2 * (Precision * Recall)/ (Precision + Recall)
@@ -32,6 +32,7 @@ def F1_score(y_true, y_pred, parameters):
 
     config = {}
 
+    # binary classfication
     if len(np.unique(y_true)) <= 2 and len(np.unique(y_pred)) <= 2:
 
         if "class_result" in parameters.keys():
@@ -46,6 +47,7 @@ def F1_score(y_true, y_pred, parameters):
 
         score = f1_score(y_true=y_true, y_pred=y_pred, pos_label=pos_label)
     
+    # multiclass classification
     else:
         
         if "average" in parameters.keys():

@@ -17,7 +17,8 @@ def sensitivity(y_true, y_pred, parameters):
     
     Returns:
         score: float
-        config:
+        config: dictionary with parameters of the function (including default parameters)
+        
 
     Additional Notes:
         recall = TP/ TP+FN
@@ -31,6 +32,8 @@ def sensitivity(y_true, y_pred, parameters):
 
     config = {}
 
+
+    # binary classification
     if len(np.unique(y_true)) <= 2 and len(np.unique(y_pred)) <= 2:
 
         if "class_result" in parameters.keys():
@@ -45,6 +48,7 @@ def sensitivity(y_true, y_pred, parameters):
 
         score = recall_score(y_true=y_true, y_pred=y_pred, pos_label=pos_label)
     
+    #multiclass classification
     else:
         
         if "average" in parameters.keys():

@@ -30,13 +30,13 @@ def evaluate_metrics(y_true, y_pred, metrics, classifiers, y_pred_probs=None):
 
     Returns:
         scores:numpy array of shape (classifiers, folds, metrics)
-        output_config:
+        output_config: dictionary with parameters of the function (including default parameters)
         list_of_metrics: since data is incoming in dictionary format, so for easy mapping of which index represents to which metric
     
     Additional Notes:
 
     """
-    # check whether correct shapes of y_* are provided or not
+    # check whether shapes of y_* are correct or not
 
     if len(y_true.shape) !=3:
         raise ValueError("Shape of y_true is not correct.")
@@ -53,6 +53,7 @@ def evaluate_metrics(y_true, y_pred, metrics, classifiers, y_pred_probs=None):
 
     list_of_metrics = []
 
+    # for storing results
     scores = np.full((num_classifiers, num_folds, num_metrics), 1000, dtype=np.float32)
     
     flag = True

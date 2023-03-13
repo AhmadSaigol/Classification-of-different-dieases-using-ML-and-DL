@@ -41,7 +41,7 @@ def new_feature_extractor(X, parameters):
 
 
 
-    #Implement your preprocessing routine
+    #Implement your feature extractor routine
 
 
 

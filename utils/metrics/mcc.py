@@ -16,7 +16,7 @@ def mcc(y_true, y_pred, parameters):
             
     Returns:
         score: float
-        config:
+        config: dictionary with parameters of the function (including default parameters)
 
     Additional Notes:
         Binary:

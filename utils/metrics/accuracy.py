@@ -17,7 +17,8 @@ def accuracy(y_true, y_pred, parameters):
     
     Returns:
         score: float
-        config:
+        config: dictionary with parameters of the function (including default parameters)
+        
 
     Additional Notes:
 
@@ -41,7 +42,6 @@ def accuracy(y_true, y_pred, parameters):
         accu_type = parameters["type"]
     else:
         accu_type = "simple"
-
     config["type"] = accu_type
     
     if accu_type == "simple":
@@ -51,7 +51,6 @@ def accuracy(y_true, y_pred, parameters):
     else:
         raise ValueError("Unknown Value encountered for parameter 'type' while calculating accuracy")#
 
-    
     return score, config
 
 if __name__ == "__main__":
