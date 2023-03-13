@@ -7,18 +7,28 @@ import cv2
 
 def calculate_contrast(X, parameters):
     """
+    Calculates contrast of an image with given method
     
     Parameters:
         X: numpy array of shape (num_images, H, W, C)
         parameters: dictionary with following keys:
-            method: how to calculate contrast. Currently, it supports
-                ["michelson", "rms"]
+                method: how to calculate contrast. Currently, it supports
+                        ["michelson", "rms"]
 
-    
     Returns:
         features: numpy array of shape (num_images, 1)
-        config: dictionary with keys ["method"]
+        config: dictionary with parameters of the function (including default parameters)
+    
+    Additional Notes:
+        
+        - for method 'michelson', it is calculated using the formula:
+           ( max(I) - min(I) )/(max(I) - min(I))
+        
+        - for method 'rms', it is calculated using the formula:
+           std(X)
 
+        - Currently supports only grayscale images.
+        
     """
     
     config = {}

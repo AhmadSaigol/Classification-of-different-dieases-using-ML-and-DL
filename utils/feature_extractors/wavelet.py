@@ -1,5 +1,5 @@
 """
-Using GCLM using wavelet
+study texture properties after applying wavelet transformation
 
 """
 import numpy as np
@@ -10,38 +10,47 @@ from skimage import util, exposure
 
 def feature_GLCM(X, parameters):
     """
+    This function performs three steps to an image:
+        - Apply 2D Discrete wavelet transformation
+        - calculate gray level co-occurence matrix
+        - calculate texture properties of GLCM which includes:
+                (energy,correlation,dissimilarity, homogeneity, contrast, ASM)
     
     Parameters:
         X: numpy array of shape (num_images, H, W, C)
         parameters: dictionary with following keys:
-            'wavelet_type': default = 'haar'
+                'wavelet_type': default = 'haar'
            
     
     Returns:
-        features: numpy array of shape (num_images, 1)
-        config: dict with keys
+        features: numpy array of shape (num_images, num_features)
+        config: dictionary with parameters of the function (including default parameters)
+
+    Additional Notes:
+        - currently supports grayscale images only
 
     """
     config = {}
 
     # make sure grayscale image is given
     if X.shape[-1] != 1:
-        raise ValueError("Currently, calculating skewness is only supported for grayscale images")
+        raise ValueError("Currently, calculating GCLM is only supported for grayscale images")
     else:
         X=np.squeeze(X, axis=-1)
 
     num_images = X.shape[0]
 
+    # get wavelet type
     if 'wavelet_type' in parameters.keys():
         wt = parameters['wavelet_type']
     else:
         wt = 'haar'
-    
     config['wavelet_type'] = wt
     
     features = []
     for img in range(num_images):
         
+        # 2D Discete wavelet transform
         LL, (LH, HL, HH) = pywt.dwt2(X[img], wt)
 
         feature = []   
@@ -53,7 +62,10 @@ def feature_GLCM(X, parameters):
             im = util.img_as_ubyte(img)
             img = im//bin_width
             
-            GLCM = graycomatrix(img, [1], [0])       
+            #calculate gray level co-occurence matrix
+            GLCM = graycomatrix(img, [1], [0])
+
+            #calculate texture properties of GLCM       
             GLCM_Energy = graycoprops(GLCM, 'energy')[0]
             GLCM_corr = graycoprops(GLCM, 'correlation')[0]
             GLCM_diss = graycoprops(GLCM, 'dissimilarity')[0]
@@ -86,7 +98,7 @@ if __name__ == "__main__":
     pipeline={}
     pipeline["GLCM"] = {}
     pipeline["GLCM"]["function"] =0 #some function pointer
-    pipeline["GLCM"]["wavelet_type"] = 'bior1.3'
+    #pipeline["GLCM"]["wavelet_type"] = 'bior1.3'
     
     new, config = feature_GLCM(image_c, parameters=pipeline["GLCM"])
     print(new)

@@ -16,18 +16,20 @@ def calculate_lbp(X, parameters):
     Parameters:
         X: numpy array of shape (num_images, H, W, C)
         parameters: dictionary with following keys:
-            P: number of neighbour set points
-            R: radius of circle
-            method: to determine the pattern. "ror", "var" or "uniform" (default)
+                P: number of neighbour set points
+                R: radius of circle
+                method: to determine the pattern. "ror", "var" or "uniform" (default)
 
     Returns:
         features: numpy array of shape (num_images, 13)
-        config: dictionary with keys
+        config: dictionary with parameters of the function (including default parameters)
+
+    Additional Notes:
+        - currently supports grayscale images only
     
-    See more under:
-    "https://cvexplained.wordpress.com/2020/07/22/10-6-haralick-texture/"
-    "https://mahotas.readthedocs.io/en/latest/api.html"
-    
+        - for more info, see:
+            "https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.local_binary_pattern"
+            "https://pyimagesearch.com/2015/12/07/local-binary-patterns-with-python-opencv/"
     """
     config = {}
 
@@ -36,7 +38,6 @@ def calculate_lbp(X, parameters):
         p = parameters["P"]
     else:
         raise ValueError("parameter 'P' must be provided in local_binary_pattern")
-
     config["P"] = p
 
 
@@ -45,7 +46,6 @@ def calculate_lbp(X, parameters):
         r = parameters["R"]
     else:
         raise ValueError("parameter 'R' must be provided in local_binary_pattern")
-
     config["R"] = r
 
     # method
@@ -53,7 +53,6 @@ def calculate_lbp(X, parameters):
         method = parameters["method"]
     else:
         method = "uniform"
-
     config["method"] = method
 
 
@@ -66,9 +65,11 @@ def calculate_lbp(X, parameters):
     feature = []
 
     for img in range(num_images):
-
+        
+        #calculate local binary pattern image
         lbp_img = lbp(np.squeeze(X[img]), P=p, R=r, method=method)
 
+        #calculate histogram
         (hist, _) = np.histogram(lbp_img.ravel(), 
                                 bins=np.arange(0, p + 3), 
                                 range=(0, p + 2))
@@ -79,7 +80,6 @@ def calculate_lbp(X, parameters):
         
         feature.append(hist)
 
-    
     feature = np.array(feature)
     
     return feature, config

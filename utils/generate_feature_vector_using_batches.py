@@ -1,20 +1,62 @@
 """
-generates feature vector using batches
+Generates feature vector using batches of images
 
 """
 
-
 def generate_feature_vector_using_batches(pipeline):
     """
-    Generates feature vector using batches:
+    Generates feature vector using batches of images at a time:
 
     Parameters:
-    pipeline:
+        pipeline: dictionary with following structure:
+            pipeline["path_to_results"]: path to the folder where results will be stored
+            pipeline["save_to_pkl"]: whether to save generated features or not
+            pipeline["batch_size"]: number of images to load/process at a time
+
+            pipeline["data"]: dictionary with following keys
+                    path_to_images: path to the folder containing .png files (or .npy)
+                    path_to_labels: path to the labels associated with the images. This could be a .txt file with each row containing
+                                    file name(ends with.png) and its label (not required when reading images from .npy)
+                    split_type: how to split the data : "simple", "simpleStratified" "kfold", "kfoldStratified"
+                    
+            pipeline["data_preprocessing"]: dictionary with following structure:
+                    preprocessing["name_of_processing_1"]["function"] = pointer to the function
+                    preprocessing["name_of_processing_1"]["parameter1"] = value
+                    preprocessing["name_of_processing_1"]["parameter2"] = value
+                    .
+                    .
+                    preprocessing["name_of_processing_2"]["function"] = pointer to the function
+                    preprocessing["name_of_processing_2"]["parameter1"] = value
+                    preprocessing["name_of_processing_2"]["parameter2"] = value
+
+            pipeline["feature_extractors"]: dictionary with following structure:
+                    extractors["feature_extractor_1"]["function"] = pointer to the function
+                    extractors["feature_extractor_1"]["parameter_1"] = value
+                    extractors["feature_extractor_1"]["parameter_2"] = value
+
+                    extractors["feature_extractor_2"]["function"] = pointer to the function
+                    extractors["feature_extractor_2"]["parameter_1"] = value
+                    extractors["feature_extractor_2"]["parameter_2"] = value
+                            
+
     
     Returns: 
-    feature vectors:
-    ys
-    config:
+
+        When 'split_type' is provided:
+            features_train: Features for training data. numpy array of shape (folds, num_images, num_features) 
+            y_train: Image Ids(axis=0) along with labels(axis=1) for training data. numpy array of shape(folds, num_images, 2)
+            features_valid: features for validation data. numpy array of shape (folds, num_images, num_features)
+            y_valid:Image Ids (axis=0) along with labels(axis=1) for validation data. numpy array of shape(folds, num_images, 2)
+            output_config: dictionary with parameters of the function (including default parameters)
+        
+        Otherwise:    
+            features: Features for data. numpy array of shape (folds, num_images, num_features)
+            y: Image Ids(axis=0) along with labels(axis=1) for data. numpy array of shape(folds, num_images, 2)
+            output_config: dictionary with parameters of the function (including default parameters)
+        
+
+    Additional Notes:
+
     """
 
     from utils.data_preprocessing.split_data import split_data
@@ -32,13 +74,14 @@ def generate_feature_vector_using_batches(pipeline):
     data = pipeline["data"]
     data_keys = data.keys()
     
+    # path to images
     if "path_to_images" in data_keys:
         path_to_images = data["path_to_images"]
         output_config["data"]["path_to_images"] = path_to_images
     else:
         raise ValueError("'path_to_images' must be provided in the parameter 'data'.")
     
-    
+    # path to labels
     if "path_to_labels" in data_keys:
         path_to_labels = data["path_to_labels"]
     else:
@@ -74,7 +117,6 @@ def generate_feature_vector_using_batches(pipeline):
         batch_size = pipeline["batch_size"]
     else:
         raise ValueError("'batch_size' must be provided in the pipeline.")
-    
     output_config["batch_size"] = batch_size
 
     # for making sure that splitting does not take place for testing data
@@ -95,7 +137,7 @@ def generate_feature_vector_using_batches(pipeline):
         path_to_results = False
     output_config["path_to_results"] = path_to_results
 
-    # result dir
+    # set up results directory
     if not os.path.exists(path_to_results):
         os.mkdir(path_to_results)
         print(f"Created directory {path_to_results}")
@@ -155,7 +197,7 @@ def generate_feature_vector_using_batches(pipeline):
             valid_labels = {}
             for fold_no in range(num_folds):
                 
-                # ratio in y_train
+                # ratio of classes in y_train
                 train_labels[str(fold_no)] = {}
                 unique_labels, counts =np.unique(y_train[fold_no, :,1], return_counts=True)
                 
@@ -165,7 +207,7 @@ def generate_feature_vector_using_batches(pipeline):
                     train_labels[str(fold_no)][ul] = format(c*100/y_train.shape[1], '.2f')
                     print(f"Label: {ul}, %age: {format(c*100/y_train.shape[1], '.2f')}")
                 
-                # ratio in y_valid
+                # ratio of classes in y_valid
                 valid_labels[str(fold_no)] = {}
                 unique_labels, counts =np.unique(y_valid[fold_no, :,1], return_counts=True)
                 
@@ -216,7 +258,8 @@ def generate_feature_vector_using_batches(pipeline):
                 else:
                     features_train =np.concatenate((features_train, features_train_fold), axis=0)
                     features_valid =np.concatenate((features_valid, features_valid_fold), axis=0)
-                
+
+            # save generated features    
             if save_pkl:
                 if path_to_results:
                     
@@ -228,8 +271,8 @@ def generate_feature_vector_using_batches(pipeline):
                 else:
                     raise ValueError("Path to results must be provided when saving features to pkl")
 
-            print("Shape training features: ", features_train.shape)
-            print("Shape testing features: ", features_valid.shape)
+            print("Shape of training features: ", features_train.shape)
+            print("Shape of validation features: ", features_valid.shape)
             output_config = {**output_config, **features_train_config}
 
             return features_train, y_train, features_valid, y_valid, output_config
@@ -248,6 +291,7 @@ def generate_feature_vector_using_batches(pipeline):
                         data_preprocessing=pipeline["data_preprocessing"], 
                         feature_extractors=pipeline["feature_extractors"])
 
+            # save generated features
             if save_pkl:
                 if path_to_results:
                     path_to_processed_dataset = path_to_results + "/processed_features.pkl"
@@ -270,11 +314,10 @@ def generate_feature_vector_using_batches(pipeline):
 
 def get_features(path_to_images, y, batch_size, data_preprocessing, feature_extractors):
     """
-    Load images,
-    extracts features, using batches
+    Loads batch of images at a time, applies preprocessing, followed by feature extractors and returns features
     
     Parameters:
-        path_to_images: path to the folder
+        path_to_images: path to the folder containing images
         y = (num_images, 2) or (num_images, 1)
         batch_size: int
         data_preprocessing: dict with preprocessing as keys
@@ -282,7 +325,8 @@ def get_features(path_to_images, y, batch_size, data_preprocessing, feature_extr
     
     Returns:
         features: (1, num_images, num_features)
-        config with data_preprocessing and feature_extractor keys 
+        config: dictionary with parameters of data_preprocessing and feature_extractor (as keys) (including default parameters)
+    
     """
 
     from utils.data_preprocessing.split_data import get_batch
@@ -299,14 +343,16 @@ def get_features(path_to_images, y, batch_size, data_preprocessing, feature_extr
         if verbose:
             print(f"Batch NO: {batch_no} y: {y_batch}")
 
+        # load images    
         images_batch, images_batch_config = load_images(path_to_images=path_to_images,
                     image_ids=y_batch[:,0], 
                     data_preprocessing=data_preprocessing)
         if verbose:
             print(f"\nBatch No: {batch_no} Shape of Images: {images_batch.shape}")
         
-        # jsut for stying consistent with what i have before
+        # adding dim to match required input dim of the function
         images_batch = np.expand_dims(images_batch, axis=0)
+
         if verbose:
             print("\nGenerating Features . . . ")
         features_batch, features_batch_config = generate_feature_vector(X=images_batch,
@@ -329,3 +375,7 @@ def get_features(path_to_images, y, batch_size, data_preprocessing, feature_extr
     output_config["feature_extractors"] = features_batch_config
 
     return features, output_config
+
+
+if __name__ == "__main__":
+    pass

@@ -8,18 +8,22 @@ from scipy.stats import kurtosis
 
 def calculate_kurtosis(X, parameters):
     """
+    Calculates kurtosis of the image
     
     Parameters:
         X: numpy array of shape (num_images, H, W, C)
         parameters: dictionary with following keys:
-            method: how to calculate kurtosis. "fisher" (default) or "pearson"
-            bias:(default=True) If it is False then the kurtosis is calculated using k statistics to eliminate bias coming from biased moment estimators
+                method: how to calculate kurtosis. "fisher" (default) or "pearson"
+                bias:(default=True) If it is False then the kurtosis is calculated using k statistics to eliminate bias coming from biased moment estimators
     
     Returns:
         features: numpy array of shape (num_images, 1)
-        config: dictionary with keys ["method", "bias"]
+        config: dictionary with parameters of the function (including default parameters)
 
+    Additional Notes:
+        - currently supports grayscale images only.
     """
+
     config = {}
 
     # get method
@@ -27,7 +31,6 @@ def calculate_kurtosis(X, parameters):
         method = parameters["method"]
     else:
         method = "fisher"
-
     config["method"] = method
 
     # get bias
@@ -35,7 +38,6 @@ def calculate_kurtosis(X, parameters):
         bias = parameters["bias"]
     else:
         bias = True
-        
     config["bias"] = bias
     
     # make sure grayscale image is given
@@ -53,8 +55,8 @@ def calculate_kurtosis(X, parameters):
     
     feature = np.zeros((num_images, 1))
     
+    # calculate kurtosis
     for img in range(num_images):
-
         feature[img] = kurtosis(X[img].flatten(), fisher=fisher, bias=bias)
     
     return feature, config

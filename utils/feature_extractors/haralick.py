@@ -14,18 +14,19 @@ def calculate_haralick(X, parameters):
     Parameters:
         X: numpy array of shape (num_images, H, W, C)
         parameters: dictionary with following keys:
-            blur: whether to image before extracting features or not (default=False)
-            distance: how many pixels to consider at a time (default=1)
+                blur: whether to image before extracting features or not (default=False)
+                distance: how many pixels to consider at a time (default=1)
 
     Returns:
         features: numpy array of shape (num_images, 13)
-        config: dictionary with keys
+        config: dictionary with parameters of the function (including default parameters)
     
-    Notes:
-        works with integer values
-    See more under:
-    "https://cvexplained.wordpress.com/2020/07/22/10-6-haralick-texture/"
-    "https://mahotas.readthedocs.io/en/latest/api.html"
+   Additional Notes:
+        - It works only with integer values and grayscale images.
+        - Blurring of image is done using bilateral filter
+        - for more info, see:
+            "https://cvexplained.wordpress.com/2020/07/22/10-6-haralick-texture/"
+            "https://mahotas.readthedocs.io/en/latest/api.html"
     
     """
     config = {}
@@ -35,21 +36,18 @@ def calculate_haralick(X, parameters):
         blur = parameters["blur"]
     else:
         blur = False
-
     config["blur"] = blur
-
 
     # distance
     if "distance" in parameters.keys():
         distance = parameters["distance"]
     else:
         distance = 1
-
     config["distance"] = distance
 
     # make sure grayscale image is given
     if X.shape[-1] != 1:
-        raise ValueError("Currently, calculating histogram is only supported for grayscale images")
+        raise ValueError("Currently, calculating haralick features is only supported for grayscale images")
     
     num_images = X.shape[0]
 
@@ -57,12 +55,15 @@ def calculate_haralick(X, parameters):
 
     for img in range(num_images):
         
+        # apply blur
         if blur:
             proc_img = cv2.bilateralFilter(np.squeeze(X[img], axis=-1) , d=5, sigmaColor=75, sigmaSpace=75)
         else:
             proc_img = np.squeeze(X[img], axis=-1)
         
+        #caclulate haralick features
         temp = mht.features.haralick(proc_img, distance=distance, return_mean=True)
+        
         feature.append(temp)
 
     

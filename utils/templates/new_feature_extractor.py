@@ -2,7 +2,7 @@
 Template for adding new feature extractor 
 """
 
-def feature_extractor(X, parameters):
+def new_feature_extractor(X, parameters):
     """
     Describe the feature extractor 
 
@@ -51,3 +51,8 @@ def feature_extractor(X, parameters):
     # plus keys whose values may be calculated during training phase and are required in testing phase
 
     return feature, config
+
+if __name__ == "__main__":
+
+    # test your code properly before integrating in the pipeline
+    pass

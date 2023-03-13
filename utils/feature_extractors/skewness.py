@@ -8,25 +8,29 @@ from scipy.stats import skew
 
 def calculate_skew(X, parameters):
     """
+    Calculates skewness
     
     Parameters:
         X: numpy array of shape (num_images, H, W, C)
         parameters: dictionary with following keys:
-            bias:(default=True) If it is False then the kurtosis is calculated using k statistics to eliminate bias coming from biased moment estimators
+                bias:(default=True) If it is False then the kurtosis is calculated using k statistics 
+                                    to eliminate bias coming from biased moment estimators
     
     Returns:
         features: numpy array of shape (num_images, 1)
-        config: dictionary with keys ["bias"]
+        config: dictionary with parameters of the function (including default parameters)
 
+    Additional Notes:
+        - currently supports grayscale images only
     """
+
     config = {}
 
     # get bias
     if "bias" in parameters.keys():
         bias = parameters["bias"]
     else:
-        bias = True
-        
+        bias = True 
     config["bias"] = bias
     
     # make sure grayscale image is given
@@ -37,8 +41,8 @@ def calculate_skew(X, parameters):
     
     feature = np.zeros((num_images, 1))
     
+    #calculate skewness
     for img in range(num_images):
-
         feature[img] = skew(X[img].flatten(), bias=bias)
     
     return feature, config

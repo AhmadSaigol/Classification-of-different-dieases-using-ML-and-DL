@@ -13,15 +13,18 @@ def calculate_histogram(X, parameters):
     Parameters:
         X: numpy array of shape (num_images, H, W, C)
         parameters: dictionary with following keys:
-            bins: number of bins for histogram (defau1t=10)
-            range: lower and upper range of bins (default = (0,256))
-            denisty: If False, the result will contain the number of samples in each bin. 
-                     If True, the result is the value of the probability density function at the bin, 
-                     normalized such that the integral over the range is 1 (default=False)
+                bins: number of bins for histogram (defau1t=10)
+                range: lower and upper range of bins (default = (0,256))
+                denisty: If False, the result will contain the number of samples in each bin. 
+                        If True, the result is the value of the probability density function at the bin, 
+                        normalized such that the integral over the range is 1 (default=False)
 
     Returns:
         features: numpy array of shape (num_images, num_bins)
-        config: dictionary with keys
+        config: dictionary with parameters of the function (including default parameters)
+
+    Additional Notes:
+        - currently supports grayscale images only
 
     """
     config = {}
@@ -31,7 +34,6 @@ def calculate_histogram(X, parameters):
         bins = parameters["bins"]
     else:
         bins = 10
-
     config["bins"] = bins
 
     # get range
@@ -39,7 +41,6 @@ def calculate_histogram(X, parameters):
         rng = parameters["range"]
     else:
         rng = (0,256)
-        
     config["range"] = rng
 
     # get denisty
@@ -47,7 +48,6 @@ def calculate_histogram(X, parameters):
         density = parameters["density"]
     else:
         density = False
-        
     config["density"] = density
     
     # make sure grayscale image is given
@@ -57,6 +57,7 @@ def calculate_histogram(X, parameters):
     
     num_images = X.shape[0]
 
+    # calculate histogram 
     feature = []
     for img in range(num_images):
         temp = np.histogram(X[img].flatten(), bins=bins, range=rng, density=density)[0]

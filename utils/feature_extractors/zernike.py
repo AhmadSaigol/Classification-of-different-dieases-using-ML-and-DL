@@ -14,19 +14,22 @@ def calculate_zernike(X, parameters):
     Parameters:
         X: numpy array of shape (num_images, H, W, C)
         parameters: dictionary with following keys:
-            blur: whether to image before extracting features or not (default=False)
+            blur: whether to blur the image before extracting features or not (default=False)
             radius: max radius for Zernike polynomials (default: 140)
             degree: max degree to use (default=8)
             cm: centre of mass (default:image centre of mass)
 
     Returns:
         features: numpy array of shape (num_images, num_features)
-        config: dictionary with keys
-    
-    See more under:
-    "https://cvexplained.wordpress.com/2020/07/21/10-5-zernike-moments/"
-    "https://mahotas.readthedocs.io/en/latest/api.html#mahotas.features.zernike_moments"
-    
+        config: dictionary with parameters of the function (including default parameters)
+
+    Additional Notes:
+        - currently supports grayscale images only
+        - Blurring of image is done using bilateral filter
+        - for more info, see
+            "https://cvexplained.wordpress.com/2020/07/21/10-5-zernike-moments/"
+            "https://mahotas.readthedocs.io/en/latest/api.html#mahotas.features.zernike_moments"
+            
     """
     config = {}
 
@@ -35,7 +38,6 @@ def calculate_zernike(X, parameters):
         blur = parameters["blur"]
     else:
         blur = False
-
     config["blur"] = blur
 
 
@@ -44,7 +46,6 @@ def calculate_zernike(X, parameters):
         radius = parameters["radius"]
     else:
         radius = 140
-
     config["radius"] = radius
 
     # determine degree
@@ -52,7 +53,6 @@ def calculate_zernike(X, parameters):
         degree = parameters["degree"]
     else:
         degree = 8
-
     config["degree"] = degree
 
     # determine radius
@@ -60,7 +60,6 @@ def calculate_zernike(X, parameters):
         cm = parameters["cm"]
     else:
         cm = "image's centre of mass"
-
     config["cm"] = cm
 
 
@@ -74,11 +73,13 @@ def calculate_zernike(X, parameters):
 
     for img in range(num_images):
         
+        # apply blur
         if blur:
             proc_img = cv2.bilateralFilter(np.squeeze(X[img], axis=-1) , d=5, sigmaColor=75, sigmaSpace=75)
         else:
             proc_img = np.squeeze(X[img], axis=-1)
         
+        # calculate zernike moments
         if cm =="image's centre of mass":
             temp = mht.features.zernike_moments(proc_img, radius=radius, degree=degree)
         else:
@@ -86,7 +87,8 @@ def calculate_zernike(X, parameters):
         
         feature.append(temp)
 
-    feature = np.array(feature)  
+    feature = np.array(feature) 
+     
     return feature, config
 
 if __name__ == "__main__":

@@ -8,31 +8,31 @@ import cv2
 
 def count_nonzeros(X, parameters):
     """
-    Calculates and returns non zero values
+    Calculates and returns non zero values in image
     
     Parameters:
         X: numpy array of shape (num_images, H, W, C)
-        parameters: dictionary with following keys:
+        parameters: 
             
 
     Returns:
         features: numpy array of shape (num_images, 1)
-        config: dictionary with keys
-    
-    See more under:
-    "https://cvexplained.wordpress.com/2020/07/21/10-5-zernike-moments/"
-    "https://mahotas.readthedocs.io/en/latest/api.html#mahotas.features.zernike_moments"
+        config: dictionary with parameters of the function (including default parameters)
+
+    Additional Notes:
+        - currently supports grayscale images only
     
     """
-
-
     # make sure grayscale image is given
     if X.shape[-1] != 1:
         raise ValueError("Currently, calculating zernike moments is only supported for grayscale images")
     
     feature = np.count_nonzero(X, axis=(1,2,3))
-    feature = np.expand_dims(feature, axis=-1)    
+    feature = np.expand_dims(feature, axis=-1)  
+
     return feature, parameters
+
+
 
 if __name__ == "__main__":
 
