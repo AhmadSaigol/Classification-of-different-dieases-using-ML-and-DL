@@ -1,3 +1,10 @@
+"""
+For generating prediction on noisy dataset using CNNs or pretrained models
+
+"""
+
+
+
 import numpy as np
 import cv2 
 import os
@@ -103,20 +110,52 @@ class ImageDataset(Dataset):
 class Model(nn.Module):
     """
     Sets up the model
-    layers: OrderedDict with format:
-        layers["layer_1"] = {}
-        layers["layer_1"]["name"] = value
-        layers["layer_1"]["parameter1"] = value
-        layers["layer_1"]["parameter2"] = value
+    Parameters:
+        input_shape: shape of input to the model
+        layers: OrderedDict with format:
+            layers["layer_1"] = {}
+            layers["layer_1"]["name"] = value
+            layers["layer_1"]["parameter1"] = value
+            layers["layer_1"]["parameter2"] = value
+            
+            layers["layer_2"] = {}
+            layers["layer_2"]["name"] = value
+            layers["layer_2"]["parameter1"] = value
+            layers["layer_2"]["parameter2"] = value
+        use_pretrained_model: whether using pretrained model or not  
         
-        layers["layer_2"] = {}
-        layers["layer_2"]["name"] = value
-        layers["layer_2"]["parameter1"] = value
-        layers["layer_2"]["parameter2"] = value
-        
-    currently supports layer names. "linear", "flatten", "relu", "lrelu"
-    
-    output layer must be added as well
+        Additional Notes:
+            When using pretrained model , layer name could be
+                "mobile_net", "resnet18", "resnet50" 
+                
+            (only last layer is trained and all take parameter "num_output_neurons": int)
+
+            otherwise along with their parameters it could be 
+                "linear":
+                    "neurons": int
+                    "bias": bool
+                
+                "flatten":
+
+                "relu":
+                    
+                "lrelu":
+                    "alpha": float
+                
+                "conv":
+                    "number_of_kernels": int
+                    "kernel_size": int 
+                    "stride": int 
+                    "padding": 'valid' or 'same'
+                    "bias": bool
+                
+                "max_pool":
+                    "kernel_size": int
+                    "stride": int
+                    "padding": int
+       
+            - output layer must be added as well without its activation
+
     """
     def __init__(self, input_shape, layers, use_pretrained_model):
         super(Model, self).__init__()
@@ -127,10 +166,15 @@ class Model(nn.Module):
         else:
             self.seq_model = nn.Sequential(self.get_model())
     
+    # forward pass
     def forward(self, x):
         return self.seq_model(x)
     
     def get_model(self):
+
+        """
+        Returns a CNN defined by 'layers'
+        """
         
         arch = []
         self.layer = "Init"
@@ -170,6 +214,10 @@ class Model(nn.Module):
         return OrderedDict(arch)
     
     def get_pretrained_model(self):
+
+        """
+        Returns a pretrained model with last layer replaced with provided number of neurons 
+        """
         
         if len(self.layers.keys()) != 1:
             raise ValueError("Currently only single pretrained model is supported")
@@ -568,9 +616,13 @@ def data_preprocessing(transformations):
 
         "random_auto_contrast":
                     keys:
+
+        "random_apply_rotation":
+                    keys:
+
+        "random_apply_affine":
+                    keys:
                         
-    
-    # train transform will be different from valid transform (CHECK)
     """
     
     preprocess = []
@@ -730,8 +782,6 @@ def data_preprocessing(transformations):
             
             preprocess.append(transforms.RandomApply([transforms.RandomRotation(degrees=90, expand=True)]))
         
-          
-        
         else:
             raise ValueError("Unknown transformation passed")
     
@@ -771,6 +821,10 @@ def generate_txt_file(y, path_to_results, name_of_file, y_probs=None):
     Generates a text file with structure as follows:
     file_name_1 label
     file_name_2 label
+
+    if y_probs is provided, it also generates a txt file with structure as follows:
+            file_name_1 label prob
+            file_name_2 label prob
 
 
     Parameters:
@@ -814,21 +868,24 @@ def get_predictions(path_to_results, path_to_images, y, data_transforms, batch_s
     """
     generates predictions
     
-    path_to_results: where models are saved
-    path_to_images: images dir
-    y: (num_images, 1)
-    data_transforms: transformation to apply
-    fold: prediction for specific fold
-    
-    
-    Returns:
-        y_preds_folds: (num_folds, num_images)
-        y_preds_probs_folds: (num_folds, num_images, num_classes) 
-        y_preds_en: (num_images,1)
-        y_preds_probs_ensemble: (num_images, num_classes)
+    Parameters:
+        path_to_results: path to the folder where results were stored during training phase
+        path_to_images: path to the folder containing images
+        y: (num_images, 1)
+        data_transforms: transformation to apply
+        batch_size:
+        device: whether to carry out training on CPU or GPU
+        fold: when prediction needed for specific fold
+        color: load images in which scale
         
-    thresholding could be added for binary (>th)/multi(>th for each class) classsifcation
-    """
+        Returns:
+            y_preds_folds: (num_folds, num_images)
+            y_preds_probs_folds: (num_folds, num_images, num_classes) 
+            y_preds_en: (num_images,1)
+            y_preds_probs_ensemble: (num_images, num_classes)
+            
+        thresholding could be added for binary (>th)/multi(>th for each class) classsifcation
+        """
     y_preds_probs_folds=[]
     y_preds_folds = []
     
@@ -920,8 +977,7 @@ def CNN_prediction(path_to_images, path_to_json, save_path):
         path_to_images: path to the folder containing images on which prediction will be generated
         path_to_results: path to the folder where models are saved
         save_path: path to the folder where the results will be stored
-        data_transform: transformation to apply
-        batch_size: batch size
+        
 
     """
 
@@ -1393,6 +1449,7 @@ def plot_MS(y_true, y_pred, path_to_results, path_to_images):
                 break
     
     plot_CM_images(cm, num_samples_to_plot, path_to_images, path_to_results)
+
 def plot_CM_images(cm, num_samples, path_to_images, path_to_results):
     """
     Plots and saves images
@@ -1493,6 +1550,7 @@ def plot_CM_images(cm, num_samples, path_to_images, path_to_results):
     
     plt.savefig(path_to_results + "_MS")
     plt.close()  
+
 def create_dict(classes):
 
     """
