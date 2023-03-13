@@ -26,3 +26,7 @@ The main code associated with two phases are as follows:
 <li> Phase1: FE_* (with and without batch) </li>
 <li> Phase2: NN_* and CNN* </li>
 </ul>
+
+
+The code is hosted in the repository:
+https://github.com/AhmadSaigol/Classification-of-different-dieases-using-ML-and-DL
