@@ -1,5 +1,6 @@
 """
-Generates prediction using batches
+Generates prediction on the given dataset
+Uses batch of images to extract features at a time.
 
 """
 # import libraries
@@ -40,7 +41,7 @@ from utils.misc import add_function_names, replace_function_names, generate_txt_
 
 def FE_batch_prediction(path_to_images, path_to_json, save_path):
     """
-    Generates prediction for the given data set
+    Generates prediction on the given data set
 
     Parameters:
         path_to_images: path to the folder containing images on which prediction will be generated
@@ -51,6 +52,7 @@ def FE_batch_prediction(path_to_images, path_to_json, save_path):
     if not os.path.isdir(path_to_images):
         raise ValueError("'path_to_images' must be a directory")
 
+    # set up result directory
     if not os.path.exists(save_path):
         os.mkdir(save_path)
         print(f"Created directory {save_path}")
@@ -79,7 +81,7 @@ def FE_batch_prediction(path_to_images, path_to_json, save_path):
         pipeline, 
         functions = data_preprocessing + feature_extractors + norm_features + classifiers)
 
-    # load images
+    # load images and generate features
     print("\nGenerating Features . . . ")
     features, y, features_config = generate_feature_vector_using_batches(pipeline)
 

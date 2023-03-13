@@ -1,9 +1,12 @@
 """
-Applies preprocessing and feature extractors on batch of images. 
+Trains different classifiers using the features obtained from different feature extractors.
+Applies data preprocessing and feature extractors on batch of images.
+Also, generates prediction on test and noisy dataset.
+
 Steps Invovled:
     1. Load batch of images.
     2. Apply data preprocessing.
-    3. Extracct features.
+    3. Extract features.
     4. Concatenate features of all images
     5. Train classifier.
     6. Evaluate metrics.
@@ -13,16 +16,13 @@ Steps Invovled:
     10. Save Results to csv.
 
 
-
-Note: Another attempt to improve speed and memory issue
-    - does not work with kfolds
+Note: 
+    - it does not work with kfolds
 
 """
-# import libraries
+# -------------------------------import libraries----------------------------
 import numpy as np
-import os
 from copy import deepcopy
-import pickle
 
 from utils.compare_dicts import compare_dict
 
@@ -80,7 +80,7 @@ def FE_batch_training (pipeline):
     features_train, y_train, features_valid, y_valid, features_config = generate_feature_vector_using_batches(pipeline)
     output_config = features_config
 
-    # normalize vectors
+    # normalize feature vector
     print("\nNormalizing Features for training data . . . ")
     features_norm_train, features_norm_train_config = normalize_features(
         features=features_train, 
@@ -96,9 +96,7 @@ def FE_batch_training (pipeline):
         )
     print(f"Normalized Features for validation data successfully. Shape: {features_norm_valid.shape}")
 
-
-
-    # get prediction
+    # generate prediction
 
     print("\nGenerating labels for training data . . . ")
     y_pred_train, classifiers_train_config, classifers_train_list = apply_classifiers(
@@ -254,7 +252,8 @@ if __name__ == "__main__":
     # transform label txt file
     path_to_multi_labels = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train_multi.txt"
     path_to_binary_labels = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train_binary.txt"
-    change_txt_for_binary(path_to_multi_labels, path_to_binary_labels)
+    
+    #change_txt_for_binary(path_to_multi_labels, path_to_binary_labels)
 
 
     #--------------------------------------Pipeline-------------------------------
