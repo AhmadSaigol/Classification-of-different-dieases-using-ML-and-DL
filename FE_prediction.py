@@ -1,5 +1,10 @@
 """
-Generates prediction
+Generates prediction 
+
+Note: 
+    This implementation tries to load all the images in memory before extracting features from them. 
+    Thus, depending upon size of data and memory, it may crash the python kernel.
+
 
 """
 # import libraries
@@ -46,6 +51,7 @@ def generate_predictions(path_to_images, path_to_json, save_path):
     if not os.path.isdir(path_to_images):
         raise ValueError("'path_to_images' must be a directory")
 
+     #set up result directory
     if not os.path.exists(save_path):
         os.mkdir(save_path)
         print(f"Created directory {save_path}")

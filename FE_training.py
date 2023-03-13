@@ -1,11 +1,14 @@
 """
-Performs classification (COVID vs No-COVID).
+Trains different classifiers using the features obtained from different feature extractors.
+Also, generates prediction on test and noisy dataset.
 
-Classicial methods are used for generating feature vectors and different classifiers are used to perform classifcation
+Note: 
+    This implementation tries to load all the images in memory before extracting features from them. 
+    Thus, depending upon size of data and memory, it may crash the python kernel.
 
 """
 
-# import libraries
+#---------------------------- import libraries----------------------------------------
 import numpy as np
 import os
 
@@ -41,26 +44,28 @@ from utils.misc import add_function_names, generate_txt_file, save_results
 
 from FE_prediction import generate_predictions
 
+
+
 pipeline = {}
+
+# results folder
 pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/train"
 
-
-#------------------ setup data------------------------
+#----------------------------------------- setup data ------------------------
 
 pipeline["data"] = {}
 
-# can be to folder 
-pipeline["data"]["path_to_images"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train"
-# can be to .txt
-pipeline["data"]["path_to_labels"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/train.txt"
+pipeline["data"]["path_to_images"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/code_testing/train"
 
-# split data
-pipeline["data"]["split_type"] = "simple" #"simple", "simpleStratified", "kfold", "kfoldStratified"
+pipeline["data"]["path_to_labels"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/code_testing/train_binary.txt"
 
-pipeline["data"]["classes"] = np.array(["Normal", "COVID", "pneumonia", "Lung_Opacity"]) # np.array(["No-COVID", "COVID"]) keep order same
+pipeline["data"]["split_type"] = "simpleStratified" #"simple", "simpleStratified", "kfold", "kfoldStratified"
+
+pipeline["data"]["classes"] = np.array(["NO_COVID", "COVID"]) #np.array(["Normal", "COVID", "pneumonia", "Lung_Opacity"]) # keep order same
 
 # ---------------------------------set up data preprocessing methods and parameters------------------------------------
-#default values for parameters not guven -8way of determining whether its training or predictin
+
+
 pipeline["data_preprocessing"] ={}
 
 # normalize image
@@ -118,27 +123,10 @@ pipeline["classifiers"]["svm"]['svm_type'] =  'C_SVC'
 pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
 pipeline["classifiers"]["svm"]['Gamma'] =  0.2 
 
-
-# kNN
-#pipeline["classifiers"]["kNN"] = {}
-#pipeline["classifiers"]["kNN"]["function"] =0 #some function pointer
-#pipeline["classifiers"]["kNN"]["some_parameter"] =0 #value of parameter
-
-# decision tree
-#pipeline["classifiers"]["decision_tree"] = {}
-#pipeline["classifiers"]["decision_tree"]["function"] =0 #some function pointer
-#pipeline["classifiers"]["decision_tree"]["some_parameter"] =0 #value of parameter
-
 # random forest tree
 pipeline["classifiers"]["RFTree"] = {}
 pipeline["classifiers"]["RFTree"]["function"] =rftree
 pipeline["classifiers"]["RFTree"]["ActiveVarCount"] =0 
-
-
-# ensemble learning
-#pipeline["classifiers"]["ensemble"] = {}
-#pipeline["classifiers"]["ensemble"]["function"] =["svm", "decision_tree"] #name of functions to be used for ensemblers
-#pipeline["classifiers"]["decision_tree"]["some_parameter"] =0 #value of parameter
 
 
 #---------------------------------------------set up evaluation metrics and parameters------------------------
@@ -334,7 +322,8 @@ plots_train_config = create_plots(
     plots= pipeline["plots"], 
     path_to_results=pipeline["path_to_results"],
     classifiers=classifers_train_list,
-    name_of_file = "train"
+    name_of_file = "train",
+    path_to_images = pipeline["data"]["path_to_images"]
     )
 print("Created Plots for training data")
 
@@ -345,12 +334,11 @@ plots_valid_config = create_plots(
     plots= pipeline["plots"], 
     path_to_results=pipeline["path_to_results"],
     classifiers=classifers_valid_list, 
-    name_of_file = "valid"
+    name_of_file = "valid",
+    path_to_images = pipeline["data"]["path_to_images"]
     )
 print("Created Plots for validation data")
 
-
-#plot_ROC()
 
 # concencate all the returuned configs and save it json
 
@@ -417,7 +405,7 @@ path_to_json = os.path.join(pipeline["path_to_results"], "training_pipeline.json
 print("\n --------------------Generating predictions for test data-------------.----- \n")
 
 
-path_to_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/test"
+path_to_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/code_testing/test"
 save_path_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/test"
 
 generate_predictions(
@@ -431,7 +419,7 @@ print("\n Completed predictions for test data\n")
 
 print("\n --------------------Generating predictions for noisy test data-------------.----- \n")
 
-path_to_noisy_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/code_testing/noisy_test"
+path_to_noisy_test_images = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/code_testing/noisy_test"
 save_path_noisy_test = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/noisy"
 
 generate_predictions(

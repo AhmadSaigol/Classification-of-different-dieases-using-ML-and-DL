@@ -1,5 +1,17 @@
+"""
+Trains different classifiers using the features obtained from different feature extractors.
+Also generates prediction on test and noisy dataset
 
-# import libraries
+Performs both binary and multiclass classification
+
+Note: 
+    This implementation tries to load all the images in memory before extracting features from them. 
+    Thus, depending upon size of data and memory, it may crash the python kernel.
+
+"""
+
+
+# ------------------------------------import libraries-------------------------------------------
 import numpy as np
 import os
 
@@ -45,9 +57,9 @@ from FE_prediction import generate_predictions
 #----------------------------------------Binary Classification--------------------------------
 
 # transform label txt file
-path_to_multi_labels = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_multi.txt"
-path_to_binary_labels = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train_binary.txt"
-change_txt_for_binary(path_to_multi_labels, path_to_binary_labels)
+path_to_multi_labels = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/code_testing/train_multi.txt"
+path_to_binary_labels = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/code_testing/train_binary.txt"
+#change_txt_for_binary(path_to_multi_labels, path_to_binary_labels)
 
 
 #--------------------------------------Pipeline-------------------------------
@@ -57,14 +69,13 @@ print("----------------------------_Binary Classification-----------------------
 pipeline = {}
 pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/haralick_zernlike/binary/train"
 
-
 #------------------ setup data------------------------
 
 pipeline["data"] = {}
 
-# can be to folder 
+
 pipeline["data"]["path_to_images"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train"
-# can be to .txt
+
 pipeline["data"]["path_to_labels"] = path_to_binary_labels
 
 # split data
@@ -78,9 +89,9 @@ pipeline["data"]["classes"] =  np.array(["NO_COVID", "COVID"])
 pipeline["data_preprocessing"] ={}
 
 # normalize image
-pipeline["data_preprocessing"]["normalize_image"] = {}
-pipeline["data_preprocessing"]["normalize_image"]["function"] = normalize
-pipeline["data_preprocessing"]["normalize_image"]["method"] = "minmax" 
+#pipeline["data_preprocessing"]["normalize_image"] = {}
+#pipeline["data_preprocessing"]["normalize_image"]["function"] = normalize
+#pipeline["data_preprocessing"]["normalize_image"]["method"] = "minmax" 
 
 # map to RGB
 pipeline["data_preprocessing"]["map_to_RGB"] = {}
@@ -88,13 +99,13 @@ pipeline["data_preprocessing"]["map_to_RGB"]["function"] = change_colorspace
 pipeline["data_preprocessing"]["map_to_RGB"]["conversion"] ="BGR2GRAY" 
 
 # canny edge detector
-#pipeline["data_preprocessing"]["canny_edges"] = {}
-#pipeline["data_preprocessing"]["canny_edges"]["function"] = canny_edge_detector
-#pipeline["data_preprocessing"]["canny_edges"]["blur"] = True
-#pipeline["data_preprocessing"]["canny_edges"]["threshold1"] =250
-#pipeline["data_preprocessing"]["canny_edges"]["threshold2"] = 500
-#pipeline["data_preprocessing"]["canny_edges"]["apertureSize"] = 5
-#pipeline["data_preprocessing"]["canny_edges"]["L2gradient"] = True
+pipeline["data_preprocessing"]["canny_edges"] = {}
+pipeline["data_preprocessing"]["canny_edges"]["function"] = canny_edge_detector
+pipeline["data_preprocessing"]["canny_edges"]["blur"] = True
+pipeline["data_preprocessing"]["canny_edges"]["threshold1"] =250
+pipeline["data_preprocessing"]["canny_edges"]["threshold2"] = 500
+pipeline["data_preprocessing"]["canny_edges"]["apertureSize"] = 5
+pipeline["data_preprocessing"]["canny_edges"]["L2gradient"] = True
 
 # resize_image
 pipeline["data_preprocessing"]["resize_image"] = {}
@@ -107,36 +118,36 @@ pipeline["data_preprocessing"]["resize_image"]["interpolation"] = "area"
 pipeline["feature_extractors"] ={}
 
 # contrast
-#pipeline["feature_extractors"]["contrast"] = {}
-#pipeline["feature_extractors"]["contrast"]["function"] = calculate_contrast
-#pipeline["feature_extractors"]["contrast"]["method"] = "michelson" 
+pipeline["feature_extractors"]["contrast"] = {}
+pipeline["feature_extractors"]["contrast"]["function"] = calculate_contrast
+pipeline["feature_extractors"]["contrast"]["method"] = "michelson" 
 
 # skewness
-#pipeline["feature_extractors"]["skewness"] = {}
-#pipeline["feature_extractors"]["skewness"]["function"] =calculate_skew
-#pipeline["feature_extractors"]["skewness"]["bias"] = True
+pipeline["feature_extractors"]["skewness"] = {}
+pipeline["feature_extractors"]["skewness"]["function"] =calculate_skew
+pipeline["feature_extractors"]["skewness"]["bias"] = True
 
 # kurtosis
-#pipeline["feature_extractors"]["kurtosis"] = {}
-#pipeline["feature_extractors"]["kurtosis"]["function"] = calculate_kurtosis
-#pipeline["feature_extractors"]["kurtosis"]["method"] = "pearson"
-#pipeline["feature_extractors"]["kurtosis"]["bias"] = True
+pipeline["feature_extractors"]["kurtosis"] = {}
+pipeline["feature_extractors"]["kurtosis"]["function"] = calculate_kurtosis
+pipeline["feature_extractors"]["kurtosis"]["method"] = "pearson"
+pipeline["feature_extractors"]["kurtosis"]["bias"] = True
 
 # RMS
-#pipeline["feature_extractors"]["RMS"] = {}
-#pipeline["feature_extractors"]["RMS"]["function"] = calculate_contrast
-#pipeline["feature_extractors"]["RMS"]["method"] = "rms"
+pipeline["feature_extractors"]["RMS"] = {}
+pipeline["feature_extractors"]["RMS"]["function"] = calculate_contrast
+pipeline["feature_extractors"]["RMS"]["method"] = "rms"
 
 # count non zeros
-#pipeline["feature_extractors"]["count_nonzeros"] = {}
-#pipeline["feature_extractors"]["count_nonzeros"]["function"] = count_nonzeros
+pipeline["feature_extractors"]["count_nonzeros"] = {}
+pipeline["feature_extractors"]["count_nonzeros"]["function"] = count_nonzeros
 
 # histogram
-#pipeline["feature_extractors"]["histogram"] = {}
-#pipeline["feature_extractors"]["histogram"]["function"] = calculate_histogram
-#pipeline["feature_extractors"]["histogram"]["bins"] = 256
-#pipeline["feature_extractors"]["histogram"]["range"] = (0,256)
-#pipeline["feature_extractors"]["histogram"]["density"] = False
+pipeline["feature_extractors"]["histogram"] = {}
+pipeline["feature_extractors"]["histogram"]["function"] = calculate_histogram
+pipeline["feature_extractors"]["histogram"]["bins"] = 256
+pipeline["feature_extractors"]["histogram"]["range"] = (0,256)
+pipeline["feature_extractors"]["histogram"]["density"] = False
 
 # haralick
 pipeline["feature_extractors"]["haralick"] = {}
@@ -153,11 +164,11 @@ pipeline["feature_extractors"]["zernike_moments"]["blur"] = True
 #pipeline["feature_extractors"]["zernike_moments"]["cm"] = (100, 100)
 
 #lbp
-#pipeline["feature_extractors"]["lbp"] = {}
-#pipeline["feature_extractors"]["lbp"]["function"] = calculate_lbp
-#pipeline["feature_extractors"]["lbp"]["P"] = 40
-#pipeline["feature_extractors"]["lbp"]["R"] = 12
-#pipeline["feature_extractors"]["lbp"]["method"] = "uniform"
+pipeline["feature_extractors"]["lbp"] = {}
+pipeline["feature_extractors"]["lbp"]["function"] = calculate_lbp
+pipeline["feature_extractors"]["lbp"]["P"] = 40
+pipeline["feature_extractors"]["lbp"]["R"] = 12
+pipeline["feature_extractors"]["lbp"]["method"] = "uniform"
 
 
 #---------------------------------Normalize feature vectors-----------------------
@@ -174,27 +185,10 @@ pipeline["classifiers"]["svm"]["trainAuto"] = True
 pipeline["classifiers"]["svm"]['svm_type'] =  'C_SVC' 
 pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
 
-
-# kNN
-#pipeline["classifiers"]["kNN"] = {}
-#pipeline["classifiers"]["kNN"]["function"] =0 #some function pointer
-#pipeline["classifiers"]["kNN"]["some_parameter"] =0 #value of parameter
-
-# decision tree
-#pipeline["classifiers"]["decision_tree"] = {}
-#pipeline["classifiers"]["decision_tree"]["function"] =0 #some function pointer
-#pipeline["classifiers"]["decision_tree"]["some_parameter"] =0 #value of parameter
-
 # random forest tree
 pipeline["classifiers"]["RFTree"] = {}
 pipeline["classifiers"]["RFTree"]["function"] =rftree
 pipeline["classifiers"]["RFTree"]["ActiveVarCount"] =0 
-
-
-# ensemble learning
-#pipeline["classifiers"]["ensemble"] = {}
-#pipeline["classifiers"]["ensemble"]["function"] =["svm", "decision_tree"] #name of functions to be used for ensemblers
-#pipeline["classifiers"]["decision_tree"]["some_parameter"] =0 #value of parameter
 
 
 #---------------------------------------------set up evaluation metrics and parameters------------------------
@@ -366,7 +360,8 @@ plots_train_config = create_plots(
     plots= pipeline["plots"], 
     path_to_results=pipeline["path_to_results"],
     classifiers=classifers_train_list,
-    name_of_file = "train"
+    name_of_file = "train",
+    path_to_images = pipeline["data"]["path_to_images"]
     )
 print("Created Plots for training data")
 
@@ -377,7 +372,8 @@ plots_valid_config = create_plots(
     plots= pipeline["plots"], 
     path_to_results=pipeline["path_to_results"],
     classifiers=classifers_valid_list, 
-    name_of_file = "valid"
+    name_of_file = "valid",
+    path_to_images = pipeline["data"]["path_to_images"]
     )
 print("Created Plots for validation data")
 
@@ -483,14 +479,12 @@ print("\n--------------------------------Multiclass Classification--------------
 pipeline = {}
 pipeline["path_to_results"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/results/haralick_zernlike/multiclass/train"
 
-
 #------------------ setup data------------------------
 
 pipeline["data"] = {}
-
-# can be to folder 
+ 
 pipeline["data"]["path_to_images"] = "/home/ahmad/Documents/TUHH/Semester 3/Intelligent Systems in Medicine/Project/Classification-of-different-dieases-using-ML-and-DL/data/raw_data/train"
-# can be to .txt
+
 pipeline["data"]["path_to_labels"] = path_to_multi_labels
 
 # split data
@@ -601,28 +595,10 @@ pipeline["classifiers"]["svm"]["trainAuto"] = True
 pipeline["classifiers"]["svm"]['svm_type'] =  'C_SVC' 
 pipeline["classifiers"]["svm"]['kernel'] =  'RBF'
 
-
-# kNN
-#pipeline["classifiers"]["kNN"] = {}
-#pipeline["classifiers"]["kNN"]["function"] =0 #some function pointer
-#pipeline["classifiers"]["kNN"]["some_parameter"] =0 #value of parameter
-
-# decision tree
-#pipeline["classifiers"]["decision_tree"] = {}
-#pipeline["classifiers"]["decision_tree"]["function"] =0 #some function pointer
-#pipeline["classifiers"]["decision_tree"]["some_parameter"] =0 #value of parameter
-
 # random forest tree
 pipeline["classifiers"]["RFTree"] = {}
 pipeline["classifiers"]["RFTree"]["function"] =rftree
 pipeline["classifiers"]["RFTree"]["ActiveVarCount"] =0 
-
-
-# ensemble learning
-#pipeline["classifiers"]["ensemble"] = {}
-#pipeline["classifiers"]["ensemble"]["function"] =["svm", "decision_tree"] #name of functions to be used for ensemblers
-#pipeline["classifiers"]["decision_tree"]["some_parameter"] =0 #value of parameter
-
 
 #---------------------------------------------set up evaluation metrics and parameters------------------------
 
@@ -796,7 +772,8 @@ plots_train_config = create_plots(
     plots= pipeline["plots"], 
     path_to_results=pipeline["path_to_results"],
     classifiers=classifers_train_list,
-    name_of_file = "train"
+    name_of_file = "train",
+    path_to_images = pipeline["data"]["path_to_images"]
     )
 print("Created Plots for training data")
 
@@ -807,7 +784,8 @@ plots_valid_config = create_plots(
     plots= pipeline["plots"], 
     path_to_results=pipeline["path_to_results"],
     classifiers=classifers_valid_list, 
-    name_of_file = "valid"
+    name_of_file = "valid",
+    path_to_images = pipeline["data"]["path_to_images"]
     )
 print("Created Plots for validation data")
 
