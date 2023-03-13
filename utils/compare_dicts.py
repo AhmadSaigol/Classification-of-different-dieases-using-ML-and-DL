@@ -27,6 +27,7 @@ def compare_dict(d1, d2):
             if not result:
                 return False
 
+        # check values
         if d1[key] != d2[key]:
             return False
     
