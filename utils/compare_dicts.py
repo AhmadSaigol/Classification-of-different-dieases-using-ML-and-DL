@@ -4,6 +4,10 @@ from copy import deepcopy
 def compare_dict(d1, d2):
     """
     Compares two dictionaries and returns whether they are exactly same or not
+
+    Parameters:
+        d1: dict
+        d2: dict
     
     """
 

@@ -21,7 +21,7 @@ from metrics.precision import precision
 
 def add_function_names(dic):
     """
-    Finds function in the dictionary, and replace its value with the function name
+    Finds function pointer in the dictionary, and replace its value with the function name
     
     Parameters:
         dict: dictionary
@@ -45,9 +45,11 @@ def add_function_names(dic):
     
 def replace_function_names(dic, functions):
     """
-    Find function in the dictionary and replace its value with its function pointers
-
-    dic: dictionary
+    Find function name in the dictionary and replace its value with its function pointers
+    
+    Parameters:
+        dic: dictionary
+        functions: list of function pointers
 
     """
     
@@ -76,9 +78,9 @@ def generate_txt_file(y, path_to_results, classifiers, name_of_file, y_probs=Non
 
     Parameters:
         y: numpy array of shape(classifiers, folds, num_images, 2)
-        path_to_results: path to the folder where to store results
-        classifiers: names of classifiers
-        name_of_file (without .txt)
+        path_to_results: path to the folder where resuts will be stored
+        classifiers: list of names of classifiers
+        name_of_file: (without .txt)
 
     """
 
@@ -92,6 +94,7 @@ def generate_txt_file(y, path_to_results, classifiers, name_of_file, y_probs=Non
 
             print(f"Processing Classifier: {classifiers[cl]} Fold No: {fold_no}")
 
+            # set up fold dir
             path_to_fold = os.path.join(path_to_results, str(fold_no))
             if not os.path.exists(path_to_fold):
                     os.mkdir(path_to_fold)
@@ -101,7 +104,7 @@ def generate_txt_file(y, path_to_results, classifiers, name_of_file, y_probs=Non
             open(path_to_file, "w").close()
             
             with open(path_to_file, "a") as file:
-
+                # save image id and label
                 for img_no in range(num_images):
                     file.write(f"{y[cl, fold_no, img_no, 0]} {y[cl, fold_no, img_no, 1]}\n")
 
@@ -109,14 +112,16 @@ def generate_txt_file(y, path_to_results, classifiers, name_of_file, y_probs=Non
 
 def change_txt_for_binary(path_to_txt, save_path):
     """
-    Generates a new text file with labels with COVID and No_COVID
+    Generates a new text file with labels with COVID and No_COVID (from multi labels to binary labels)
 
-    path_to_txt: path to txt containing multilabels
-    save_path: path to the file where results will be saved
-    
+    Parameters:
+        path_to_txt: path to txt containing multilabels
+        save_path: path to the file where results will be saved
+        
     """
 
     multilabels = np.loadtxt(path_to_txt, dtype=str, delimiter=" ")
+    
     ids = multilabels[:,0]
 
     labels = multilabels[:,1]
@@ -124,6 +129,7 @@ def change_txt_for_binary(path_to_txt, save_path):
     labels [labels!="COVID"] = "NO_COVID"
      
     binarylabels = np.concatenate( (ids[:, None], labels[:, None]), axis=-1)
+    
     np.savetxt(save_path, binarylabels, fmt="%s")
     
 
